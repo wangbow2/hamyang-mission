@@ -1,0 +1,2465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>함양 국내선교 | 수영로교회 고등부</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ────────────────── Variables ────────────────── */
+    :root {
+      --amber: #C17B4A;
+      --amber-light: #E09B6A;
+      --amber-pale: #FFF0E3;
+      --green: #4A7C59;
+      --green-light: #E8F4EC;
+      --bg: #FDFAF6;
+      --bg-alt: #F5EFE6;
+      --white: #FFFFFF;
+      --dark: #1A1A2E;
+      --body: #4A4A5A;
+      --muted: #8890A4;
+      --border: #EAE2D8;
+      --shadow-sm: 0 2px 10px rgba(0,0,0,0.06);
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 48px rgba(0,0,0,0.12);
+      --radius-sm: 10px;
+      --radius: 18px;
+      --radius-lg: 28px;
+      --nav-h: 68px;
+    }
+
+    /* ────────────────── Reset ────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; font-size:16px; }
+    body {
+      font-family:'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background:var(--bg);
+      color:var(--body);
+      line-height:1.7;
+      overflow-x:hidden;
+    }
+    a { text-decoration:none; color:inherit; }
+    img { max-width:100%; display:block; }
+    ul { list-style:none; }
+    section { scroll-margin-top:var(--nav-h); }
+
+    /* ────────────────── Utilities ────────────────── */
+    .container { max-width:1160px; margin:0 auto; padding:0 24px; }
+    .section-label {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--amber-pale); color:var(--amber);
+      font-size:12px; font-weight:700; letter-spacing:.08em;
+      padding:6px 14px; border-radius:100px; margin-bottom:16px;
+    }
+    .section-label::before { content:''; width:6px; height:6px; background:var(--amber); border-radius:50%; }
+    .section-title {
+      font-size:clamp(26px, 4vw, 38px);
+      font-weight:800; color:var(--dark);
+      line-height:1.3; letter-spacing:-.02em;
+      margin-bottom:14px;
+    }
+    .section-desc { font-size:17px; color:var(--muted); max-width:580px; }
+    .section-head { margin-bottom:56px; }
+    .section-head.center { text-align:center; }
+    .section-head.center .section-desc { margin:0 auto; }
+
+    /* ────────────────── Buttons ────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:inherit; font-size:15px; font-weight:600;
+      padding:14px 28px; border-radius:100px; cursor:pointer;
+      border:none; transition:all .25s ease; white-space:nowrap;
+    }
+    .btn-primary { background:var(--amber); color:#fff; }
+    .btn-primary:hover { background:var(--amber-light); transform:translateY(-2px); box-shadow:0 6px 24px rgba(193,123,74,.35); }
+    .btn-outline { background:transparent; color:var(--dark); border:2px solid var(--dark); }
+    .btn-outline:hover { background:var(--dark); color:#fff; }
+    .btn-outline-white { background:transparent; color:#fff; border:2px solid rgba(255,255,255,.6); }
+    .btn-outline-white:hover { background:rgba(255,255,255,.15); }
+    .btn-green { background:var(--green); color:#fff; }
+    .btn-green:hover { background:#3A6347; transform:translateY(-2px); }
+
+    /* ────────────────── Nav ────────────────── */
+    .nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      height:var(--nav-h);
+      display:flex; align-items:center;
+      transition:background .3s, box-shadow .3s;
+    }
+    .nav.scrolled { background:rgba(253,250,246,.92); backdrop-filter:blur(16px); box-shadow:var(--shadow-sm); }
+    .nav-inner {
+      display:flex; align-items:center; justify-content:space-between;
+      width:100%; max-width:1160px; margin:0 auto; padding:0 24px;
+    }
+    .nav-logo { display:flex; align-items:center; gap:12px; }
+    .nav-logo-icon {
+      width:36px; height:36px; background:var(--amber);
+      border-radius:10px; display:flex; align-items:center; justify-content:center;
+    }
+    .nav-logo-icon svg { width:20px; height:20px; fill:none; stroke:#fff; stroke-width:2; }
+    .nav-logo-text { font-size:14px; font-weight:700; color:var(--dark); line-height:1.3; }
+    .nav-logo-text span { display:block; font-weight:400; font-size:11px; color:var(--muted); }
+    .nav-links { display:flex; align-items:center; gap:32px; }
+    .nav-links a { font-size:14px; font-weight:500; color:var(--body); transition:color .2s; }
+    .nav-links a:hover { color:var(--amber); }
+    .nav-cta { font-size:14px; }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:8px; }
+    .nav-hamburger span { display:block; width:24px; height:2px; background:var(--dark); border-radius:2px; transition:all .3s; }
+    .mobile-menu {
+      display:none; position:fixed; top:var(--nav-h); left:0; right:0;
+      background:var(--white); z-index:99; padding:24px;
+      box-shadow:var(--shadow); flex-direction:column; gap:20px;
+    }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { font-size:16px; font-weight:500; padding:10px 0; border-bottom:1px solid var(--border); color:var(--dark); }
+    .mobile-menu a:last-child { border-bottom:none; }
+
+    /* ────────────────── Hero ────────────────── */
+    .hero {
+      min-height:100vh;
+      background:linear-gradient(135deg, #2D1B0E 0%, #4A3020 40%, #3D6B4F 100%);
+      display:flex; align-items:center;
+      padding:calc(var(--nav-h) + 48px) 0 80px;
+      position:relative; overflow:hidden;
+    }
+    .hero::before {
+      content:'';
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse at 20% 50%, rgba(193,123,74,.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(74,124,89,.2) 0%, transparent 50%);
+    }
+    .hero-inner {
+      position:relative; display:grid;
+      grid-template-columns:1fr 1fr; gap:64px;
+      align-items:center; max-width:1160px; margin:0 auto; padding:0 24px;
+    }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(255,255,255,.12); color:rgba(255,255,255,.85);
+      font-size:12px; font-weight:600; letter-spacing:.1em;
+      padding:6px 16px; border-radius:100px; margin-bottom:24px;
+      border:1px solid rgba(255,255,255,.2);
+    }
+    .hero-title {
+      font-size:clamp(28px, 4vw, 48px);
+      font-weight:900; color:#fff;
+      line-height:1.25; letter-spacing:-.03em;
+      margin-bottom:24px;
+    }
+    .hero-acrostic { display:flex; align-items:baseline; gap:0; white-space:nowrap; }
+    .hero-ac-char { font-size:1.5em; line-height:1; flex-shrink:0; }
+    .hero-ac-rest { flex:1; }
+    .hero-subtitle {
+      font-size:16px; color:rgba(255,255,255,.75);
+      line-height:1.9; margin-bottom:40px; white-space:nowrap;
+    }
+    .hero-buttons { display:flex; gap:14px; flex-wrap:wrap; }
+    .hero-faq {
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+      border-radius:var(--radius); padding:28px; backdrop-filter:blur(8px);
+      display:flex; flex-direction:column; gap:0;
+    }
+    .hero-faq-label {
+      font-size:11px; font-weight:700; letter-spacing:.12em;
+      color:rgba(255,255,255,.5); margin-bottom:16px; text-transform:uppercase;
+    }
+    .hero-faq-item {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 0; border-bottom:1px solid rgba(255,255,255,.1);
+      font-size:14px; font-weight:500; color:rgba(255,255,255,.85);
+      text-decoration:none; transition:color .2s;
+    }
+    .hero-faq-item:last-of-type { border-bottom:none; }
+    .hero-faq-item:hover { color:#fff; }
+    .hero-faq-item::after { content:'›'; font-size:18px; opacity:.5; flex-shrink:0; }
+    .hero-faq-more {
+      margin-top:16px; display:inline-flex; align-items:center; gap:6px;
+      font-size:13px; font-weight:700; color:var(--amber-light);
+      text-decoration:none; transition:gap .2s;
+    }
+    .hero-faq-more:hover { gap:10px; }
+    .hero-scroll {
+      position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      color:rgba(255,255,255,.5); font-size:11px; letter-spacing:.08em;
+    }
+    .scroll-dot {
+      width:1px; height:48px; background:rgba(255,255,255,.3);
+      animation:scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+
+    /* ────────────────── Stats ────────────────── */
+    .stats { background:var(--white); padding:56px 0; border-bottom:1px solid var(--border); }
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0; }
+    .stat-item {
+      text-align:center; padding:32px 24px;
+      border-right:1px solid var(--border);
+    }
+    .stat-item:last-child { border-right:none; }
+    .stat-num { font-size:clamp(36px,5vw,52px); font-weight:900; color:var(--amber); letter-spacing:-.03em; }
+    .stat-unit { font-size:18px; font-weight:400; }
+    .stat-label { font-size:14px; color:var(--muted); margin-top:6px; font-weight:500; }
+
+    /* ────────────────── Three Churches ────────────────── */
+    .churches { padding:100px 0; background:var(--bg); }
+    .church-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .church-card {
+      background:var(--white); border-radius:var(--radius-lg);
+      overflow:hidden; box-shadow:var(--shadow);
+      transition:transform .3s, box-shadow .3s;
+      display:flex; flex-direction:column;
+    }
+    .church-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-lg); }
+    .church-card-top {
+      height:180px; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:10px;
+      color:#fff; font-size:13px; position:relative; overflow:hidden;
+    }
+    .church-card-top::after {
+      content:''; position:absolute; bottom:-20px; left:50%;
+      transform:translateX(-50%);
+      width:140%; height:40px; background:var(--white); border-radius:50%;
+    }
+    .church-card-top-1 { background:linear-gradient(135deg, #C17B4A, #8A5229); }
+    .church-card-top-2 { background:linear-gradient(135deg, #4A7C59, #2D5E40); }
+    .church-card-top-3 { background:linear-gradient(135deg, #7C6B4A, #5A4A2D); }
+    .church-icon { font-size:36px; }
+    .church-card-body { padding:32px 28px 28px; flex:1; display:flex; flex-direction:column; }
+    .church-tag {
+      display:inline-block; padding:4px 12px;
+      border-radius:100px; font-size:11px; font-weight:700;
+      margin-bottom:12px; letter-spacing:.04em;
+    }
+    .tag-amber { background:var(--amber-pale); color:var(--amber); }
+    .tag-green { background:var(--green-light); color:var(--green); }
+    .tag-brown { background:#F5EDE3; color:#7C5A3A; }
+    .church-name { font-size:21px; font-weight:800; color:var(--dark); margin-bottom:12px; }
+    .church-years {
+      display:flex; align-items:center; gap:6px;
+      font-size:13px; color:var(--muted); margin-bottom:14px;
+    }
+    .church-years::before { content:'●'; font-size:8px; color:var(--amber); }
+    .church-desc { font-size:14px; color:var(--body); line-height:1.75; flex:1; }
+    .church-new {
+      margin-top:16px; padding:12px 14px;
+      background:#FFF8F0; border-left:3px solid var(--amber);
+      border-radius:0 8px 8px 0;
+      font-size:13px; color:var(--body);
+    }
+
+    /* ────────────────── Ministry Content ────────────────── */
+    .ministry { padding:100px 0; background:var(--bg-alt); }
+    .ministry-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .ministry-card {
+      background:var(--white); padding:36px 28px;
+      border-radius:var(--radius); box-shadow:var(--shadow-sm);
+      transition:transform .25s, box-shadow .25s;
+    }
+    .ministry-card:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
+    .ministry-icon {
+      width:56px; height:56px; border-radius:16px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:26px; margin-bottom:20px;
+    }
+    .icon-amber { background:var(--amber-pale); }
+    .icon-green { background:var(--green-light); }
+    .icon-blue { background:#EEF2FF; }
+    .icon-rose { background:#FFF0F3; }
+    .icon-purple { background:#F5F0FF; }
+    .icon-teal { background:#E8FAF5; }
+    .ministry-card h3 { font-size:17px; font-weight:700; color:var(--dark); margin-bottom:10px; }
+    .ministry-card p { font-size:14px; color:var(--body); line-height:1.75; }
+    .ministry-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+    .ministry-tag {
+      font-size:12px; padding:3px 10px; border-radius:100px;
+      background:var(--bg-alt); color:var(--muted); font-weight:500;
+    }
+
+    /* ────────────────── Preparation ────────────────── */
+    .preparation { padding:100px 0; background:var(--white); }
+    .prep-intro {
+      background:linear-gradient(135deg, #FFF0E3, #E8F4EC);
+      border-radius:var(--radius-lg); padding:40px 48px;
+      margin-bottom:64px; display:flex; align-items:center; gap:32px;
+    }
+    .prep-intro-icon { font-size:56px; flex-shrink:0; }
+    .prep-intro-text h3 { font-size:20px; font-weight:800; color:var(--dark); margin-bottom:8px; }
+    .prep-intro-text p { font-size:15px; color:var(--body); }
+    .timeline { position:relative; max-width:720px; margin:0 auto; }
+    .timeline::before {
+      content:''; position:absolute;
+      left:32px; top:0; bottom:0; width:2px;
+      background:linear-gradient(to bottom, var(--amber), var(--green));
+    }
+    .timeline-item { display:flex; gap:32px; margin-bottom:40px; position:relative; }
+    .timeline-dot {
+      flex-shrink:0; width:64px; height:64px;
+      background:var(--white); border:3px solid var(--amber);
+      border-radius:50%; display:flex; align-items:center; justify-content:center;
+      font-size:22px; z-index:1; box-shadow:var(--shadow-sm);
+    }
+    .timeline-item:nth-child(even) .timeline-dot { border-color:var(--green); }
+    .timeline-content {
+      flex:1; background:var(--bg); border-radius:var(--radius);
+      padding:24px 28px; box-shadow:var(--shadow-sm);
+      margin-top:8px;
+    }
+    .timeline-week {
+      font-size:11px; font-weight:700; letter-spacing:.08em;
+      color:var(--amber); margin-bottom:8px; text-transform:uppercase;
+    }
+    .timeline-item:nth-child(even) .timeline-week { color:var(--green); }
+    .timeline-content h4 { font-size:17px; font-weight:700; color:var(--dark); margin-bottom:8px; }
+    .timeline-content p { font-size:14px; color:var(--body); line-height:1.7; }
+
+    /* ────────────────── Schedule ────────────────── */
+    .schedule-section { padding:100px 0; background:var(--bg-alt); }
+    .schedule-tabs { display:flex; gap:12px; margin-bottom:40px; flex-wrap:wrap; }
+    .tab-btn {
+      padding:12px 28px; border-radius:100px; font-size:15px; font-weight:600;
+      cursor:pointer; border:2px solid var(--border);
+      background:var(--white); color:var(--body); transition:all .25s;
+      font-family:inherit;
+    }
+    .tab-btn.active { background:var(--amber); color:#fff; border-color:var(--amber); }
+    .tab-btn:hover:not(.active) { border-color:var(--amber); color:var(--amber); }
+    .tab-content { display:none; animation:fadeIn .3s ease; }
+    .tab-content.active { display:block; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .day-header {
+      display:flex; align-items:center; gap:16px;
+      background:linear-gradient(135deg, var(--amber), var(--green));
+      color:#fff; border-radius:var(--radius); padding:28px 36px; margin-bottom:32px;
+    }
+    .day-badge {
+      font-size:42px; font-weight:900; opacity:.9;
+    }
+    .day-info h3 { font-size:22px; font-weight:800; margin-bottom:4px; }
+    .day-info p { font-size:14px; opacity:.85; }
+    .schedule-items { display:flex; flex-direction:column; gap:0; }
+    .schedule-item {
+      display:flex; gap:0; align-items:stretch;
+    }
+    .schedule-time {
+      width:100px; flex-shrink:0; padding:18px 20px;
+      font-size:13px; font-weight:700; color:var(--amber);
+      border-right:2px solid var(--border);
+      display:flex; align-items:flex-start; justify-content:flex-end;
+      text-align:right;
+    }
+    .schedule-item:nth-child(even) .schedule-time { color:var(--green); }
+    .schedule-item-content {
+      flex:1; padding:18px 24px;
+      border-bottom:1px solid var(--border);
+    }
+    .schedule-item:last-child .schedule-item-content { border-bottom:none; }
+    .schedule-item-title { font-size:15px; font-weight:700; color:var(--dark); margin-bottom:4px; }
+    .schedule-item-desc { font-size:13px; color:var(--body); }
+    .schedule-item-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .s-tag {
+      font-size:11px; padding:2px 10px; border-radius:100px;
+      font-weight:600;
+    }
+    .s-tag-amber { background:var(--amber-pale); color:var(--amber); }
+    .s-tag-green { background:var(--green-light); color:var(--green); }
+    .s-tag-blue { background:#EEF2FF; color:#5B72E7; }
+    .s-tag-rose { background:#FFF0F3; color:#E77B8A; }
+
+    /* ────────────────── Gallery ────────────────── */
+    .gallery-section { padding:100px 0; background:var(--white); }
+    .gallery-filters {
+      display:flex; gap:10px; flex-wrap:wrap; margin-bottom:40px;
+    }
+    .filter-btn {
+      padding:8px 20px; border-radius:100px; font-size:13px; font-weight:600;
+      cursor:pointer; border:2px solid var(--border);
+      background:var(--white); color:var(--body); transition:all .2s;
+      font-family:inherit;
+    }
+    .filter-btn.active { background:var(--amber); color:#fff; border-color:var(--amber); }
+    .filter-btn:hover:not(.active) { border-color:var(--amber); color:var(--amber); }
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      grid-auto-rows:200px;
+      gap:14px;
+    }
+    .gallery-item {
+      border-radius:var(--radius-sm); overflow:hidden;
+      transition:transform .25s, box-shadow .25s; cursor:pointer;
+    }
+    .gallery-item:hover { transform:scale(1.02); box-shadow:var(--shadow-lg); }
+    .gallery-item.wide { grid-column:span 2; }
+    .gallery-item.tall { grid-row:span 2; }
+    .gph {
+      width:100%; height:100%;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:10px; color:rgba(255,255,255,.75); font-size:12px;
+      font-weight:600; text-align:center; padding:12px;
+    }
+    .gph svg { width:28px; height:28px; opacity:.8; }
+    .gph-1 { background:linear-gradient(135deg, #C17B4A, #8A5229); }
+    .gph-2 { background:linear-gradient(135deg, #4A7C59, #2D5E40); }
+    .gph-3 { background:linear-gradient(135deg, #7C6B4A, #5A4A2D); }
+    .gph-4 { background:linear-gradient(135deg, #4A6B8A, #2D4A6A); }
+    .gph-5 { background:linear-gradient(135deg, #7C4A6B, #5A2D4A); }
+    .gph-6 { background:linear-gradient(135deg, #6B7C4A, #4A5A2D); }
+    .gallery-upload-notice {
+      margin-top:32px; padding:20px 24px;
+      background:var(--bg-alt); border-radius:var(--radius-sm);
+      display:flex; align-items:center; gap:12px;
+      font-size:14px; color:var(--muted);
+    }
+    .gallery-upload-notice span { font-size:20px; }
+
+    /* ────────────────── Testimonials ────────────────── */
+    .testimonials-section { padding:100px 0; background:var(--bg); }
+    .church-tabs { display:flex; gap:12px; margin-bottom:48px; flex-wrap:wrap; }
+    .church-tab-btn {
+      padding:12px 28px; border-radius:var(--radius-sm); font-size:14px; font-weight:600;
+      cursor:pointer; border:2px solid var(--border);
+      background:var(--white); color:var(--body); transition:all .25s;
+      font-family:inherit;
+    }
+    .church-tab-btn.active { background:var(--dark); color:#fff; border-color:var(--dark); }
+    .church-tab-btn:hover:not(.active) { border-color:var(--dark); color:var(--dark); }
+    .church-tab-content { display:none; }
+    .church-tab-content.active { display:block; animation:fadeIn .3s ease; }
+    .church-tab-header {
+      display:flex; align-items:center; gap:14px; margin-bottom:32px;
+    }
+    .church-tab-badge {
+      padding:6px 16px; border-radius:100px; font-size:12px; font-weight:700;
+      letter-spacing:.04em;
+    }
+    .church-tab-header h3 { font-size:19px; font-weight:800; color:var(--dark); }
+    .testimonial-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    .review-card {
+      background:var(--white); border-radius:var(--radius); padding:28px;
+      box-shadow:var(--shadow-sm); border:1px solid var(--border);
+    }
+    .review-card.teacher { background:var(--bg-alt); }
+    .review-meta { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .review-avatar {
+      width:44px; height:44px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; flex-shrink:0;
+    }
+    .avatar-amber { background:var(--amber-pale); }
+    .avatar-green { background:var(--green-light); }
+    .avatar-blue { background:#EEF2FF; }
+    .review-author { font-size:14px; font-weight:700; color:var(--dark); }
+    .review-role { font-size:12px; color:var(--muted); }
+    .review-quote {
+      font-size:14px; color:var(--body); line-height:1.8;
+      padding-top:16px; border-top:1px solid var(--border);
+    }
+    .review-quote::before { content:' '; color:var(--amber); font-size:18px; }
+    .review-type-badge {
+      display:inline-block; margin-bottom:8px;
+      font-size:11px; font-weight:700; padding:2px 10px; border-radius:100px;
+    }
+    .badge-student { background:var(--amber-pale); color:var(--amber); }
+    .badge-teacher { background:var(--green-light); color:var(--green); }
+
+    /* ────────────────── FAQ ────────────────── */
+    .faq-section { padding:100px 0; background:var(--white); }
+    .faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; max-width:900px; margin:0 auto; }
+    .faq-container { max-width:760px; margin:0 auto; }
+    .faq-item {
+      border:1px solid var(--border); border-radius:var(--radius-sm);
+      margin-bottom:12px; overflow:hidden; transition:box-shadow .25s;
+    }
+    .faq-item.open { box-shadow:var(--shadow); }
+    .faq-question {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:22px 24px; cursor:pointer;
+      background:var(--white); gap:16px;
+    }
+    .faq-question:hover { background:var(--bg); }
+    .faq-q-text { font-size:15px; font-weight:600; color:var(--dark); flex:1; }
+    .faq-icon {
+      width:28px; height:28px; border-radius:50%;
+      background:var(--amber-pale); color:var(--amber);
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; flex-shrink:0; transition:transform .3s;
+      line-height:1;
+    }
+    .faq-item.open .faq-icon { transform:rotate(45deg); background:var(--amber); color:#fff; }
+    .faq-answer {
+      max-height:0; overflow:hidden; transition:max-height .35s ease, padding .35s ease;
+      padding:0 24px; font-size:14px; color:var(--body); line-height:1.8;
+    }
+    .faq-item.open .faq-answer { max-height:300px; padding:0 24px 22px; }
+
+    /* ────────────────── Registration ────────────────── */
+    .registration { padding:100px 0; background:var(--bg-alt); }
+    .reg-card {
+      background:linear-gradient(135deg, #2D1B0E 0%, #4A3020 50%, #3D6B4F 100%);
+      border-radius:var(--radius-lg); padding:64px 56px;
+      color:#fff; position:relative; overflow:hidden;
+    }
+    .reg-card::before {
+      content:''; position:absolute;
+      top:-60px; right:-60px; width:300px; height:300px;
+      background:rgba(255,255,255,.05); border-radius:50%;
+    }
+    .reg-card::after {
+      content:''; position:absolute;
+      bottom:-80px; right:100px; width:200px; height:200px;
+      background:rgba(193,123,74,.15); border-radius:50%;
+    }
+    .reg-inner { position:relative; z-index:1; }
+    .reg-grid { display:grid; grid-template-columns:1fr auto; gap:56px; align-items:start; }
+    .reg-title { font-size:clamp(24px,3.5vw,36px); font-weight:900; margin-bottom:16px; line-height:1.3; }
+    .reg-desc { font-size:16px; opacity:.8; margin-bottom:36px; max-width:480px; line-height:1.8; }
+    .reg-info-list { display:flex; flex-direction:column; gap:14px; margin-bottom:40px; }
+    .reg-info-item { display:flex; align-items:flex-start; gap:12px; }
+    .reg-info-icon {
+      width:32px; height:32px; border-radius:8px;
+      background:rgba(255,255,255,.12); display:flex;
+      align-items:center; justify-content:center; font-size:14px; flex-shrink:0;
+    }
+    .reg-info-text { font-size:14px; opacity:.85; line-height:1.6; }
+    .reg-info-text strong { display:block; font-weight:700; margin-bottom:2px; opacity:1; font-size:15px; }
+    .reg-cta-panel {
+      background:rgba(255,255,255,.1); backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.2); border-radius:var(--radius);
+      padding:36px 32px; min-width:280px;
+      display:flex; flex-direction:column; align-items:center; gap:20px;
+      text-align:center;
+    }
+    .reg-cta-title { font-size:16px; font-weight:700; margin-bottom:4px; }
+    .reg-cta-sub { font-size:13px; opacity:.7; }
+    .btn-apply {
+      width:100%; background:var(--amber); color:#fff;
+      font-size:15px; font-weight:700; padding:16px 24px;
+      border-radius:100px; cursor:pointer; border:none;
+      font-family:inherit; transition:all .25s;
+    }
+    .btn-apply:hover { background:var(--amber-light); transform:translateY(-2px); box-shadow:0 8px 24px rgba(193,123,74,.4); }
+    .reg-contact { font-size:13px; opacity:.6; }
+
+    /* ────────────────── Footer ────────────────── */
+    footer {
+      background:var(--dark); color:rgba(255,255,255,.6);
+      padding:56px 0 40px;
+    }
+    .footer-inner {
+      display:grid; grid-template-columns:2fr 1fr 1fr; gap:48px;
+      padding-bottom:48px; border-bottom:1px solid rgba(255,255,255,.1);
+      margin-bottom:32px;
+    }
+    .footer-brand { }
+    .footer-logo { font-size:16px; font-weight:800; color:#fff; margin-bottom:12px; }
+    .footer-tagline { font-size:13px; line-height:1.8; }
+    .footer-col h4 { font-size:13px; font-weight:700; color:#fff; margin-bottom:16px; letter-spacing:.04em; text-transform:uppercase; }
+    .footer-col a { display:block; font-size:13px; padding:4px 0; color:rgba(255,255,255,.5); transition:color .2s; }
+    .footer-col a:hover { color:#fff; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; font-size:12px; flex-wrap:wrap; gap:12px; }
+    .footer-bottom a { color:rgba(255,255,255,.4); }
+    .footer-bottom a:hover { color:#fff; }
+
+    /* ────────────────── Responsive ────────────────── */
+    @media (max-width:1024px) {
+      .hero-inner { grid-template-columns:1fr; }
+      .hero-faq { display:none; }
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .stat-item:nth-child(2) { border-right:none; }
+      .stat-item:nth-child(3) { border-top:1px solid var(--border); border-right:1px solid var(--border); }
+      .stat-item:nth-child(4) { border-top:1px solid var(--border); }
+      .ministry-grid { grid-template-columns:repeat(2,1fr); }
+      .gallery-grid { grid-template-columns:repeat(3,1fr); }
+      .reg-grid { grid-template-columns:1fr; }
+      .reg-cta-panel { min-width:auto; }
+      .footer-inner { grid-template-columns:1fr 1fr; }
+    }
+
+    @media (max-width:768px) {
+      .nav-links, .nav-cta { display:none; }
+      .nav-hamburger { display:flex; }
+      .hero { min-height:auto; padding:calc(var(--nav-h) + 48px) 0 64px; }
+      .hero-title { font-size:30px; }
+      .church-grid { grid-template-columns:1fr; }
+      .ministry-grid { grid-template-columns:1fr; }
+      .timeline::before { left:24px; }
+      .timeline-dot { width:48px; height:48px; font-size:18px; }
+      .gallery-grid { grid-template-columns:repeat(2,1fr); grid-auto-rows:160px; }
+      .gallery-item.wide { grid-column:span 1; }
+      .testimonial-grid { grid-template-columns:1fr; }
+      .reg-card { padding:40px 28px; }
+      .footer-inner { grid-template-columns:1fr; gap:32px; }
+      .schedule-time { width:70px; font-size:12px; padding:14px 12px; }
+      .prep-intro { flex-direction:column; gap:16px; padding:28px 24px; }
+      .hero-buttons { flex-direction:column; }
+      .hero-buttons .btn { text-align:center; justify-content:center; }
+    }
+
+    @media (max-width:480px) {
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .gallery-grid { grid-template-columns:1fr 1fr; grid-auto-rows:140px; }
+    }
+
+    /* Scroll animation */
+    .reveal {
+      opacity:0; transform:translateY(28px);
+      transition:opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── Lightbox ── */
+    .lightbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px;}
+    .lightbox-img{max-width:90vw;max-height:75vh;border-radius:12px;object-fit:contain;}
+    .lightbox-meta{color:#fff;text-align:center;}
+    .lightbox-meta strong{font-size:16px;display:block;}
+    .lightbox-meta span{font-size:13px;color:rgba(255,255,255,.6);}
+    .lightbox-close{position:absolute;top:20px;right:24px;font-size:28px;color:#fff;cursor:pointer;background:none;border:none;line-height:1;}
+
+    /* ── Gallery card ── */
+    /* ── Gallery board ── */
+    .gallery-board{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);}
+    .gallery-board thead tr{background:var(--dark);color:#fff;}
+    .gallery-board th{padding:12px 16px;font-size:12px;font-weight:700;letter-spacing:.04em;text-align:left;}
+    .gallery-board th.col-num{width:60px;text-align:center;}
+    .gallery-board th.col-author{width:100px;}
+    .gallery-board th.col-time{width:110px;}
+    .gallery-board th.col-admin{width:72px;text-align:center;}
+    .gallery-board tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+    .gallery-board tbody tr:last-child{border-bottom:none;}
+    .gallery-board tbody tr:hover{background:var(--bg-alt);}
+    .gallery-board td{padding:13px 16px;font-size:13px;color:var(--body);vertical-align:middle;}
+    .gallery-board td.col-num{text-align:center;color:var(--muted);font-size:12px;}
+    .gallery-board td.col-title{font-weight:600;color:var(--dark);}
+    .gallery-board td.col-author{color:var(--muted);}
+    .gallery-board td.col-time{color:var(--muted);font-size:12px;}
+    .gallery-board td.col-admin{text-align:center;}
+    .gallery-board .thumb{width:48px;height:36px;object-fit:cover;border-radius:6px;margin-right:10px;vertical-align:middle;flex-shrink:0;}
+    .gallery-board th.col-check{width:40px;text-align:center;}
+    .gallery-board td.col-check{text-align:center;}
+    .gallery-board tbody tr.row-selected{background:#FFF0E3;}
+    .gallery-bulk-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#FFF0E3;border-radius:var(--radius-sm);margin-bottom:8px;flex-wrap:wrap;}
+    .gallery-bulk-bar .bulk-count{font-size:13px;font-weight:700;color:#C17B4A;}
+    .bulk-del-btn{padding:6px 16px;border-radius:8px;border:none;background:#E05252;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+    .bulk-del-btn:hover{background:#c03a3a;}
+    .bulk-cancel-btn{padding:6px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--body);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+    .photo-check{width:16px;height:16px;cursor:pointer;accent-color:#C17B4A;}
+    .gallery-board .title-wrap{display:flex;align-items:center;}
+    .admin-photo-del{width:24px;height:24px;border-radius:50%;background:#E05252;color:#fff;border:none;cursor:pointer;font-size:11px;}
+    .admin-photo-move{width:24px;height:24px;border-radius:50%;background:#4A7C59;color:#fff;border:none;cursor:pointer;font-size:11px;margin-left:4px;}
+    .admin-photo-del{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:rgba(220,50,50,.9);color:#fff;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;z-index:5;}
+    .admin-photo-move{position:absolute;top:7px;right:37px;width:26px;height:26px;border-radius:50%;background:rgba(30,80,200,.85);color:#fff;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;z-index:5;}
+
+
+    /* ── Post detail modal ── */
+    .post-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9990;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .post-modal-box{background:#fff;border-radius:20px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.35);}
+    .post-modal-header{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;}
+    .post-modal-grid{padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .post-modal-item{aspect-ratio:4/3;overflow:hidden;border-radius:10px;cursor:pointer;background:var(--bg-alt);}
+    .post-modal-item img{width:100%;height:100%;object-fit:cover;transition:transform .2s;display:block;}
+    .post-modal-item:hover img{transform:scale(1.04);}
+    /* ── Lightbox arrows ── */
+    .lb-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);border:none;color:#fff;font-size:26px;width:50px;height:50px;cursor:pointer;border-radius:10px;transition:background .2s;display:flex;align-items:center;justify-content:center;}
+    .lb-arrow:hover{background:rgba(255,255,255,.3);}
+    .lb-prev{left:16px;}
+    .lb-next{right:16px;}
+    .lb-counter{position:absolute;top:18px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:13px;}
+    /* ── Auth modals ── */
+    .auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .auth-box{background:#fff;border-radius:20px;padding:36px 32px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+    .auth-box h3{font-size:20px;font-weight:800;color:var(--dark);margin-bottom:4px;}
+    .auth-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.7;}
+    .auth-field{margin-bottom:14px;}
+    .auth-field label{font-size:12px;font-weight:700;color:var(--dark);letter-spacing:.04em;display:block;margin-bottom:6px;}
+    .auth-field input,.auth-field select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
+    .auth-field input:focus,.auth-field select:focus{border-color:var(--amber);}
+    .auth-msg{font-size:13px;color:#E05252;margin-bottom:10px;min-height:18px;}
+    .auth-btn{width:100%;padding:14px;border:none;border-radius:12px;background:var(--amber);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+    .auth-btn:hover{background:#A86338;}
+    .auth-cancel{width:100%;margin-top:8px;padding:10px;border:none;background:none;font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;}
+    .auth-cancel:hover{color:var(--body);}
+
+    /* ── Admin bar ── */
+    #adminBar{background:#1A2744;color:#fff;padding:10px 24px;display:none;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:68px;z-index:500;}
+    .admin-bar-label{font-size:12px;font-weight:700;letter-spacing:.06em;color:#F0C060;}
+    .admin-bar-btn{font-size:12px;padding:5px 14px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-weight:600;}
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ NAV ════════════════════ -->
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L12 22M2 12L22 12" stroke-linecap="round"/></svg>
+      </div>
+      <div class="nav-logo-text">
+        수영로교회 고등부
+        <span>함양 국내선교</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#ministry">사역 소개</a>
+      <a href="#churches">세 교회팀</a>
+      <a href="#schedule-section">2박 3일 일정</a>
+      <a href="#gallery">갤러리</a>
+      <a href="#reviews">후기</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div id="navUserArea" style="display:flex;align-items:center;gap:8px;"></div>
+    <button onclick="showAdminModal()" style="font-size:11px;color:var(--muted);border:none;background:none;cursor:pointer;padding:4px 8px;border-radius:6px;" title="관리자"></button>
+    <a href="#apply" class="btn btn-primary nav-cta">신청하기</a>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Admin bar -->
+<div id="adminBar" style="background:#1A2744;color:#fff;padding:10px 24px;display:none;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:68px;z-index:500;">
+  <span style="font-size:12px;font-weight:700;letter-spacing:.06em;color:#F0C060;"> 관리자 모드</span>
+  <button onclick="adminMigrateAll()" style="font-size:12px;padding:5px 14px;border-radius:8px;background:#C17B4A;color:#fff;border:none;cursor:pointer;font-weight:600;">성우성서 → 대지교회 2025 이동</button>
+  <button onclick="clearSession()" style="margin-left:auto;font-size:12px;padding:5px 14px;border-radius:8px;background:rgba(255,255,255,.15);color:#fff;border:none;cursor:pointer;">로그아웃</button>
+</div>
+
+<!-- Login / Register Modal -->
+<div id="loginModal" class="auth-overlay" style="display:none;">
+  <div class="auth-box">
+    <h3>로그인 / 가입</h3>
+    <p class="auth-sub">이름과 비밀번호를 입력하세요.<br>처음 가입이라면 학년도 선택해 주세요.</p>
+    <div class="auth-field"><label>이름</label><input type="text" id="authName" placeholder="본인 이름" maxlength="20" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="auth-field">
+      <label>학년 <span style="font-size:11px;color:var(--muted);font-weight:400;">(처음 가입 시 선택)</span></label>
+      <select id="authGrade" style="background:#fff;">
+        <option value="">선택 안함 (기존 회원)</option>
+        <option value="고1">고1</option>
+        <option value="고2">고2</option>
+        <option value="고3">고3</option>
+      </select>
+    </div>
+    <div class="auth-field"><label>비밀번호</label><input type="password" id="authPin" placeholder="비밀번호 (영문·숫자·특수문자 자유)" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="auth-msg" id="authMsg"></div>
+    <button class="auth-btn" onclick="doLogin()">확인</button>
+    <button class="auth-cancel" onclick="closeLoginModal()">취소</button>
+  </div>
+</div>
+
+<!-- Admin Login Modal -->
+<div id="adminModal" class="auth-overlay" style="display:none;">
+  <div class="auth-box">
+    <h3>관리자 로그인</h3>
+    <p class="auth-sub">관리자 아이디와 비밀번호를 입력하세요.</p>
+    <div class="auth-field"><label>아이디</label><input type="text" id="adminIdInput" placeholder="아이디" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+    <div class="auth-field"><label>비밀번호</label><input type="password" id="adminPinInput" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+    <div class="auth-msg" id="adminMsg"></div>
+    <button class="auth-btn" onclick="doAdminLogin()">로그인</button>
+    <button class="auth-cancel" onclick="document.getElementById('adminModal').style.display='none'">취소</button>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox-overlay" style="display:none;" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()"></button>
+  <img id="lightboxImg" class="lightbox-img" alt="" onclick="event.stopPropagation()">
+  <div class="lightbox-meta" onclick="event.stopPropagation()">
+    <strong id="lightboxTitle"></strong>
+    <span id="lightboxAuthor"></span>
+  </div>
+</div>
+
+<!-- Edit Post Modal -->
+<div id="editModal" class="auth-overlay" style="display:none;">
+  <div class="auth-box">
+    <h3>게시글 수정</h3>
+    <p class="auth-sub">제목, 교회, 연도를 수정하세요.</p>
+    <input type="hidden" id="editPhotoId">
+    <div class="auth-field">
+      <label>제목</label>
+      <input type="text" id="editTitle" placeholder="제목 입력">
+    </div>
+    <div class="auth-field"><label>교회</label>
+      <select id="editChurch" style="background:#fff;">
+        <option value="sunwoo">성우성서교회</option>
+        <option value="okdong">옥동교회</option>
+        <option value="jinam">대지교회(지남교회)</option>
+        <option value="assembly">전체 집회</option>
+      </select>
+    </div>
+    <div class="auth-field"><label>연도</label>
+      <select id="editYear" style="background:#fff;">
+        <option value="2022">2022</option><option value="2023">2023</option>
+        <option value="2024">2024</option><option value="2025">2025</option>
+      </select>
+    </div>
+    <button class="auth-btn" onclick="confirmEditPost()">저장</button>
+    <button class="auth-cancel" onclick="document.getElementById('editModal').style.display='none'">취소</button>
+  </div>
+</div>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#churches" onclick="closeMobile()">세 교회팀</a>
+  <a href="#ministry" onclick="closeMobile()">사역 소개</a>
+  <a href="#schedule-section" onclick="closeMobile()">2박 3일 일정</a>
+  <a href="#gallery" onclick="closeMobile()">갤러리</a>
+  <a href="#reviews" onclick="closeMobile()">후기</a>
+  <a href="#faq" onclick="closeMobile()">자주 묻는 질문</a>
+  <a href="#apply" onclick="closeMobile()" style="color:var(--amber);font-weight:700;">신청하기 →</a>
+</div>
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<section id="home" class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge"> 수영로교회 고등부 · 함양 국내선교</div>
+      <h1 class="hero-title">
+        <span class="hero-acrostic">
+          <span class="hero-ac-char" style="color:#E09B6A;">함</span><span class="hero-ac-rest">께 가서 복음을 전하고,</span>
+        </span>
+        <span class="hero-acrostic">
+          <span class="hero-ac-char" style="color:#7EC8A0;">양</span><span class="hero-ac-rest">손으로 어르신들을 섬깁니다.</span>
+        </span>
+      </h1>
+      <p class="hero-subtitle">
+        수영로교회 고등부가 세 팀으로 나뉘어 함양 지역 교회들과 함께하며,<br>
+        마을회관을 찾아가 어르신들을 섬기고 예수님의 사랑을 전합니다.
+      </p>
+      <div class="hero-buttons">
+        <a href="#ministry" class="btn btn-primary">사역 알아보기 →</a>
+        <a href="#faq" class="btn btn-outline-white">자주 묻는 질문</a>
+      </div>
+    </div>
+    <div class="hero-faq">
+      <div class="hero-faq-label">사역 알아보기</div>
+      <a href="#ministry" class="hero-faq-item">어떤 사역을 하나요?</a>
+      <a href="#churches" class="hero-faq-item">어떻게 사역을 하나요?</a>
+      <a href="#prep" class="hero-faq-item">언제, 어떻게 준비하나요?</a>
+      <a href="#schedule-section" class="hero-faq-item">함양 사역 타임테이블</a>
+      <a href="#gallery" class="hero-faq-item">함양 사역 사진들</a>
+      <a href="#reviews" class="hero-faq-item">함양 사역 후기</a>
+      <a href="#faq" class="hero-faq-item">FAQ</a>
+      <a href="#apply" class="hero-faq-more">신청하기 →</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ════════════════════ STATS ════════════════════ -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-num">3<span class="stat-unit">팀</span></div>
+        <div class="stat-label">고등부 목사 3명 인솔</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">3<span class="stat-unit">교회</span></div>
+        <div class="stat-label">함양 지역 협력 교회</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">5<span class="stat-unit">년+</span></div>
+        <div class="stat-label">이어지는 섬김의 역사</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">2<span class="stat-unit">박</span>3<span class="stat-unit">일</span></div>
+        <div class="stat-label">7월 21일(화) – 23일(목)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ MINISTRY CONTENT ════════════════════ -->
+<section id="ministry" class="ministry">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-label">어떤 사역을 하나요?</div>
+      <h2 class="section-title">현장에서 우리가 하는 일들</h2>
+      <p class="section-desc">공연부터 복음 전도, 기도와 예배까지—한 번의 방문에 담기는 섬김의 이야기들입니다.</p>
+    </div>
+    <div class="ministry-grid">
+
+      <div class="ministry-card reveal">
+        <div class="ministry-icon icon-amber"></div>
+        <h3>공연 사역</h3>
+        <p>학생들이 한 달 동안 함께 준비한 공연을 마을회관 어르신들께 선보입니다. 완성도보다 마음을 담는 것, 그 정성이 어르신들께 닿습니다.</p>
+        <div class="ministry-tags">
+          <span class="ministry-tag">노래</span>
+          <span class="ministry-tag">율동</span>
+          <span class="ministry-tag">팀 공연</span>
+        </div>
+      </div>
+
+      <div class="ministry-card reveal">
+        <div class="ministry-icon icon-rose"></div>
+        <h3>섬김 사역</h3>
+        <p>어르신들께 편육, 김치, 수박 등 간식을 대접하고, 매니큐어·팩·안마를 해드리며 따뜻한 대화를 나눕니다. 손발로 직접 섬기는 사역입니다.</p>
+        <div class="ministry-tags">
+          <span class="ministry-tag">매니큐어</span>
+          <span class="ministry-tag">팩</span>
+          <span class="ministry-tag">안마</span>
+          <span class="ministry-tag">간식 대접</span>
+        </div>
+      </div>
+
+      <div class="ministry-card reveal">
+        <div class="ministry-icon icon-blue"></div>
+        <h3>백지전도</h3>
+        <p>빈 종이 한 장으로 복음의 핵심을 전달하는 방법을 배우고, 현장에서 어르신들께 직접 전도합니다. 준비 모임에서 암송하고 실습합니다.</p>
+        <div class="ministry-tags">
+          <span class="ministry-tag">복음 전도</span>
+          <span class="ministry-tag">암송</span>
+          <span class="ministry-tag">실습</span>
+        </div>
+      </div>
+
+      <div class="ministry-card reveal">
+        <div class="ministry-icon icon-purple"></div>
+        <h3>기도와 예배</h3>
+        <p>매일 아침 큐티와 묵상 나눔으로 시작하고, 저녁 예배와 기도회로 하루를 마칩니다. 섬김 이전에 하나님과의 시간이 중심이 됩니다.</p>
+        <div class="ministry-tags">
+          <span class="ministry-tag">큐티</span>
+          <span class="ministry-tag">저녁 예배</span>
+          <span class="ministry-tag">기도회</span>
+        </div>
+      </div>
+
+      <div class="ministry-card reveal">
+        <div class="ministry-icon icon-green"></div>
+        <h3>팀 공동체 훈련</h3>
+        <p>매일 저녁 팀 피드백 모임을 통해 그날의 사역을 되돌아보고 나눕니다. 처음 만난 친구들이 동역자가 되는 과정 자체가 훈련입니다.</p>
+        <div class="ministry-tags">
+          <span class="ministry-tag">피드백 모임</span>
+          <span class="ministry-tag">나눔</span>
+          <span class="ministry-tag">공동체</span>
+        </div>
+      </div>
+
+      <div class="ministry-card reveal">
+        <div class="ministry-icon icon-teal"></div>
+        <h3>말씀 & 묵상</h3>
+        <p>아침마다 말씀을 읽고 묵상을 나누며 하루를 열어갑니다. 마지막 날에는 세 팀이 옥동교회에 모여 함께 찬양과 말씀집회로 선교를 마무리합니다.</p>
+        <div class="ministry-tags">
+          <span class="ministry-tag">말씀집회</span>
+          <span class="ministry-tag">찬양</span>
+          <span class="ministry-tag">묵상 나눔</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ THREE CHURCHES ════════════════════ -->
+<section id="churches" class="churches">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-label">어떻게 사역을 하나요?</div>
+      <h2 class="section-title">세 팀, 세 교회</h2>
+      <p class="section-desc">고등부 목사님 3명이 각각 한 팀을 맡고, 학생들은 함양 지역 세 교회와 함께 마을을 섬깁니다.</p>
+    </div>
+    <div class="church-grid">
+
+      <!-- 성우성서교회 -->
+      <div class="church-card reveal">
+        <div class="church-card-top church-card-top-1">
+          <div class="church-icon"></div>
+        </div>
+        <div class="church-card-body">
+          <span class="church-tag tag-amber">5년째 함께</span>
+          <div class="church-name">성우성서교회</div>
+          <div class="church-years">2022년부터 이어온 섬김</div>
+          <p class="church-desc">
+            5년간 변함없이 함께해온 교회입니다. 마을회관을 찾아다니며 어르신들께 공연과 간식을 대접하고, 복음을 전하는 사역을 함께해왔습니다. 해가 지날수록 어르신들도 우리 학생들의 얼굴을 기억해주시는 진한 관계가 쌓여 있습니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 옥동교회 -->
+      <div class="church-card reveal">
+        <div class="church-card-top church-card-top-2">
+          <div class="church-icon"></div>
+        </div>
+        <div class="church-card-body">
+          <span class="church-tag tag-green">5년째 함께</span>
+          <div class="church-name">옥동교회</div>
+          <div class="church-years">2022년부터 이어온 섬김</div>
+          <p class="church-desc">
+            성우성서교회와 함께 5년을 이어온 협력 교회입니다. 마지막 날 전체 팀이 모두 옥동교회에 모여 찬양과 말씀집회로 선교를 마무리합니다. 이 자리는 세 팀이 하나가 되어 감사를 나누는 시간이기도 합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 대지교회(지남교회) -->
+      <div class="church-card reveal">
+        <div class="church-card-top church-card-top-3">
+          <div class="church-icon"></div>
+        </div>
+        <div class="church-card-body">
+          <span class="church-tag tag-brown">새로운 시작</span>
+          <div class="church-name">대지교회(지남교회)</div>
+          <div class="church-years">새롭게 함께하는 사역지</div>
+          <p class="church-desc">
+            이전에 4년간 섬겨온 대지교회와의 사역 경험을 바탕으로 새롭게 함께하게 된 교회입니다. 쌓아온 사역의 노하우와 성숙한 팀 문화를 가지고 새로운 만남을 이어가고 있습니다.
+          </p>
+          <div class="church-new">
+             대지교회에서 4년간 쌓아온 섬김의 경험이 이어집니다.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ PREPARATION ════════════════════ -->
+<section id="prep" class="preparation">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-label">언제, 어떻게 준비하나요?</div>
+      <h2 class="section-title">현장 이전에 시작되는<br>섬김의 준비</h2>
+      <p class="section-desc">출발 전 약 한 달 동안 팀원들과 함께 준비합니다. 이 과정 자체가 선교입니다.</p>
+    </div>
+
+    <div class="prep-intro reveal">
+      <div class="prep-intro-icon"></div>
+      <div class="prep-intro-text">
+        <h3>왜 준비 과정이 중요한가요?</h3>
+        <p>백지전도를 처음 해보거나 공연 경험이 없어도 괜찮습니다. 준비 모임을 통해 함께 배우고 연습합니다. 그리고 그 과정에서 팀원들과 자연스럽게 가까워지게 됩니다. 함양에서의 섬김은 이 준비의 연장선입니다.</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-week">매주</div>
+          <h4>팀 기도 모임</h4>
+          <p>준비 모임마다 함께 기도하는 시간이 포함됩니다. 사역의 준비는 기도에서 시작됩니다.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-week">1주차</div>
+          <h4>팀 관계 형성</h4>
+          <p>처음 만나는 팀원들과 인사하고 서로를 알아가는 시간. 이 관계가 사역의 기초가 됩니다.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-week">1-2주차</div>
+          <h4>선교 목적 이해</h4>
+          <p>함양 국내선교가 왜 이 방식으로 이루어지는지, 어르신들을 향한 사역의 의미와 배경을 함께 나눕니다.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-week">1-3주차</div>
+          <h4>공연 준비</h4>
+          <p>팀별로 공연을 기획하고 함께 연습합니다. 완벽한 퍼포먼스보다 어르신들께 기쁨을 드릴 수 있는 마음을 담습니다.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-week">2-3주차</div>
+          <h4>백지전도 암송 & 실습</h4>
+          <p>백지전도의 내용을 외우고 실제로 파트너에게 해보며 연습합니다. 어색함도 이 과정에서 점차 사라집니다.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-week">3주차</div>
+          <h4>선물 & 섬김 준비</h4>
+          <p>어르신들께 드릴 선물과 간식을 함께 준비합니다. 어르신들을 대하는 태도와 말투에 대한 교육도 함께 진행합니다.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-week">3-4주차</div>
+          <h4>사역 시뮬레이션 & 기도 모임</h4>
+          <p>실제 마을회관 사역과 유사하게 시뮬레이션을 진행해 현장 적응력을 높입니다. 팀 기도 제목도 함께 나누며 출발을 준비합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SCHEDULE ════════════════════ -->
+<section id="schedule-section" class="schedule-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-label">함양 사역 타임테이블</div>
+      <h2 class="section-title">7월 21일(화) – 23일(목),<br>함양에서의 시간</h2>
+      <p class="section-desc">새벽기도 후 출발해 3일간 함양 마을 곳곳을 섬기고 돌아옵니다.</p>
+    </div>
+    <div class="schedule-tabs">
+      <button class="tab-btn active" onclick="switchTab('tue', this)"> 7/21 화요일 · 출발</button>
+      <button class="tab-btn" onclick="switchTab('wed', this)"> 7/22 수요일 · 본 사역</button>
+      <button class="tab-btn" onclick="switchTab('thu', this)"> 7/23 목요일 · 마무리</button>
+    </div>
+
+    <!-- 화요일 -->
+    <div class="tab-content active" id="tab-tue">
+      <div class="day-header">
+        <div class="day-badge">화</div>
+        <div class="day-info">
+          <h3>출발의 날 — 첫 사역</h3>
+          <p>새벽기도 후 출발해 함양에 도착하고, 첫 마을회관 사역을 진행합니다</p>
+        </div>
+      </div>
+      <div class="schedule-items">
+        <div class="schedule-item">
+          <div class="schedule-time">새벽</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">새벽기도 후 출발</div>
+            <div class="schedule-item-desc">교회에서 새벽기도를 마친 후 함양으로 출발합니다. 약 3시간 30분 이동.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-blue">이동</span></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">점심</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">함양 도착 & 점심식사</div>
+            <div class="schedule-item-desc">현지 도착 후 식사로 힘을 보충합니다.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">오후</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">사역 준비 & 기도회</div>
+            <div class="schedule-item-desc">첫 마을회관 방문 전, 팀별 준비와 기도회를 진행합니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-green">기도</span></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">오후</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">마을회관 사역 (2-3곳)</div>
+            <div class="schedule-item-desc">마을회관을 찾아가 어르신들께 간식(편육·김치·수박)을 대접하고, 공연·매니큐어·팩·안마를 진행합니다. 준비한 백지전도로 복음도 전합니다.</div>
+            <div class="schedule-item-tags">
+              <span class="s-tag s-tag-amber">섬김 사역</span>
+              <span class="s-tag s-tag-rose">전도</span>
+              <span class="s-tag s-tag-green">공연</span>
+            </div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">저녁</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">저녁식사</div>
+            <div class="schedule-item-desc">사역을 마치고 함께 저녁을 먹으며 하루를 되돌아봅니다.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">밤</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">피드백 모임 & 기도회</div>
+            <div class="schedule-item-desc">오늘의 사역을 나누고 서로 격려합니다. 내일을 위한 기도로 마무리합니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-blue">팀 모임</span><span class="s-tag s-tag-green">기도</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 수요일 -->
+    <div class="tab-content" id="tab-wed">
+      <div class="day-header">
+        <div class="day-badge">수</div>
+        <div class="day-info">
+          <h3>본 사역의 날 — 오전·오후 풀 사역</h3>
+          <p>아침 말씀 나눔으로 시작해 하루 종일 마을회관을 섬깁니다</p>
+        </div>
+      </div>
+      <div class="schedule-items">
+        <div class="schedule-item">
+          <div class="schedule-time">아침</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">아침 큐티 & 묵상 나눔</div>
+            <div class="schedule-item-desc">말씀을 함께 읽고 묵상을 나누며 하루를 엽니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-green">큐티</span></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">오전</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">사역 준비 & 오전 마을회관 사역</div>
+            <div class="schedule-item-desc">어제보다 익숙해진 손길로, 오전 마을회관을 찾아갑니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-amber">섬김 사역</span><span class="s-tag s-tag-rose">전도</span></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">점심</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">점심식사</div>
+            <div class="schedule-item-desc">오전 사역을 마치고 함께 점심을 먹습니다.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">오후</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">오후 마을회관 사역</div>
+            <div class="schedule-item-desc">오후에도 또 다른 마을회관을 방문해 같은 마음으로 섬깁니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-amber">섬김 사역</span><span class="s-tag s-tag-green">공연</span></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">저녁</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">저녁식사</div>
+            <div class="schedule-item-desc">하루의 고생을 나누며 함께 저녁을 먹습니다.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">밤</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">저녁 예배 & 팀 모임</div>
+            <div class="schedule-item-desc">하루를 감사로 마무리하는 예배와 팀 피드백 시간. 서로를 더 깊이 알아가는 밤입니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-blue">예배</span><span class="s-tag s-tag-blue">팀 모임</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 목요일 -->
+    <div class="tab-content" id="tab-thu">
+      <div class="day-header">
+        <div class="day-badge">목</div>
+        <div class="day-info">
+          <h3>마무리의 날 — 하나 되어 돌아오는 길</h3>
+          <p>세 팀이 옥동교회에 모여 함께 마무리 집회를 드리고 귀가합니다</p>
+        </div>
+      </div>
+      <div class="schedule-items">
+        <div class="schedule-item">
+          <div class="schedule-time">아침</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">아침 큐티 & 묵상 나눔</div>
+            <div class="schedule-item-desc">마지막 아침, 말씀 앞에 앉아 이번 선교 여정을 되돌아보는 나눔을 갖습니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-green">큐티</span></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">점심</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">점심식사</div>
+            <div class="schedule-item-desc">함양에서의 마지막 식사입니다.</div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">오후</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">옥동교회 집결 — 전체 찬양 & 말씀집회</div>
+            <div class="schedule-item-desc">흩어져 사역했던 세 팀이 옥동교회에 모여 함께 찬양하고 말씀을 나눕니다. 이 자리가 선교의 하이라이트입니다.</div>
+            <div class="schedule-item-tags">
+              <span class="s-tag s-tag-amber">전체 집결</span>
+              <span class="s-tag s-tag-blue">말씀집회</span>
+              <span class="s-tag s-tag-green">찬양</span>
+            </div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">귀가</div>
+          <div class="schedule-item-content">
+            <div class="schedule-item-title">교회로 출발 & 귀가</div>
+            <div class="schedule-item-desc">집회를 마친 후 교회로 출발합니다. 약 3시간 30분 이동. 마음 가득 채워 돌아옵니다.</div>
+            <div class="schedule-item-tags"><span class="s-tag s-tag-blue">이동</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════ GALLERY ════════════════════ -->
+<section id="gallery" class="gallery-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-label">함양 사역 사진들</div>
+      <h2 class="section-title">함양에서의 순간들</h2>
+      <p class="section-desc">이미 다녀온 학생들이 직접 올린 사진들. 말보다 사진이 더 많은 걸 담습니다.</p>
+    </div>
+
+    <!-- 교회 필터 -->
+    <div class="gallery-filters reveal">
+      <button class="filter-btn active" onclick="filterChurch('sunwoo', this)">성우성서교회</button>
+      <button class="filter-btn" onclick="filterChurch('okdong', this)">옥동교회</button>
+      <button class="filter-btn" onclick="filterChurch('jinam', this)">대지교회(지남교회)</button>
+      <button class="filter-btn" onclick="filterChurch('assembly', this)">전체 집회</button>
+    </div>
+
+    <!-- 연도 필터 -->
+    <div id="yearFilters" class="gallery-filters reveal" style="margin-top:0;padding-top:0;">
+      <button class="filter-btn filter-year active" style="font-size:13px;padding:8px 18px;" onclick="filterYear('all', this)">전체</button>
+      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2022', this)">2022</button>
+      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2023', this)">2023</button>
+      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2024', this)">2024</button>
+      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2025', this)">2025</button>
+    </div>
+
+    <!-- 업로드된 실제 사진 -->
+    <div id="savedPhotos" class="reveal" style="margin-top:0;"></div>
+
+    <!-- 사진 없을 때 빈 상태 -->
+    <div id="emptyState" class="reveal" style="padding:40px;text-align:center;background:var(--bg-alt);border-radius:var(--radius);display:none;">
+      <div style="font-size:32px;margin-bottom:10px;"></div>
+      <p style="font-size:14px;color:var(--muted);">아직 등록된 사진이 없습니다. 다녀온 분들이 사진을 올려주세요!</p>
+    </div>
+
+    <!-- 업로드 UI -->
+    <div class="reveal" style="margin-top:24px;background:var(--bg-alt);border-radius:var(--radius);border:2px dashed var(--border);overflow:hidden;">
+      <div id="uploadIdle" style="padding:28px;text-align:center;">
+        <p style="font-size:15px;font-weight:700;color:var(--dark);margin-bottom:6px;"> 사진 올리기</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">로그인 후 대표 사진 1장과 제목을 올릴 수 있습니다.</p>
+        <button class="btn btn-primary" onclick="openUploadForm()" style="display:inline-flex;">사진 올리기 →</button>
+      </div>
+      <div id="uploadPreview" style="display:none;padding:24px;flex-direction:column;gap:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;display:block;margin-bottom:8px;">교회 *</label>
+            <select id="uploadChurch" class="form-input" style="padding:10px 14px;font-size:14px;">
+              <option value="sunwoo">성우성서교회</option>
+              <option value="okdong">옥동교회</option>
+              <option value="jinam">대지교회(지남교회)</option>
+              <option value="assembly">전체 집회</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;display:block;margin-bottom:8px;">연도 *</label>
+            <select id="uploadYear" class="form-input" style="padding:10px 14px;font-size:14px;">
+              <option value="2025">2025</option><option value="2024">2024</option>
+              <option value="2023">2023</option><option value="2022">2022</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;display:block;margin-bottom:8px;">제목 *</label>
+          <input id="uploadTitle" class="form-input" placeholder="예: 마을회관 사역 Day 1" style="padding:10px 14px;font-size:14px;width:100%;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;display:block;margin-bottom:8px;">사진 (여러 장 선택 가능) *</label>
+          <label style="cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;border:1.5px dashed var(--border);font-size:13px;color:var(--muted);">
+            <input type="file" accept="image/*" multiple id="galleryUpload" style="display:none;" onchange="handleGalleryUpload(event)">
+            <span id="uploadFileName">사진 선택</span>
+          </label>
+          <p style="font-size:11px;color:var(--muted);margin-top:6px;">첫 번째 사진이 목록 대표 사진으로 표시됩니다.</p>
+          <div id="uploadPreviewGrid" style="margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;"></div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:8px;border-top:1px solid var(--border);">
+          <span id="uploadCount" style="font-size:13px;color:var(--muted);align-self:center;"></span>
+          <button onclick="cancelUpload()" class="btn btn-outline" style="padding:10px 20px;font-size:13px;">취소</button>
+          <button onclick="registerPhotos()" class="btn btn-primary" style="padding:10px 20px;font-size:13px;">등록하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════ REVIEWS ════════════════════ -->
+<section id="reviews" style="padding:100px 0; background:var(--bg-alt); scroll-margin-top:var(--nav-h);">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-label">함양 사역 후기</div>
+      <h2 class="section-title">다녀온 이들이<br>남기는 이야기</h2>
+      <p class="section-desc">함양을 다녀온 후 느낀 점을 자유롭게 남겨주세요.</p>
+    </div>
+
+    <!-- 후기 목록 -->
+    <div id="reviewList" style="max-width:760px;margin:0 auto 48px;display:flex;flex-direction:column;gap:16px;">
+      <div id="dynamicReviews"></div>
+    </div>
+
+    <!-- 후기 작성 폼 -->
+    <div class="reveal" style="max-width:760px;margin:0 auto;">
+      <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;">
+        <div style="padding:24px 28px;border-bottom:1px solid var(--border);">
+          <h3 style="font-size:16px;font-weight:800;color:var(--dark);"> 후기 남기기</h3>
+          <p style="font-size:13px;color:var(--muted);margin-top:4px;">함양 국내선교를 다녀온 분만 작성해 주세요.</p>
+        </div>
+        <form id="reviewForm" onsubmit="submitReview(event)" style="padding:28px;display:flex;flex-direction:column;gap:16px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <label class="form-label">이름 <span class="req">*</span></label>
+              <input required name="rName" class="form-input" placeholder="예: 김○○">
+            </div>
+            <div>
+              <label class="form-label">참여 연도 & 팀</label>
+              <input name="rTeam" class="form-input" placeholder="예: 2024 · 성우성서교회팀">
+            </div>
+          </div>
+          <div>
+            <label class="form-label">후기 <span class="req">*</span></label>
+            <textarea required name="rContent" class="form-textarea" rows="4"
+              placeholder="함양에서의 경험, 느낀 점, 기억에 남는 순간을 자유롭게 써주세요."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="align-self:flex-start;">후기 등록하기 →</button>
+        </form>
+        <div id="reviewSuccess" style="display:none;padding:40px;text-align:center;">
+          <div style="font-size:36px;margin-bottom:12px;"></div>
+          <h4 style="font-size:18px;font-weight:800;color:var(--dark);margin-bottom:8px;">후기를 남겨주셔서 감사해요!</h4>
+          <p style="font-size:14px;color:var(--muted);">소중한 이야기가 다음 참가자들에게 큰 힘이 됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════ FAQ ════════════════════ -->
+<section id="faq" class="faq-section">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-label">자주 묻는 질문</div>
+      <h2 class="section-title">처음 가는 친구들을 위한<br>FAQ</h2>
+      <p class="section-desc">궁금한 게 있어도 신청을 망설이지 마세요.</p>
+    </div>
+    <div class="faq-container">
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">전도를 한 번도 해본 적 없어도 갈 수 있나요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          물론이에요. 오히려 처음 전도를 경험하게 되는 친구들이 많아요. 백지전도는 준비 모임에서 처음부터 함께 배웁니다. 어떻게 시작하고, 어떻게 이어가고, 어떻게 복음의 핵심을 전하는지—단계별로 익히고 팀원과 직접 해보며 연습해요.<br><br>
+          전도 경험보다 중요한 건 복음에 대한 진심입니다. 말이 막혀도, 떨려도 괜찮아요. 예수님의 사랑을 전하고 싶다는 마음 하나면 충분합니다. 실제로 처음 해봤는데 어르신이 눈물을 흘리셨다는 이야기가 매년 나옵니다.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">공연을 잘 해야 하나요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          전혀요. 어르신들이 기대하시는 건 완성도 높은 퍼포먼스가 아니라, 이렇게 멀리까지 찾아와준 학생들의 마음이에요. 준비 모임에서 팀원들과 함께 맞춰 연습하니 걱정 마세요. 오히려 처음 하는 친구들의 진솔한 공연이 더 감동을 드릴 때도 많아요.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">준비 모임은 꼭 참석해야 하나요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          준비 모임부터가 사역의 시작입니다. 함양에 도착하기 전, 함께 모여 기도하고, 백지전도를 연습하고, 팀원들과 마음을 맞춰가는 그 과정 자체가 사역이에요.<br><br>
+          현장에서 한 팀으로 움직이려면 그 시간들이 반드시 필요합니다. 준비 모임에 빠지면 팀 전체의 흐름이 흔들릴 수 있어요. 부득이한 사정이 생기면 미리 담당 교사에게 꼭 알려주세요.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">어떤 마음으로 가면 될까요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          우리가 먼저 받은 섬김, 우리가 먼저 받은 복음을 전하러 가는 겁니다. 빌립보서 2장이 말하는 것처럼, 예수님이 먼저 낮아지셔서 우리에게 오셨던 그 마음을 품고 가는 거예요.<br><br>
+          잘해야 한다는 부담보다, 함께하고자 하는 마음이 먼저입니다. 어르신들께 필요한 건 완벽한 공연이나 유창한 말솜씨가 아니에요. 먼 길을 달려와 옆에 앉아, 손 한 번 꼭 잡아주는 그 마음—그게 섬김의 전부입니다.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">개인 준비물은 어떻게 되나요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          편안한 활동복, 세면도구, 개인 상비약, 성경과 노트, 충전기 등 2박 3일 여행 기본 준비물과 같아요. 자세한 준비물 목록은 참가 확정 후 공지를 통해 안내해드립니다. 특별히 챙겨야 할 것들도 함께 안내됩니다.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">부모님은 무엇을 확인하시면 되나요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          담당 목사님 3분과 여자 선생님, 부장님들이 함께 동행하는 안전한 프로그램입니다. 출발 전 학부모 오리엔테이션을 통해 일정, 숙소 정보, 비상 연락처가 공유됩니다. 가장 중요한 건 기도 지원입니다. 자녀가 현장에서 마음껏 섬길 수 있도록, 집에서 함께 기도해주시는 게 부모님이 해주실 수 있는 가장 큰 힘입니다.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">어느 팀에 배정되나요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          팀 배정은 사역을 위한 결정입니다. 친한 친구와 함께하고 싶은 마음은 충분히 이해하지만, 함양 선교는 편안한 여행이 아니라 함께 섬기기 위해 가는 자리입니다. 때문에 팀 구성은 개인적인 친분보다 사역의 균형과 팀 역할을 고려해 배정되며, 신청 시 친구 요청은 반영되지 않습니다. 처음 만나는 팀원들과 함께 섬기는 그 경험 자체가 이 선교의 중요한 부분입니다.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">비용은 얼마인가요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          참가비는 10만원입니다. 단, 입금 전에 담당 교사와 짧은 면접이 있을 예정이니 신청 후 연락을 기다려 주세요.
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span class="faq-q-text">인솔 선생님들은 어떻게 되나요?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          담당 목사님 3분 외에도 여자 선생님들과 부장님들이 함께 동행하십니다. 학생들이 안전하고 편안하게 사역에 집중할 수 있도록 충분한 인솔 인원이 함께합니다.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="reveal" style="text-align:center;margin-top:40px;padding:28px;background:var(--amber-pale);border-radius:var(--radius);max-width:560px;margin-left:auto;margin-right:auto;">
+      <p style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:8px;">다른 질문이 있으신가요?</p>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">FAQ에 없는 내용은 메일로 바로 문의해 주세요.</p>
+      <a href="mailto:hwanedla@hanmail.net" class="btn btn-primary" style="display:inline-flex;">
+         문의 메일 보내기
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════ REGISTRATION ════════════════════ -->
+<section id="apply" style="scroll-margin-top:68px;">
+
+  <!-- 배너 -->
+  <div style="background:linear-gradient(135deg,#0F1A3A 0%,#1A2744 55%,#1E3A2F 100%);padding:64px 0;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;right:0;width:260px;height:260px;background:radial-gradient(circle,rgba(193,123,74,.25),transparent);transform:translate(40%,-40%);pointer-events:none;border-radius:50%;"></div>
+    <div style="position:relative;max-width:640px;margin:0 auto;padding:0 24px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:11px;font-weight:700;letter-spacing:.1em;padding:6px 16px;border-radius:100px;margin-bottom:20px;">신청 안내</div>
+      <h2 style="font-size:clamp(26px,4vw,38px);font-weight:900;color:#fff;line-height:1.25;letter-spacing:-.02em;margin-bottom:14px;">함양 국내선교,<br>함께 가실래요?</h2>
+      <p style="color:rgba(255,255,255,.7);font-size:16px;line-height:1.75;">처음이어도 괜찮습니다. 잘 못해도 괜찮습니다.<br>섬기고 싶은 마음 하나면 충분합니다.</p>
+    </div>
+  </div>
+
+  <!-- 폼 영역 -->
+  <div style="background:#F5EFE6;padding:56px 0;">
+    <div style="max-width:640px;margin:0 auto;padding:0 24px;">
+
+      <!-- 제출 완료 (기본 숨김) -->
+      <div id="applySuccess" style="display:none;background:#fff;border-radius:24px;border:1px solid #EAE2D8;padding:56px 32px;text-align:center;">
+        <div style="width:72px;height:72px;background:#E8F4EC;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;"></div>
+        <h3 style="font-size:22px;font-weight:900;color:#1A2744;margin-bottom:10px;">신청이 완료되었습니다!</h3>
+        <p style="font-size:14px;color:#4A4A5A;line-height:1.8;margin-bottom:24px;">담당 교사가 확인 후 연락드릴게요.<br>참가비는 아래 계좌로 입금해 주세요.</p>
+        <div style="background:#FFF8F0;border:1px solid #EAD5BB;border-radius:16px;padding:18px;text-align:left;">
+          <div style="font-size:11px;font-weight:700;color:#C17B4A;letter-spacing:.06em;margin-bottom:8px;"> 참가비 입금 계좌</div>
+          <div style="font-size:16px;font-weight:900;color:#1A2744;">○○은행 000-0000-0000</div>
+          <div style="font-size:13px;color:#4A4A5A;margin-top:4px;">예금주: ○○○ (회계 선생님 성함 입력)</div>
+          <div style="font-size:12px;color:#8890A4;margin-top:8px;">입금자명: 본인 이름으로 입금해 주세요</div>
+        </div>
+        <button onclick="document.getElementById('applySuccess').style.display='none';document.getElementById('applyForm').style.display='block';"
+          style="margin-top:20px;font-size:13px;color:#8890A4;background:none;border:none;cursor:pointer;text-decoration:underline;">다시 입력하기</button>
+      </div>
+
+      <!-- 신청 폼 -->
+      <form id="applyForm" onsubmit="submitApply(event)" style="background:#fff;border-radius:24px;border:1px solid #EAE2D8;overflow:hidden;">
+
+        <style>
+          .form-section { padding:28px; border-bottom:1px solid #F5EFE6; }
+          .form-section:last-child { border-bottom:none; }
+          .form-step-title { display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;color:#1A2744;margin-bottom:18px; }
+          .step-badge { width:24px;height:24px;border-radius:50%;background:#FFF0E3;color:#C17B4A;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+          .form-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+          @media(max-width:520px){ .form-grid { grid-template-columns:1fr; } }
+          .form-col-full { grid-column:1/-1; }
+          .form-label { display:block;font-size:12px;font-weight:700;color:#4A4A5A;margin-bottom:6px; }
+          .req { color:#f87171; }
+          .form-input, .form-select, .form-textarea {
+            width:100%;border:2px solid #EAE2D8;border-radius:12px;padding:11px 14px;
+            font-size:14px;color:#1A2744;outline:none;font-family:inherit;
+            transition:border-color .2s,box-shadow .2s;background:#fff;
+          }
+          .form-input:focus,.form-select:focus,.form-textarea:focus { border-color:#C17B4A;box-shadow:0 0 0 3px rgba(193,123,74,.12); }
+          .form-textarea { resize:none; }
+          .radio-group,.check-group { display:flex;gap:10px;flex-wrap:wrap; }
+          .radio-label,.check-label {
+            display:flex;align-items:center;gap:7px;padding:9px 14px;
+            border:2px solid #EAE2D8;border-radius:12px;cursor:pointer;
+            font-size:13px;font-weight:600;color:#8890A4;transition:all .2s;
+            user-select:none;
+          }
+          .radio-label:hover,.check-label:hover { border-color:#C17B4A; }
+          .radio-label input,.check-label input { display:none; }
+          .radio-label.selected { border-color:#C17B4A;background:#FFF0E3;color:#C17B4A; }
+          .check-label.selected { border-color:#C17B4A;background:#FFF0E3;color:#C17B4A; }
+          .check-box { width:16px;height:16px;border-radius:4px;border:2px solid #D0C8BF;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s; }
+          .check-label.selected .check-box { background:#C17B4A;border-color:#C17B4A; }
+          .first-label.selected { border-color:#4A7C59;background:#E8F4EC;color:#4A7C59; }
+          .account-box { background:#FFF8F0;border:1px solid #EAD5BB;border-radius:16px;padding:18px; }
+        </style>
+
+        <!-- 1. 기본 정보 -->
+        <div class="form-section">
+          <div class="form-step-title"><span class="step-badge">1</span>기본 정보</div>
+          <div class="form-grid">
+            <div>
+              <label class="form-label">이름 <span class="req">*</span></label>
+              <input required name="name" class="form-input" placeholder="홍길동">
+            </div>
+            <div>
+              <label class="form-label">예배 <span class="req">*</span></label>
+              <div class="radio-group" style="margin-top:2px;">
+                <label class="radio-label" onclick="selectRadio(this,'service')"><input type="radio" name="service" value="1부" required>1부</label>
+                <label class="radio-label" onclick="selectRadio(this,'service')"><input type="radio" name="service" value="2부">2부</label>
+              </div>
+            </div>
+            <div>
+              <label class="form-label">학년 <span class="req">*</span></label>
+              <select required name="grade" class="form-select">
+                <option value="">선택</option>
+                <option>고1</option><option>고2</option><option>고3</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">반 <span class="req">*</span></label>
+              <input required name="classNum" class="form-input" placeholder="예: 3반">
+            </div>
+            <div>
+              <label class="form-label">핸드폰 번호 <span class="req">*</span></label>
+              <input required name="phone" type="tel" class="form-input" placeholder="010-0000-0000">
+            </div>
+            <div>
+              <label class="form-label">부모님 연락처 <span class="req">*</span></label>
+              <input required name="parentPhone" type="tel" class="form-input" placeholder="010-0000-0000">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 받은 훈련 -->
+        <div class="form-section">
+          <div class="form-step-title"><span class="step-badge">2</span>받은 훈련</div>
+          <p style="font-size:12px;color:#8890A4;margin:-10px 0 14px 34px;">해당되는 것을 모두 선택해 주세요</p>
+          <div class="check-group" id="trainingGroup">
+            <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="양육"><span class="check-box"></span>양육</label>
+            <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="성경공부반"><span class="check-box"></span>성경공부반</label>
+            <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="제자반"><span class="check-box"></span>제자반</label>
+            <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="섬김이"><span class="check-box"></span>섬김이</label>
+            <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="뉴스팀"><span class="check-box"></span>뉴스팀</label>
+            <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="라디"><span class="check-box"></span>라디</label>
+            <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="기타"><span class="check-box"></span>기타</label>
+          </div>
+        </div>
+
+        <!-- 3. 건강 및 참가 정보 -->
+        <div class="form-section">
+          <div class="form-step-title"><span class="step-badge">3</span>건강 및 참가 정보</div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div>
+              <label class="form-label">알레르기 / 건강 특이사항 <span class="req">*</span></label>
+              <textarea required name="health" class="form-textarea" rows="3"
+                placeholder="없으면 '없음'으로 적어주세요. (음식 알레르기, 복용 중인 약, 기타 건강 상태 등)"></textarea>
+            </div>
+            <div>
+              <label class="form-label" style="margin-bottom:8px;">이번이 처음인가요?</label>
+              <div class="radio-group">
+                <label class="radio-label first-label" onclick="selectRadio(this,'firstTime')"><input type="radio" name="firstTime" value="처음이에요">처음이에요</label>
+                <label class="radio-label first-label" onclick="selectRadio(this,'firstTime')"><input type="radio" name="firstTime" value="이전에 다녀왔어요">이전에 다녀왔어요</label>
+              </div>
+            </div>
+            <div>
+              <label class="form-label" style="margin-bottom:8px;">해외선교 신청 여부</label>
+              <div class="radio-group">
+                <label class="radio-label first-label" onclick="selectRadio(this,'overseas')"><input type="radio" name="overseas" value="해외선교도 함께 신청했습니다">해외선교도 함께 신청했습니다</label>
+                <label class="radio-label first-label" onclick="selectRadio(this,'overseas')"><input type="radio" name="overseas" value="해당 없음">해당 없음</label>
+              </div>
+            </div>
+            <div>
+              <label class="form-label">참가 동기 <span style="color:#8890A4;font-weight:400;">(선택)</span></label>
+              <textarea name="motivation" class="form-textarea" rows="2" placeholder="한두 줄로 자유롭게 적어주세요."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 참가비 안내 -->
+        <div class="form-section">
+          <div class="form-step-title"><span class="step-badge">4</span>참가비 안내</div>
+          <div class="account-box">
+            <div style="font-size:11px;font-weight:700;color:#C17B4A;letter-spacing:.06em;margin-bottom:10px;"> 입금 계좌</div>
+            <div style="font-size:16px;font-weight:900;color:#1A2744;">○○은행 000-0000-0000</div>
+            <div style="font-size:13px;color:#4A4A5A;margin-top:3px;">예금주: ○○○ <span style="font-size:11px;color:#8890A4;">(회계 선생님 성함 입력)</span></div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid #EAD5BB;display:flex;flex-direction:column;gap:5px;">
+              <div style="font-size:12px;color:#4A4A5A;">• 신청 후 담당 교사와 <strong>면접</strong>이 진행됩니다</div>
+              <div style="font-size:12px;color:#4A4A5A;">• 면접 후 입금 계좌가 안내됩니다 · 참가비: <strong>10만원</strong></div>
+              <div style="font-size:12px;color:#4A4A5A;">• 입금자명: <strong>본인 이름</strong>으로 입금해 주세요</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 제출 -->
+        <div style="padding:24px 28px;">
+          <button type="submit" class="btn-apply">함양 국내선교 신청하기 →</button>
+          <p style="text-align:center;font-size:12px;color:#8890A4;margin-top:12px;">신청 후 담당 교사의 확인 연락을 기다려 주세요 · 문의: 고등부 교역자실</p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">수영로교회 고등부 함양 국내선교</div>
+        <div class="footer-tagline">
+          한 번의 방문이 아니라, 이어지는 섬김.<br>
+          함양 지역 교회들과 함께 마을을 섬기는<br>
+          고등부의 2박 3일 국내선교 사역입니다.
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>사역 소개</h4>
+        <a href="#churches">세 교회팀 소개</a>
+        <a href="#ministry">사역 내용</a>
+        <a href="#prep">한 달 준비 과정</a>
+        <a href="#schedule-section">2박 3일 일정</a>
+      </div>
+      <div class="footer-col">
+        <h4>참여하기</h4>
+        <a href="#gallery">사진 갤러리</a>
+        <a href="#testimonials">참가자 후기</a>
+        <a href="#faq">자주 묻는 질문</a>
+        <a href="#apply">신청 안내</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 수영로교회 고등부. All rights reserved.</span>
+      <span>함양 국내선교 · 성우성서교회 · 옥동교회 · 대지교회(지남교회)</span>
+      <button onclick="showAdminModal()" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:11px;cursor:pointer;margin-top:8px;display:block;">관리자</button>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════ JAVASCRIPT ════════════════════ -->
+<script>
+  /* ── Navbar scroll ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  /* ── Mobile menu ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  function closeMobile() { mobileMenu.classList.remove('open'); }
+
+  /* ── Schedule tabs ── */
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  /* ── Church tabs (testimonials) ── */
+  function switchChurchTab(id, btn) {
+    document.querySelectorAll('.church-tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.church-tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('ctab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  /* ── Gallery filter ── */
+  function filterGallery(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.style.display = item.dataset.cat === cat ? '' : 'none';
+    });
+  }
+
+  /* 초기 로딩: 성우성서교회만 표시 */
+  /* ── Gallery state ── */
+  let currentChurch = 'sunwoo';
+  let currentYear = 'all';
+
+  /* ── IndexedDB (용량 제한 없음) ── */
+  let _idb = null;
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      if (_idb) { resolve(_idb); return; }
+      const req = indexedDB.open('hamyangPhotosDB', 2);
+      req.onupgradeneeded = e => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains('photos'))
+          d.createObjectStore('photos', { keyPath: 'id', autoIncrement: true });
+        if (!d.objectStoreNames.contains('users')) {
+          const us = d.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+          us.createIndex('name', 'name', { unique: true });
+        }
+        if (!d.objectStoreNames.contains('reviews'))
+          d.createObjectStore('reviews', { keyPath: 'id', autoIncrement: true });
+      };
+      req.onsuccess = e => { _idb = e.target.result; resolve(_idb); };
+      req.onerror  = e => reject(e.target.error);
+    });
+  }
+  function dbGetAll() {
+    return openDB().then(db => new Promise((resolve, reject) => {
+      const req = db.transaction('photos','readonly').objectStore('photos').getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror  = () => reject(req.error);
+    }));
+  }
+
+  function dbGetUser(name) {
+    return openDB().then(db => new Promise((res,rej) => {
+      const r = db.transaction('users','readonly').objectStore('users').index('name').get(name);
+      r.onsuccess = () => res(r.result || null);
+      r.onerror   = () => rej(r.error);
+    }));
+  }
+  function dbAddUser(name, grade, pin) {
+    return openDB().then(db => new Promise((res,rej) => {
+      const tx = db.transaction('users','readwrite');
+      const r  = tx.objectStore('users').add({ name, grade, pin });
+      r.onsuccess = () => res(r.result);
+      tx.onerror  = () => rej(tx.error);
+    }));
+  }
+  function dbGetReviews() {
+    return openDB().then(db => new Promise((res,rej) => {
+      const r = db.transaction('reviews','readonly').objectStore('reviews').getAll();
+      r.onsuccess = () => res(r.result);
+      r.onerror   = () => rej(r.error);
+    }));
+  }
+  function dbAddReview(rv) {
+    return openDB().then(db => new Promise((res,rej) => {
+      const tx = db.transaction('reviews','readwrite');
+      const r  = tx.objectStore('reviews').add(rv);
+      r.onsuccess = () => res(r.result);
+      tx.onerror  = () => rej(tx.error);
+    }));
+  }
+  function dbDeleteItem(store, id) {
+    return openDB().then(db => new Promise((res,rej) => {
+      const tx = db.transaction(store,'readwrite');
+      tx.objectStore(store).delete(id);
+      tx.oncomplete = res;
+      tx.onerror    = () => rej(tx.error);
+    }));
+  }
+  function dbPutPhoto(p) {
+    return openDB().then(db => new Promise((res,rej) => {
+      const tx = db.transaction('photos','readwrite');
+      tx.objectStore('photos').put(p);
+      tx.oncomplete = res;
+      tx.onerror    = () => rej(tx.error);
+    }));
+  }
+
+  function dbAddAll(entries) {
+    return openDB().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction('photos','readwrite');
+      const store = tx.objectStore('photos');
+      entries.forEach(e => store.add(e));
+      tx.oncomplete = () => resolve();
+      tx.onerror    = () => reject(tx.error);
+    }));
+  }
+
+
+  /* ── Auth ── */
+  const ADMIN_ID  = 'admin';
+  const ADMIN_PIN = '12340987';
+
+  function getSession() {
+    try { return JSON.parse(sessionStorage.getItem('hm_session')||'null'); } catch { return null; }
+  }
+  function isAdmin() { return sessionStorage.getItem('hm_admin')==='1'; }
+
+  function setSession(user) {
+    sessionStorage.setItem('hm_session', JSON.stringify(user));
+    updateNavUser();
+  }
+  function clearSession() {
+    sessionStorage.removeItem('hm_session');
+    sessionStorage.removeItem('hm_admin');
+    document.getElementById('adminBar').style.display = 'none';
+    updateNavUser();
+    renderSavedPhotos();
+    renderReviews();
+  }
+  function updateNavUser() {
+    const el = document.getElementById('navUserArea');
+    if (!el) return;
+    const s = getSession();
+    if (isAdmin()) {
+      el.innerHTML = '<span style="font-size:13px;font-weight:700;color:#C17B4A;"> 관리자</span>';
+    } else if (s) {
+      el.innerHTML = '<span style="font-size:13px;font-weight:600;color:var(--dark);">' + s.name + '</span>'
+        + '<button style="font-size:11px;color:#8890A4;border:none;background:none;cursor:pointer;margin-left:6px;" onclick="clearSession()">로그아웃</button>';
+    } else {
+      el.innerHTML = '<button onclick="showLoginModal()" style="font-size:13px;font-weight:600;color:var(--amber);border:1.5px solid var(--amber);background:none;padding:4px 14px;border-radius:20px;cursor:pointer;font-family:inherit;">로그인</button>';
+    }
+  }
+
+  let _loginCb = null;
+  function showLoginModal(cb) {
+    _loginCb = cb || null;
+    document.getElementById('authName').value = '';
+    document.getElementById('authGrade').value = '';
+    document.getElementById('authPin').value = '';
+    document.getElementById('authMsg').textContent = '';
+    document.getElementById('loginModal').style.display = 'flex';
+    setTimeout(() => document.getElementById('authName').focus(), 50);
+  }
+  function closeLoginModal() {
+    document.getElementById('loginModal').style.display = 'none';
+    _loginCb = null;
+  }
+  async function doLogin() {
+    const name  = document.getElementById('authName').value.trim();
+    const grade = document.getElementById('authGrade').value;
+    const pin   = document.getElementById('authPin').value;
+    const msg   = document.getElementById('authMsg');
+    msg.textContent = '';
+    if (!name) { msg.textContent = '이름을 입력해주세요.'; return; }
+    if (!pin)  { msg.textContent = '비밀번호를 입력해주세요.'; return; }
+    try {
+      const ex = await dbGetUser(name);
+      if (ex) {
+        if (ex.pin !== pin) { msg.textContent = '비밀번호가 맞지 않습니다.'; return; }
+        setSession({ id: ex.id, name });
+      } else {
+        const id = await dbAddUser(name, grade, pin);
+        setSession({ id, name });
+      }
+      closeLoginModal();
+      if (_loginCb) _loginCb();
+    } catch { msg.textContent = '오류가 발생했습니다. 다시 시도해주세요.'; }
+  }
+
+  function showAdminModal() {
+    document.getElementById('adminIdInput').value = '';
+    document.getElementById('adminPinInput').value = '';
+    document.getElementById('adminMsg').textContent = '';
+    document.getElementById('adminModal').style.display = 'flex';
+    setTimeout(() => document.getElementById('adminIdInput').focus(), 50);
+  }
+  function doAdminLogin() {
+    const id  = document.getElementById('adminIdInput').value.trim();
+    const pin = document.getElementById('adminPinInput').value;
+    if (id === ADMIN_ID && pin === ADMIN_PIN) {
+      sessionStorage.setItem('hm_admin', '1');
+      document.getElementById('adminModal').style.display = 'none';
+      document.getElementById('adminBar').style.display = 'flex';
+      updateNavUser();
+      renderSavedPhotos();
+      renderReviews();
+    } else {
+      document.getElementById('adminMsg').textContent = '아이디 또는 비밀번호가 틀렸습니다.';
+    }
+  }
+
+  /* ── Lightbox ── */
+  let _lbPhotos = [];
+  let _lbIndex  = 0;
+  let _lbTitle  = '';
+  let _lbAuthor = '';
+
+  function openLightbox(photos, index, title, author) {
+    _lbPhotos = Array.isArray(photos) ? photos : [photos];
+    _lbIndex  = Math.max(0, Math.min(index, _lbPhotos.length - 1));
+    _lbTitle  = title  || '';
+    _lbAuthor = author || '';
+    lbRender();
+    document.getElementById('lightbox').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function lbRender() {
+    document.getElementById('lightboxImg').src = _lbPhotos[_lbIndex] || '';
+    document.getElementById('lightboxTitle').textContent = _lbTitle;
+    document.getElementById('lightboxAuthor').textContent = _lbAuthor;
+    const counter = document.getElementById('lbCounter');
+    counter.textContent = _lbPhotos.length > 1 ? (_lbIndex + 1) + ' / ' + _lbPhotos.length : '';
+    document.querySelector('.lb-prev').style.display = _lbPhotos.length > 1 ? '' : 'none';
+    document.querySelector('.lb-next').style.display = _lbPhotos.length > 1 ? '' : 'none';
+  }
+  function lbGo(index) {
+    _lbIndex = (_lbPhotos.length + index) % _lbPhotos.length;
+    lbRender();
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('lightbox').style.display !== 'none') {
+      if (e.key === 'Escape')      closeLightbox();
+      else if (e.key === 'ArrowRight') lbGo(_lbIndex + 1);
+      else if (e.key === 'ArrowLeft')  lbGo(_lbIndex - 1);
+    }
+    if (document.getElementById('postModal').style.display !== 'none' && e.key === 'Escape') closePostModal();
+  });
+
+  function openPostModal(p, title, author, timeStr) {
+    const photos = getPostPhotos(p);
+    if (photos.length === 1) { openLightbox(photos, 0, title, author + ' · ' + timeStr); return; }
+    document.getElementById('postModalTitle').textContent = title;
+    document.getElementById('postModalMeta').textContent = (author || '') + (timeStr ? ' · ' + timeStr : '');
+    const grid = document.getElementById('postModalGrid');
+    grid.innerHTML = '';
+    photos.forEach((src, i) => {
+      const item = document.createElement('div');
+      item.className = 'post-modal-item';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.loading = 'lazy';
+      item.appendChild(img);
+      item.addEventListener('click', () => openLightbox(photos, i, title, author));
+      grid.appendChild(item);
+    });
+    document.getElementById('postModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function closePostModal() {
+    document.getElementById('postModal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  /* ── Gallery upload (로그인 필요) ── */
+  function openUploadForm() {
+    const s = getSession();
+    if (!s && !isAdmin()) { showLoginModal(() => openUploadForm()); return; }
+    document.getElementById('uploadIdle').style.display = 'none';
+    document.getElementById('uploadPreview').style.display = 'flex';
+    document.getElementById('uploadPreview').style.flexDirection = 'column';
+    document.getElementById('uploadPreview').style.gap = '16px';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    /* localStorage → IndexedDB 마이그레이션 */
+    const old = localStorage.getItem('hamyangPhotos');
+    if (old) {
+      try {
+        const arr = JSON.parse(old);
+        if (arr.length) dbAddAll(arr).catch(() => {});
+      } catch {}
+      localStorage.removeItem('hamyangPhotos');
+    }
+    renderSavedPhotos();
+    renderReviews();
+    updateNavUser();
+    if (isAdmin()) document.getElementById('adminBar').style.display = 'flex';
+  });
+
+  function filterChurch(church, btn) {
+    currentChurch = church;
+    currentYear = 'all';
+    document.querySelectorAll('.filter-btn:not(.filter-year)').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.filter-year').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-year').classList.add('active');
+    renderSavedPhotos();
+  }
+
+  function filterYear(year, btn) {
+    currentYear = year;
+    document.querySelectorAll('.filter-year').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderSavedPhotos();
+  }
+
+  function getPostPhotos(p) { return p.photos && p.photos.length ? p.photos : (p.src ? [p.src] : []); }
+  function getPostCover(p) { return getPostPhotos(p)[0] || ''; }
+
+  function renderSavedPhotos() {
+    dbGetAll().then(all => {
+      const filtered = all.filter(p =>
+        p.church === currentChurch &&
+        (currentYear === 'all' || p.year === currentYear)
+      );
+      const wrap  = document.getElementById('savedPhotos');
+      const empty = document.getElementById('emptyState');
+      wrap.innerHTML = '';
+      if (filtered.length === 0) {
+        wrap.style.display = 'none';
+        empty.style.display = 'block';
+      } else {
+        empty.style.display = 'none';
+        wrap.style.display = 'block';
+        const admin = isAdmin();
+
+        /* 관리자 모드: 일괄 작업 툴바 */
+        if (admin) {
+          const bulkBar = document.createElement('div');
+          bulkBar.id = 'bulkBar';
+          bulkBar.className = 'gallery-bulk-bar';
+          bulkBar.style.display = 'none';
+          bulkBar.innerHTML = '<span class="bulk-count" id="bulkCount">0개 선택됨</span>'
+            + '<button class="bulk-del-btn" onclick="adminBulkDelete()">선택 삭제</button>'
+            + '<button class="bulk-cancel-btn" onclick="clearAllChecks()">선택 해제</button>';
+          wrap.appendChild(bulkBar);
+        }
+
+        const table = document.createElement('table');
+        table.className = 'gallery-board';
+        table.innerHTML = '<thead><tr>'
+          + (admin ? '<th class="col-check"><input type="checkbox" class="photo-check" onchange="toggleAllPhotos(this)" title="전체 선택"></th>' : '<th class="col-num">번호</th>')
+          + '<th>제목</th>'
+          + '<th class="col-author">글쓴이</th>'
+          + '<th class="col-time">시간</th>'
+          + (admin ? '<th class="col-admin">관리</th>' : '')
+          + '</tr></thead>';
+        const tbody = document.createElement('tbody');
+        filtered.slice().reverse().forEach((p, i) => {
+          const title  = p.title || '(제목 없음)';
+          const author = p.authorName || '-';
+          const ts     = p.timestamp ? new Date(p.timestamp) : null;
+          const timeStr = ts
+            ? ts.getFullYear() + '.' + String(ts.getMonth()+1).padStart(2,'0') + '.' + String(ts.getDate()).padStart(2,'0')
+              + ' ' + String(ts.getHours()).padStart(2,'0') + ':' + String(ts.getMinutes()).padStart(2,'0')
+            : '-';
+          const tr = document.createElement('tr');
+
+          if (admin) {
+            const checkTd = document.createElement('td');
+            checkTd.className = 'col-check';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.className = 'photo-check';
+            cb.value = p.id;
+            cb.addEventListener('change', updateBulkBar);
+            cb.addEventListener('click', e => e.stopPropagation());
+            checkTd.appendChild(cb);
+            tr.appendChild(checkTd);
+          } else {
+            const numTd = document.createElement('td');
+            numTd.className = 'col-num';
+            numTd.textContent = filtered.length - i;
+            tr.appendChild(numTd);
+          }
+
+          const titleTd = document.createElement('td');
+          titleTd.className = 'col-title';
+          const thumb = document.createElement('img');
+          thumb.className = 'thumb';
+          thumb.src = getPostCover(p);
+          thumb.alt = '';
+          const titleSpan = document.createElement('span');
+          titleSpan.textContent = title;
+          const wrap2 = document.createElement('div');
+          wrap2.className = 'title-wrap';
+          wrap2.appendChild(thumb);
+          wrap2.appendChild(titleSpan);
+          titleTd.appendChild(wrap2);
+
+          const authorTd = document.createElement('td');
+          authorTd.className = 'col-author';
+          authorTd.textContent = author;
+
+          const timeTd = document.createElement('td');
+          timeTd.className = 'col-time';
+          timeTd.textContent = timeStr;
+
+          tr.appendChild(titleTd);
+          tr.appendChild(authorTd);
+          tr.appendChild(timeTd);
+
+          const photoCount = getPostPhotos(p).length;
+          if (photoCount > 1) {
+            const countBadge = document.createElement('span');
+            countBadge.textContent = ' (' + photoCount + '장)';
+            countBadge.style.cssText = 'font-size:11px;color:var(--muted);font-weight:400;';
+            titleSpan.appendChild(countBadge);
+          }
+          tr.addEventListener('click', () => openPostModal(p, title, author, timeStr));
+
+          if (admin) {
+            const adminTd = document.createElement('td');
+            adminTd.className = 'col-admin';
+            const editBtn = document.createElement('button');
+            editBtn.className = 'admin-photo-move';
+            editBtn.textContent = '✏';
+            editBtn.title = '수정';
+            editBtn.addEventListener('click', e => { e.stopPropagation(); adminEditPost(p.id, p.title, p.church, p.year); });
+            const del = document.createElement('button');
+            del.className = 'admin-photo-del';
+            del.textContent = '';
+            del.title = '삭제';
+            del.addEventListener('click', e => { e.stopPropagation(); adminDeletePhoto(p.id); });
+            adminTd.appendChild(editBtn);
+            adminTd.appendChild(del);
+            tr.appendChild(adminTd);
+          }
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        wrap.appendChild(table);
+      }
+    }).catch(() => {});
+  }
+
+  /* ── FAQ accordion ── */
+  function toggleFaq(questionEl) {
+    const item = questionEl.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ── Scroll reveal ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── Form helpers ── */
+  function selectRadio(label, name) {
+    const group = label.closest('form') || document;
+    group.querySelectorAll(`.radio-label[onclick*="${name}"]`).forEach(l => l.classList.remove('selected'));
+    label.classList.add('selected');
+    label.querySelector('input').checked = true;
+  }
+
+  function toggleCheck(label) {
+    setTimeout(() => {
+      const cb = label.querySelector('input');
+      label.classList.toggle('selected', cb.checked);
+    }, 0);
+  }
+
+  /* ── Gallery upload ── */
+  let pendingImages = [];
+
+  function compressImage(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 900;
+        let w = img.width, h = img.height;
+        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+        if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.72));
+      };
+      img.src = src;
+    });
+  }
+
+  function handleGalleryUpload(e) {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    pendingImages = [];
+    const grid = document.getElementById('uploadPreviewGrid');
+    grid.innerHTML = '';
+    document.getElementById('uploadFileName').textContent = '불러오는 중...';
+    document.getElementById('uploadCount').textContent = '';
+    let done = 0;
+    const total = files.length;
+    files.forEach((file, idx) => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        compressImage(ev.target.result).then(compressed => {
+          pendingImages[idx] = compressed;
+          const wrap = document.createElement('div');
+          wrap.style.cssText = 'aspect-ratio:1;overflow:hidden;border-radius:8px;' + (idx===0 ? 'outline:3px solid var(--amber);' : '');
+          const img = document.createElement('img');
+          img.src = compressed;
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+          wrap.appendChild(img);
+          grid.appendChild(wrap);
+          done++;
+          document.getElementById('uploadCount').textContent = done + '/' + total + '장 로딩됨';
+          if (done === total) document.getElementById('uploadFileName').textContent = total + '장 선택됨';
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function cancelUpload() {
+    pendingImages = [];
+    document.getElementById('uploadPreview').style.display = 'none';
+    document.getElementById('uploadIdle').style.display = 'block';
+    document.getElementById('galleryUpload').value = '';
+    document.getElementById('uploadFileName').textContent = '사진 선택';
+    document.getElementById('uploadPreviewGrid').innerHTML = '';
+    document.getElementById('uploadTitle').value = '';
+    document.getElementById('uploadCount').textContent = '';
+  }
+
+  function registerPhotos() {
+    if (!pendingImages.length) { alert('사진을 선택해주세요.'); return; }
+    const title  = (document.getElementById('uploadTitle').value || '').trim();
+    if (!title) { alert('제목을 입력해주세요.'); return; }
+    const church = document.getElementById('uploadChurch').value;
+    const year   = document.getElementById('uploadYear').value;
+    const s      = getSession();
+    const authorName = s ? s.name : (isAdmin() ? '관리자' : '');
+    const newEntries = [{ photos: pendingImages.filter(Boolean), title, authorName, church, year, timestamp: Date.now() }];
+    dbAddAll(newEntries).then(() => {
+      currentChurch = church;
+      currentYear = year;
+      document.querySelectorAll('.filter-btn:not(.filter-year)').forEach(b => b.classList.remove('active'));
+      const churchBtn = document.querySelector(`.filter-btn[onclick*="'${church}'"]`);
+      if (churchBtn) churchBtn.classList.add('active');
+      document.querySelectorAll('.filter-year').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim() === year);
+      });
+      cancelUpload();
+      renderSavedPhotos();
+    }).catch(err => {
+      alert('사진 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+    });
+  }
+
+  function submitApply(e) {
+    e.preventDefault();
+    document.getElementById('applyForm').style.display = 'none';
+    document.getElementById('applySuccess').style.display = 'block';
+    document.getElementById('apply').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function submitReview(e) {
+    e.preventDefault();
+    const session = getSession();
+    if (!session) { showLoginModal(() => {}); return; }
+    const form    = e.target;
+    const name    = form.rName.value.trim();
+    const team    = form.rTeam.value.trim();
+    const content = form.rContent.value.trim();
+    dbAddReview({ name, team, content, authorId: session.id, timestamp: Date.now() }).then(() => {
+      document.getElementById('reviewForm').style.display = 'none';
+      document.getElementById('reviewSuccess').style.display = 'block';
+      renderReviews();
+    });
+  }
+
+  function renderReviews() {
+    dbGetReviews().then(reviews => {
+      const el = document.getElementById('dynamicReviews');
+      if (!el) return;
+      const admin = isAdmin();
+      el.innerHTML = reviews.map(r => `
+        <div class="review-card">
+          ${admin ? '<button onclick="adminDeleteReview(' + r.id + ')" style="float:right;border:none;background:#E05252;color:#fff;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;line-height:24px;margin-left:8px;"></button>' : ''}
+          <div class="review-meta">
+            <div class="review-avatar avatar-amber"></div>
+            <div>
+              <div class="review-author">${r.name}</div>
+              <div class="review-role">${r.team}</div>
+            </div>
+          </div>
+          <div class="review-type-badge badge-student">학생 후기</div>
+          <div class="review-quote">${r.content.replace(/\n/g,'<br>')}</div>
+        </div>
+      `).join('');
+    }).catch(() => {});
+  }
+
+  async function adminDeleteReview(id) {
+    if (!confirm('이 후기를 삭제할까요?')) return;
+    await dbDeleteItem('reviews', id);
+    renderReviews();
+  }
+
+  async function adminDeletePhoto(id) {
+    if (!confirm('이 사진을 삭제할까요?')) return;
+    await dbDeleteItem('photos', id);
+    renderSavedPhotos();
+  }
+  function adminEditPost(id, title, church, year) {
+    document.getElementById('editPhotoId').value = id;
+    document.getElementById('editTitle').value   = title || '';
+    document.getElementById('editChurch').value  = church || 'sunwoo';
+    document.getElementById('editYear').value    = year   || '2025';
+    document.getElementById('editModal').style.display = 'flex';
+  }
+  async function confirmEditPost() {
+    const id     = Number(document.getElementById('editPhotoId').value);
+    const title  = document.getElementById('editTitle').value.trim();
+    const church = document.getElementById('editChurch').value;
+    const year   = document.getElementById('editYear').value;
+    if (!title) { alert('제목을 입력해주세요.'); return; }
+    const all = await dbGetAll();
+    const p = all.find(x => x.id === id);
+    if (p) await dbPutPhoto({ ...p, title, church, year });
+    document.getElementById('editModal').style.display = 'none';
+    renderSavedPhotos();
+  }
+
+  /* ── 체크박스 일괄 관리 ── */
+  function updateBulkBar() {
+    const checked = document.querySelectorAll('.photo-check[value]:checked');
+    const bar = document.getElementById('bulkBar');
+    const countEl = document.getElementById('bulkCount');
+    if (!bar) return;
+    if (checked.length > 0) {
+      bar.style.display = 'flex';
+      countEl.textContent = checked.length + '개 선택됨';
+    } else {
+      bar.style.display = 'none';
+    }
+  }
+  function toggleAllPhotos(headerCb) {
+    document.querySelectorAll('.photo-check[value]').forEach(cb => { cb.checked = headerCb.checked; });
+    updateBulkBar();
+  }
+  function clearAllChecks() {
+    document.querySelectorAll('.photo-check').forEach(cb => { cb.checked = false; });
+    updateBulkBar();
+  }
+  async function adminBulkDelete() {
+    const ids = Array.from(document.querySelectorAll('.photo-check[value]:checked')).map(cb => Number(cb.value));
+    if (!ids.length) return;
+    if (!confirm(ids.length + '개 게시글을 삭제할까요?')) return;
+    for (const id of ids) await dbDeleteItem('photos', id);
+    renderSavedPhotos();
+  }
+
+  async function adminMigrateAll() {
+    /* localStorage 잔여분 */
+    const old = localStorage.getItem('hamyangPhotos');
+    let cnt = 0;
+    if (old) {
+      try {
+        const arr = JSON.parse(old);
+        if (arr.length) {
+          await dbAddAll(arr.map(p => ({ src: p.src, church: 'jinam', year: '2025' })));
+          cnt += arr.length;
+        }
+      } catch {}
+      localStorage.removeItem('hamyangPhotos');
+    }
+    /* IndexedDB sunwoo → jinam */
+    const all = await dbGetAll();
+    const sunwoo = all.filter(p => p.church === 'sunwoo');
+    for (const p of sunwoo) { await dbPutPhoto({ ...p, church: 'jinam', year: '2025' }); cnt++; }
+    alert(cnt ? cnt + '장 대지교회 2025로 이동 완료!' : '이동할 성우성서교회 사진이 없습니다.');
+    currentChurch = 'jinam'; currentYear = '2025';
+    renderSavedPhotos();
+  }
+</script>
+</body>
+</html>
