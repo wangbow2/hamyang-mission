@@ -2097,29 +2097,47 @@
 
   /* blob ID → base64 메모리 캐시 */
   const _blobCache = {};
+  function _isBlobId(x) {
+    return typeof x === 'string' && x.length < 50 && !x.startsWith('data:') && !x.startsWith('http');
+  }
+  async function _fetchBlob(id) {
+    if (_blobCache[id]) return _blobCache[id];
+    try {
+      const doc = await firestoreDB.collection('photo_blobs').doc(id).get();
+      if (!doc.exists) return null;
+      const d = doc.data();
+      let result;
+      if (d.chunkIds && d.chunkIds.length) {
+        /* 청크 분할 저장 방식 */
+        const chunks = await Promise.all(
+          d.chunkIds.map(cid => firestoreDB.collection('photo_chunks').doc(cid).get()
+            .then(cd => cd.exists ? cd.data().d : ''))
+        );
+        result = chunks.join('');
+      } else {
+        /* 이전 단일 문서 방식 호환 */
+        result = d.data || null;
+      }
+      if (result) _blobCache[id] = result;
+      return result;
+    } catch { return null; }
+  }
   async function _resolvePhotos(posts) {
     if (!firestoreDB) return posts;
     const blobIdsNeeded = [];
     posts.forEach(p => {
       if (Array.isArray(p.photos)) p.photos.forEach(x => {
-        if (typeof x === 'string' && x.length < 50 && !x.startsWith('data:') && !x.startsWith('http') && !_blobCache[x])
-          blobIdsNeeded.push(x);
+        if (_isBlobId(x) && !_blobCache[x]) blobIdsNeeded.push(x);
       });
     });
     if (blobIdsNeeded.length) {
-      await Promise.all(blobIdsNeeded.map(async id => {
-        try {
-          const d = await firestoreDB.collection('photo_blobs').doc(id).get();
-          if (d.exists) _blobCache[id] = d.data().data;
-        } catch {}
-      }));
+      await Promise.all([...new Set(blobIdsNeeded)].map(id => _fetchBlob(id)));
     }
     return posts.map(p => ({
       ...p,
-      photos: Array.isArray(p.photos) ? p.photos.map(x =>
-        (typeof x === 'string' && x.length < 50 && !x.startsWith('data:') && !x.startsWith('http'))
-          ? (_blobCache[x] || null) : x
-      ).filter(Boolean) : p.photos
+      photos: Array.isArray(p.photos)
+        ? p.photos.map(x => _isBlobId(x) ? (_blobCache[x] || null) : x).filter(Boolean)
+        : p.photos
     }));
   }
 
@@ -2199,10 +2217,15 @@
     if (store === 'photos') {
       await _idbDelete(id).catch(() => {});
       _lsDel('hm_photos', id);
-      /* Firestore: blob 문서들도 삭제 */
+      /* Firestore: blob + chunk 문서 삭제 */
       if (firestoreDB) {
-        firestoreDB.collection('photo_blobs').where('postId','==',id).get()
-          .then(snap => snap.docs.forEach(d => d.ref.delete())).catch(()=>{});
+        firestoreDB.collection('photo_blobs').where('postId','==',id).get().then(snap => {
+          snap.docs.forEach(d => {
+            const chunkIds = (d.data().chunkIds || []);
+            chunkIds.forEach(cid => firestoreDB.collection('photo_chunks').doc(cid).delete().catch(()=>{}));
+            d.ref.delete();
+          });
+        }).catch(()=>{});
       }
     } else {
       const lsKeyMap = { reviews: 'hm_reviews', users: 'hm_users', applications: 'hm_applications', inquiries: 'hm_inquiries' };
@@ -2936,26 +2959,27 @@ function filterYear(year, btn) {
       const uploadCount = document.getElementById('uploadCount');
 
       if (firestoreDB) {
-        /* ── Firestore: 사진 별도 문서로 저장 — 1MB 한도 맞춰 재압축 ── */
-        const LIMIT = 786432; /* 768KB — base64 overhead 감안, 1MB 안전 마진 */
-        async function fitBlob(dataUrl) {
-          let result = dataUrl;
-          /* 이미 충분히 작으면 그대로 */
-          if (result.length <= LIMIT) return result;
-          /* 960px → 768px → 600px 순으로 재시도 */
-          for (const [px, q] of [[960, 0.80], [768, 0.75], [600, 0.70]]) {
-            result = await compressImage(dataUrl, px, q).catch(() => null) || dataUrl;
-            if (result.length <= LIMIT) break;
+        /* ── Firestore: 사진 별도 문서로 저장 ── */
+        /* Firestore 문자열 한도(~1MB) 내로 청크 분할 저장 */
+        const CHUNK = 600000; /* 600,000자 청크 — Firestore 1MB 한도 안전 */
+
+        async function uploadPhoto(dataUrl, idx, total) {
+          if (uploadCount) uploadCount.textContent = `${idx + 1}/${total}장 업로드 중...`;
+          const chunks = [];
+          for (let s = 0; s < dataUrl.length; s += CHUNK) chunks.push(dataUrl.slice(s, s + CHUNK));
+          /* 각 청크를 별도 문서로 저장 */
+          const chunkIds = [];
+          for (const chunk of chunks) {
+            const r = await firestoreDB.collection('photo_chunks').add({ d: chunk });
+            chunkIds.push(r.id);
           }
-          return result;
+          const blobRef = await firestoreDB.collection('photo_blobs').add({ chunkIds, postId: '' });
+          return blobRef.id;
         }
 
         const blobIds = [];
         for (let i = 0; i < valid.length; i++) {
-          if (uploadCount) uploadCount.textContent = `${i + 1}/${valid.length}장 업로드 중...`;
-          const data = await fitBlob(valid[i]);
-          const ref = await firestoreDB.collection('photo_blobs').add({ data, postId: '' });
-          blobIds.push(ref.id);
+          blobIds.push(await uploadPhoto(valid[i], i, valid.length));
         }
         if (uploadCount) uploadCount.textContent = `저장 중...`;
         const postRef = await firestoreDB.collection('photos').add({
