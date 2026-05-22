@@ -62,9 +62,9 @@
       font-size:clamp(26px, 4vw, 38px);
       font-weight:800; color:var(--dark);
       line-height:1.3; letter-spacing:-.02em;
-      margin-bottom:14px;
+      margin-bottom:14px; word-break:keep-all;
     }
-    .section-desc { font-size:17px; color:var(--muted); max-width:580px; }
+    .section-desc { font-size:17px; color:var(--muted); max-width:580px; word-break:keep-all; }
     .section-head { margin-bottom:56px; }
     .section-head.center { text-align:center; }
     .section-head.center .section-desc { margin:0 auto; }
@@ -164,6 +164,7 @@
       font-weight:900; color:#fff;
       line-height:1.25; letter-spacing:-.03em;
       margin-bottom:24px;
+      word-break:keep-all; overflow-wrap:break-word;
     }
     .hero-acrostic { display:flex; align-items:baseline; gap:0; white-space:nowrap; }
     .hero-ac-char { font-size:1.5em; line-height:1; flex-shrink:0; }
@@ -609,7 +610,8 @@
       .nav-links, .nav-cta { display:none; }
       .nav-hamburger { display:flex; }
       .hero { min-height:auto; padding:calc(var(--nav-h) + 48px) 0 64px; }
-      .hero-title { font-size:30px; }
+      .hero-title { font-size:26px; line-height:1.3; }
+      .container { padding-left:16px; padding-right:16px; }
       .church-grid { grid-template-columns:1fr; }
       .ministry-grid { grid-template-columns:1fr; }
       .timeline::before { left:23px; top:24px; }
@@ -625,11 +627,17 @@
       .prep-intro { flex-direction:column; gap:16px; padding:28px 24px; }
       .hero-buttons { flex-direction:column; }
       .hero-buttons .btn { text-align:center; justify-content:center; }
+      .post-card { flex-direction:row !important; gap:10px !important; padding:10px !important; }
+      .post-card img { width:72px !important; height:54px !important; }
     }
 
     @media (max-width:480px) {
       .stats-grid { grid-template-columns:repeat(2,1fr); }
       .gallery-grid { grid-template-columns:1fr 1fr; grid-auto-rows:140px; }
+      .hero-title { font-size:22px; }
+      .section-title { font-size:22px; }
+      .stat-number { font-size:28px; }
+      .timeline-dot { width:40px; height:40px; font-size:16px; }
     }
 
     /* Scroll animation */
@@ -751,7 +759,6 @@
   <!-- Firebase SDK (compat v10) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 </head>
 <body>
 
@@ -2017,13 +2024,13 @@
     appId:             "1:1035908221195:web:91bb2464b9f7d429697a0e"
   };
   let firestoreDB = null;
-  let firebaseStorage = null;
   const _fbReady = !firebaseConfig.apiKey.includes('여기에') && !firebaseConfig.projectId.includes('여기에');
   if (_fbReady) {
     try {
       firebase.initializeApp(firebaseConfig);
-      firestoreDB     = firebase.firestore();
-      firebaseStorage = firebase.storage();
+      firestoreDB = firebase.firestore();
+      /* 모바일 WebView 호환 — WebSocket 대신 long-polling 사용 */
+      firestoreDB.settings({ experimentalForceLongPolling: true, merge: true });
     } catch(e) {
       console.warn('Firebase 초기화 실패:', e.message);
     }
@@ -2151,7 +2158,11 @@
   async function dbGetAll() {
     if (firestoreDB) {
       try {
-        const snap = await firestoreDB.collection('photos').orderBy('timestamp','asc').get();
+        const timeoutMs = 12000;
+        const snap = await Promise.race([
+          firestoreDB.collection('photos').orderBy('timestamp','asc').get(),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), timeoutMs))
+        ]);
         const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         return _resolvePhotos(posts);
       } catch(e) {
@@ -2724,7 +2735,10 @@ function filterYear(year, btn) {
           wrap.appendChild(group);
         });
       }
-    }).catch(() => {});
+    }).catch(err => {
+      const wrap = document.getElementById('savedPhotos');
+      if (wrap) wrap.innerHTML = '<div style="text-align:center;padding:32px;color:#c00;font-size:14px;">불러오기 실패. <button onclick="renderSavedPhotos()" style="margin-left:8px;padding:4px 14px;border:1.5px solid #c00;background:none;color:#c00;border-radius:14px;cursor:pointer;font-size:13px;">다시 시도</button></div>';
+    });
   }
 
   /* ── FAQ accordion ── */
