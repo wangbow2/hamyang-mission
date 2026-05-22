@@ -2110,21 +2110,24 @@
       const doc = await firestoreDB.collection('photo_blobs').doc(id).get();
       if (!doc.exists) return null;
       const d = doc.data();
-      let result;
-      if (d.chunkIds && d.chunkIds.length) {
-        /* 청크 분할 저장 방식 */
+      let result = null;
+      if (d.data) {
+        /* 단일 문서 방식 */
+        result = d.data;
+      } else if (d.chunkIds && d.chunkIds.length) {
+        /* 구버전 청크 방식 호환 */
         const chunks = await Promise.all(
           d.chunkIds.map(cid => firestoreDB.collection('photo_chunks').doc(cid).get()
-            .then(cd => cd.exists ? cd.data().d : ''))
+            .then(cd => cd.exists ? cd.data().d : '').catch(() => ''))
         );
         result = chunks.join('');
-      } else {
-        /* 이전 단일 문서 방식 호환 */
-        result = d.data || null;
       }
       if (result) _blobCache[id] = result;
       return result;
-    } catch { return null; }
+    } catch(e) {
+      console.error('blob fetch 실패:', id, e);
+      return null;
+    }
   }
   async function _resolvePhotos(posts) {
     if (!firestoreDB) return posts;
@@ -2151,7 +2154,12 @@
         const snap = await firestoreDB.collection('photos').orderBy('timestamp','asc').get();
         const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         return _resolvePhotos(posts);
-      } catch { /* fall through */ }
+      } catch(e) {
+        console.error('Firestore 로드 실패:', e);
+        const wrap = document.getElementById('savedPhotos');
+        if (wrap) wrap.innerHTML = '<div style="text-align:center;padding:32px;color:#c00;font-size:14px;">사진을 불러오지 못했습니다. <button onclick="renderSavedPhotos()" style="margin-left:8px;padding:4px 14px;border:1.5px solid #c00;background:none;color:#c00;border-radius:14px;cursor:pointer;font-size:13px;">다시 시도</button></div>';
+        return [];
+      }
     }
     try {
       const items = await _idbGetAll();
@@ -2636,13 +2644,18 @@ function filterYear(year, btn) {
   function getPostCover(p) { return getPostPhotos(p)[0] || ''; }
 
   function renderSavedPhotos() {
+    const wrap  = document.getElementById('savedPhotos');
+    const empty = document.getElementById('emptyState');
+    /* 로딩 스피너 표시 */
+    wrap.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">사진 불러오는 중...</div>';
+    wrap.style.display = 'block';
+    empty.style.display = 'none';
+
     dbGetAll().then(all => {
       const filtered = all.filter(p =>
         (currentChurch === 'all' || p.church === currentChurch) &&
         (currentYear === 'all' || p.year === currentYear)
       );
-      const wrap  = document.getElementById('savedPhotos');
-      const empty = document.getElementById('emptyState');
       wrap.innerHTML = '';
       if (filtered.length === 0) {
         wrap.style.display = 'none';
@@ -2976,27 +2989,35 @@ function filterYear(year, btn) {
       const uploadCount = document.getElementById('uploadCount');
 
       if (firestoreDB) {
-        /* ── Firestore: 사진 별도 문서로 저장 ── */
-        /* Firestore 문자열 한도(~1MB) 내로 청크 분할 저장 */
-        const CHUNK = 600000; /* 600,000자 청크 — Firestore 1MB 한도 안전 */
-
-        async function uploadPhoto(dataUrl, idx, total) {
-          if (uploadCount) uploadCount.textContent = `${idx + 1}/${total}장 업로드 중...`;
-          const chunks = [];
-          for (let s = 0; s < dataUrl.length; s += CHUNK) chunks.push(dataUrl.slice(s, s + CHUNK));
-          /* 각 청크를 별도 문서로 저장 */
-          const chunkIds = [];
-          for (const chunk of chunks) {
-            const r = await firestoreDB.collection('photo_chunks').add({ d: chunk });
-            chunkIds.push(r.id);
+        /* ── Firestore: 사진을 단일 문서로 저장 (700KB 이하 강제 압축) ── */
+        async function compressToFit(src) {
+          /* Canvas 직접 사용 — 단계별 압축, 반드시 700KB 이하 보장 */
+          const img = await new Promise(res => {
+            const i = new Image();
+            i.onload = () => res(i);
+            i.onerror = () => res(null);
+            i.src = src;
+          });
+          if (!img) return src;
+          for (const [maxPx, q] of [[800,0.75],[640,0.68],[480,0.62],[360,0.55],[240,0.50]]) {
+            const scale = Math.min(1, maxPx / Math.max(img.naturalWidth, img.naturalHeight, 1));
+            const w = Math.max(1, Math.round(img.naturalWidth * scale));
+            const h = Math.max(1, Math.round(img.naturalHeight * scale));
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            const out = c.toDataURL('image/jpeg', q);
+            if (out && out.length < 700000) return out;
           }
-          const blobRef = await firestoreDB.collection('photo_blobs').add({ chunkIds, postId: '' });
-          return blobRef.id;
+          return src;
         }
 
         const blobIds = [];
         for (let i = 0; i < valid.length; i++) {
-          blobIds.push(await uploadPhoto(valid[i], i, valid.length));
+          if (uploadCount) uploadCount.textContent = `${i + 1}/${valid.length}장 업로드 중...`;
+          const data = await compressToFit(valid[i]);
+          const ref = await firestoreDB.collection('photo_blobs').add({ data, postId: '' });
+          blobIds.push(ref.id);
         }
         if (uploadCount) uploadCount.textContent = `저장 중...`;
         const postRef = await firestoreDB.collection('photos').add({
