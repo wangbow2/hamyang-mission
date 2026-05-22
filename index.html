@@ -2936,11 +2936,25 @@ function filterYear(year, btn) {
       const uploadCount = document.getElementById('uploadCount');
 
       if (firestoreDB) {
-        /* ── Firestore: 사진 별도 문서로 저장 (Storage 불필요) ── */
+        /* ── Firestore: 사진 별도 문서로 저장 — 1MB 한도 맞춰 재압축 ── */
+        const LIMIT = 786432; /* 768KB — base64 overhead 감안, 1MB 안전 마진 */
+        async function fitBlob(dataUrl) {
+          let result = dataUrl;
+          /* 이미 충분히 작으면 그대로 */
+          if (result.length <= LIMIT) return result;
+          /* 960px → 768px → 600px 순으로 재시도 */
+          for (const [px, q] of [[960, 0.80], [768, 0.75], [600, 0.70]]) {
+            result = await compressImage(dataUrl, px, q).catch(() => null) || dataUrl;
+            if (result.length <= LIMIT) break;
+          }
+          return result;
+        }
+
         const blobIds = [];
         for (let i = 0; i < valid.length; i++) {
           if (uploadCount) uploadCount.textContent = `${i + 1}/${valid.length}장 업로드 중...`;
-          const ref = await firestoreDB.collection('photo_blobs').add({ data: valid[i], postId: '' });
+          const data = await fitBlob(valid[i]);
+          const ref = await firestoreDB.collection('photo_blobs').add({ data, postId: '' });
           blobIds.push(ref.id);
         }
         if (uploadCount) uploadCount.textContent = `저장 중...`;
