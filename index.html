@@ -96,10 +96,11 @@
     }
     .nav-logo { display:flex; align-items:center; gap:12px; }
     .nav-logo-icon {
-      width:36px; height:36px; background:var(--amber);
-      border-radius:10px; display:flex; align-items:center; justify-content:center;
+      width:40px; height:40px;
+      border-radius:50%; overflow:hidden; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
     }
-    .nav-logo-icon svg { width:20px; height:20px; fill:none; stroke:#fff; stroke-width:2; }
+    .nav-logo-icon img { width:100%; height:100%; object-fit:cover; }
     .nav-logo-text { font-size:14px; font-weight:700; color:var(--dark); line-height:1.3; }
     .nav-logo-text span { display:block; font-weight:400; font-size:11px; color:var(--muted); }
     .nav-links { display:flex; align-items:center; gap:32px; }
@@ -124,15 +125,27 @@
       display:flex; align-items:center;
       padding:calc(var(--nav-h) + 48px) 0 80px;
       position:relative; overflow:hidden;
+      isolation:isolate;
     }
+    .hero-slides { position:absolute; inset:0; z-index:0; }
+    .hero-slide {
+      position:absolute; inset:0;
+      background-size:cover; background-position:center;
+      opacity:0; transition:opacity 1.4s ease;
+    }
+    .hero-slide::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg, rgba(20,10,5,.68) 0%, rgba(20,30,15,.55) 100%);
+    }
+    .hero-slide.active { opacity:1; }
     .hero::before {
       content:'';
-      position:absolute; inset:0;
-      background:radial-gradient(ellipse at 20% 50%, rgba(193,123,74,.25) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(74,124,89,.2) 0%, transparent 50%);
+      position:absolute; inset:0; z-index:1;
+      background:radial-gradient(ellipse at 20% 50%, rgba(193,123,74,.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(74,124,89,.15) 0%, transparent 50%);
     }
     .hero-inner {
-      position:relative; display:grid;
+      position:relative; z-index:2; display:grid;
       grid-template-columns:1fr 1fr; gap:64px;
       align-items:center; max-width:1160px; margin:0 auto; padding:0 24px;
     }
@@ -185,6 +198,7 @@
       position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
       display:flex; flex-direction:column; align-items:center; gap:8px;
       color:rgba(255,255,255,.5); font-size:11px; letter-spacing:.08em;
+      z-index:2;
     }
     .scroll-dot {
       width:1px; height:48px; background:rgba(255,255,255,.3);
@@ -273,6 +287,14 @@
     .icon-teal { background:#E8FAF5; }
     .ministry-card h3 { font-size:17px; font-weight:700; color:var(--dark); margin-bottom:10px; }
     .ministry-card p { font-size:14px; color:var(--body); line-height:1.75; }
+    .ministry-yt-link {
+      display:inline-flex; align-items:center; gap:6px;
+      margin-top:12px; font-size:13px; font-weight:600;
+      color:#E05C5C; text-decoration:none;
+      transition:opacity .2s;
+    }
+    .ministry-yt-link:hover { opacity:.75; }
+    .ministry-yt-link svg { flex-shrink:0; }
     .ministry-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
     .ministry-tag {
       font-size:12px; padding:3px 10px; border-radius:100px;
@@ -292,10 +314,10 @@
     .timeline { position:relative; max-width:720px; margin:0 auto; }
     .timeline::before {
       content:''; position:absolute;
-      left:32px; top:0; bottom:0; width:2px;
+      left:31px; top:32px; bottom:32px; width:2px;
       background:linear-gradient(to bottom, var(--amber), var(--green));
     }
-    .timeline-item { display:flex; gap:32px; margin-bottom:40px; position:relative; }
+    .timeline-item { display:flex; align-items:flex-start; gap:28px; margin-bottom:32px; position:relative; }
     .timeline-dot {
       flex-shrink:0; width:64px; height:64px;
       background:var(--white); border:3px solid var(--amber);
@@ -305,8 +327,8 @@
     .timeline-item:nth-child(even) .timeline-dot { border-color:var(--green); }
     .timeline-content {
       flex:1; background:var(--bg); border-radius:var(--radius);
-      padding:24px 28px; box-shadow:var(--shadow-sm);
-      margin-top:8px;
+      padding:20px 24px; box-shadow:var(--shadow-sm);
+      margin-top:0;
     }
     .timeline-week {
       font-size:11px; font-weight:700; letter-spacing:.08em;
@@ -464,6 +486,7 @@
       font-size:11px; font-weight:700; padding:2px 10px; border-radius:100px;
     }
     .badge-student { background:var(--amber-pale); color:var(--amber); }
+    .badge-alumni  { background:#EEF0FF; color:#4A5EBF; }
     .badge-teacher { background:var(--green-light); color:var(--green); }
 
     /* ────────────────── FAQ ────────────────── */
@@ -586,8 +609,10 @@
       .hero-title { font-size:30px; }
       .church-grid { grid-template-columns:1fr; }
       .ministry-grid { grid-template-columns:1fr; }
-      .timeline::before { left:24px; }
-      .timeline-dot { width:48px; height:48px; font-size:18px; }
+      .timeline::before { left:23px; top:24px; }
+      .timeline-dot { width:48px; height:48px; font-size:18px; flex-shrink:0; }
+      .timeline-item { gap:20px; }
+      .timeline-content { padding:16px 18px; }
       .gallery-grid { grid-template-columns:repeat(2,1fr); grid-auto-rows:160px; }
       .gallery-item.wide { grid-column:span 1; }
       .testimonial-grid { grid-template-columns:1fr; }
@@ -612,8 +637,10 @@
     .reveal.visible { opacity:1; transform:translateY(0); }
 
     /* ── Lightbox ── */
-    .lightbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px;}
-    .lightbox-img{max-width:90vw;max-height:75vh;border-radius:12px;object-fit:contain;}
+    .lightbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px;overflow:hidden;}
+    .lightbox-img-wrap{overflow:auto;max-width:94vw;max-height:82vh;display:flex;align-items:center;justify-content:center;border-radius:10px;-webkit-overflow-scrolling:touch;}
+    .lightbox-img{display:block;max-width:94vw;max-height:82vh;border-radius:10px;object-fit:contain;cursor:zoom-in;transition:max-width .2s,max-height .2s;}
+    .lightbox-img.zoomed{max-width:none;max-height:none;width:auto;height:auto;cursor:zoom-out;}
     .lightbox-meta{color:#fff;text-align:center;}
     .lightbox-meta strong{font-size:16px;display:block;}
     .lightbox-meta span{font-size:13px;color:rgba(255,255,255,.6);}
@@ -643,6 +670,17 @@
     .gallery-board tbody tr.row-selected{background:#FFF0E3;}
     .gallery-bulk-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#FFF0E3;border-radius:var(--radius-sm);margin-bottom:8px;flex-wrap:wrap;}
     .gallery-bulk-bar .bulk-count{font-size:13px;font-weight:700;color:#C17B4A;}
+    .post-group{margin-bottom:32px;}
+    .post-group-header{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:10px 4px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+    .post-group-title{font-size:14px;font-weight:700;color:var(--dark);}
+    .post-group-meta{font-size:12px;color:var(--muted);}
+    .post-group-church{font-size:11px;font-weight:700;color:var(--amber);}
+    .post-group-actions{margin-left:auto;display:flex;gap:6px;}
+    .post-photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+    .post-photo-tile{aspect-ratio:1;overflow:hidden;border-radius:8px;cursor:pointer;background:var(--bg-alt);position:relative;}
+    .post-photo-tile img{width:100%;height:100%;object-fit:cover;transition:transform .2s;display:block;}
+    .post-photo-tile:hover img{transform:scale(1.04);}
+    @media(max-width:600px){.post-photo-grid{grid-template-columns:repeat(3,1fr);}}
     .bulk-del-btn{padding:6px 16px;border-radius:8px;border:none;background:#E05252;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
     .bulk-del-btn:hover{background:#c03a3a;}
     .bulk-cancel-btn{padding:6px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--body);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
@@ -683,11 +721,34 @@
     .auth-cancel{width:100%;margin-top:8px;padding:10px;border:none;background:none;font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;}
     .auth-cancel:hover{color:var(--body);}
 
+    /* ── Login toast ── */
+    #loginToast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:#1A2744;color:#fff;padding:14px 28px;border-radius:50px;font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:99999;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;white-space:nowrap;}
+    #loginToast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
     /* ── Admin bar ── */
     #adminBar{background:#1A2744;color:#fff;padding:10px 24px;display:none;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:68px;z-index:500;}
     .admin-bar-label{font-size:12px;font-weight:700;letter-spacing:.06em;color:#F0C060;}
     .admin-bar-btn{font-size:12px;padding:5px 14px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-weight:600;}
+    /* ── Auth tabs ── */
+    .auth-tab-header{display:flex;border-bottom:1px solid var(--border);}
+    .auth-tab-btn-sw{flex:1;padding:16px;border:none;background:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;border-bottom:2px solid transparent;color:var(--muted);}
+    .auth-tab-btn-sw.at-active{color:var(--amber);border-bottom-color:var(--amber);}
+    /* ── Admin Panel ── */
+    .admin-panel-tab{padding:14px 20px;border:none;background:none;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;transition:all .2s;white-space:nowrap;}
+    .admin-panel-tab.ap-active{color:var(--amber);border-bottom-color:var(--amber);}
+    .ap-table{width:100%;border-collapse:collapse;}
+    .ap-table th{padding:10px 14px;font-size:12px;font-weight:700;color:var(--muted);text-align:left;border-bottom:2px solid var(--border);background:var(--bg);}
+    .ap-table td{padding:12px 14px;font-size:13px;color:var(--body);border-bottom:1px solid var(--border);vertical-align:middle;}
+    .ap-table tbody tr:hover{background:var(--bg);}
+    .ap-del{padding:5px 12px;border-radius:6px;background:#E05252;color:#fff;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+    .ap-del:hover{background:#c03a3a;}
+    .ap-edit{padding:5px 12px;border-radius:6px;background:var(--amber);color:#fff;border:none;font-size:12px;font-weight:600;cursor:pointer;margin-right:4px;font-family:inherit;}
+    .ap-edit:hover{background:var(--amber-light);}
   </style>
+  <!-- Firebase SDK (compat v10) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 </head>
 <body>
 
@@ -696,7 +757,7 @@
   <div class="nav-inner">
     <a href="#" class="nav-logo">
       <div class="nav-logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L12 22M2 12L22 12" stroke-linecap="round"/></svg>
+        <img src="images/wildspirit-logo.png" alt="Wild Spirit">
       </div>
       <div class="nav-logo-text">
         수영로교회 고등부
@@ -721,31 +782,64 @@
 </nav>
 
 <!-- Admin bar -->
-<div id="adminBar" style="background:#1A2744;color:#fff;padding:10px 24px;display:none;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:68px;z-index:500;">
-  <span style="font-size:12px;font-weight:700;letter-spacing:.06em;color:#F0C060;"> 관리자 모드</span>
-  <button onclick="adminMigrateAll()" style="font-size:12px;padding:5px 14px;border-radius:8px;background:#C17B4A;color:#fff;border:none;cursor:pointer;font-weight:600;">성우성서 → 대지교회 2025 이동</button>
+<div id="adminBar" style="background:#1A2744;color:#fff;padding:10px 24px;display:none;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:68px;z-index:500;">
+  <span style="font-size:12px;font-weight:700;letter-spacing:.06em;color:#F0C060;">🛡 관리자 모드</span>
+  <button onclick="openAdminPanel()" style="font-size:12px;padding:5px 16px;border-radius:8px;background:#4A7C59;color:#fff;border:none;cursor:pointer;font-weight:600;">관리자 패널 열기</button>
+  <button onclick="adminMigrateAll()" style="font-size:12px;padding:5px 14px;border-radius:8px;background:#C17B4A;color:#fff;border:none;cursor:pointer;font-weight:600;">데이터 이동</button>
   <button onclick="clearSession()" style="margin-left:auto;font-size:12px;padding:5px 14px;border-radius:8px;background:rgba(255,255,255,.15);color:#fff;border:none;cursor:pointer;">로그아웃</button>
 </div>
 
+<!-- Login toast -->
+<div id="loginToast"></div>
+
 <!-- Login / Register Modal -->
 <div id="loginModal" class="auth-overlay" style="display:none;">
-  <div class="auth-box">
-    <h3>로그인 / 가입</h3>
-    <p class="auth-sub">이름과 비밀번호를 입력하세요.<br>처음 가입이라면 학년도 선택해 주세요.</p>
-    <div class="auth-field"><label>이름</label><input type="text" id="authName" placeholder="본인 이름" maxlength="20" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="auth-field">
-      <label>학년 <span style="font-size:11px;color:var(--muted);font-weight:400;">(처음 가입 시 선택)</span></label>
-      <select id="authGrade" style="background:#fff;">
-        <option value="">선택 안함 (기존 회원)</option>
-        <option value="고1">고1</option>
-        <option value="고2">고2</option>
-        <option value="고3">고3</option>
-      </select>
+  <div class="auth-box" style="padding:0;overflow:hidden;max-width:400px;">
+    <div class="auth-tab-header">
+      <button class="auth-tab-btn-sw at-active" id="authTabLogin" onclick="switchAuthTab('login')">로그인</button>
+      <button class="auth-tab-btn-sw" id="authTabRegister" onclick="switchAuthTab('register')">회원가입</button>
     </div>
-    <div class="auth-field"><label>비밀번호</label><input type="password" id="authPin" placeholder="비밀번호 (영문·숫자·특수문자 자유)" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="auth-msg" id="authMsg"></div>
-    <button class="auth-btn" onclick="doLogin()">확인</button>
-    <button class="auth-cancel" onclick="closeLoginModal()">취소</button>
+    <!-- 로그인 폼 -->
+    <div id="authFormLogin" style="padding:28px 32px;">
+      <p class="auth-sub" style="margin-bottom:20px;">이름과 비밀번호로 로그인하세요.</p>
+      <div class="auth-field"><label>이름</label><input type="text" id="authName" placeholder="본인 이름" maxlength="20" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="auth-field"><label>비밀번호</label><input type="password" id="authPin" placeholder="비밀번호" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="auth-msg" id="authMsg"></div>
+      <button class="auth-btn" onclick="doLogin()">로그인</button>
+      <button class="auth-cancel" onclick="closeLoginModal()">취소</button>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px;">처음이신가요? <button onclick="switchAuthTab('register')" style="border:none;background:none;color:var(--amber);font-weight:700;cursor:pointer;font-size:12px;font-family:inherit;">회원가입 →</button></p>
+      <p style="text-align:center;margin-top:8px;"><button onclick="closeLoginModal();showAdminModal();" style="border:none;background:none;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit;text-decoration:underline;">관리자 로그인</button></p>
+    </div>
+    <!-- 회원가입 폼 -->
+    <div id="authFormRegister" style="padding:22px 28px;display:none;max-height:80vh;overflow-y:auto;">
+      <p class="auth-sub" style="margin-bottom:16px;">처음 이용하시는 분은 가입해 주세요.</p>
+      <div class="auth-field"><label>이름 *</label><input type="text" id="regName" placeholder="본인 이름" maxlength="20"></div>
+      <div class="auth-field"><label>예배 *</label>
+        <div style="display:flex;flex-direction:row;flex-wrap:nowrap;gap:10px;margin-top:6px;">
+          <label style="display:inline-flex!important;align-items:center;gap:6px;font-size:14px;cursor:pointer;padding:10px 18px;border:1.5px solid var(--border);border-radius:10px;flex:1;justify-content:center;margin-bottom:0!important;"><input type="radio" name="regService" value="1부"> 1부</label>
+          <label style="display:inline-flex!important;align-items:center;gap:6px;font-size:14px;cursor:pointer;padding:10px 18px;border:1.5px solid var(--border);border-radius:10px;flex:1;justify-content:center;margin-bottom:0!important;"><input type="radio" name="regService" value="2부"> 2부</label>
+        </div>
+      </div>
+      <div class="auth-field"><label>학년 *</label>
+        <select id="regGrade" style="background:#fff;" onchange="updateRegFields()">
+          <option value="">선택</option>
+          <option value="고1">고1</option>
+          <option value="고2">고2</option>
+          <option value="고3">고3</option>
+          <option value="졸업생">졸업생</option>
+          <option value="교사">교사</option>
+          <option value="교역자/부장">교역자/부장</option>
+        </select>
+      </div>
+      <div class="auth-field" id="regClassField"><label>반 *</label><input type="text" id="regClass" placeholder="예: 3반" maxlength="10"></div>
+      <div class="auth-field"><label>핸드폰 번호 *</label><input type="tel" id="regPhone" placeholder="010-0000-0000"></div>
+      <div class="auth-field" id="regParentPhoneField"><label>부모님 연락처 *</label><input type="tel" id="regParentPhone" placeholder="010-0000-0000"></div>
+      <div class="auth-field"><label>비밀번호 *</label><input type="password" id="regPin" placeholder="비밀번호"></div>
+      <div class="auth-field"><label>비밀번호 확인 *</label><input type="password" id="regPinConfirm" placeholder="비밀번호 다시 입력" onkeydown="if(event.key==='Enter')doRegister()"></div>
+      <div class="auth-msg" id="regMsg"></div>
+      <button class="auth-btn" onclick="doRegister()">가입하기</button>
+      <button class="auth-cancel" onclick="closeLoginModal()">취소</button>
+    </div>
   </div>
 </div>
 
@@ -764,40 +858,90 @@
 
 <!-- Lightbox -->
 <div id="lightbox" class="lightbox-overlay" style="display:none;" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()"></button>
-  <img id="lightboxImg" class="lightbox-img" alt="" onclick="event.stopPropagation()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <span class="lb-counter" id="lbCounter"></span>
+  <button class="lb-arrow lb-prev" onclick="event.stopPropagation();lbGo(_lbIndex-1)">‹</button>
+  <div class="lightbox-img-wrap" onclick="event.stopPropagation()">
+    <img id="lightboxImg" class="lightbox-img" alt="" onclick="toggleLbZoom(this)">
+  </div>
+  <button class="lb-arrow lb-next" onclick="event.stopPropagation();lbGo(_lbIndex+1)">›</button>
   <div class="lightbox-meta" onclick="event.stopPropagation()">
     <strong id="lightboxTitle"></strong>
     <span id="lightboxAuthor"></span>
   </div>
 </div>
 
+<!-- Post detail modal -->
+<div id="postModal" class="post-modal-overlay" style="display:none;" onclick="closePostModal()">
+  <div class="post-modal-box" onclick="event.stopPropagation()">
+    <div class="post-modal-header">
+      <div>
+        <strong id="postModalTitle" style="font-size:17px;font-weight:800;color:var(--dark);display:block;"></strong>
+        <span id="postModalMeta" style="font-size:13px;color:var(--muted);"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button id="postModalEditBtn" onclick="postModalEdit()" style="display:none;background:var(--amber-light);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer;">수정</button>
+        <button id="postModalDelBtn" onclick="postModalDelete()" style="display:none;background:#E05C5C;color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button>
+        <button onclick="closePostModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted);line-height:1;">✕</button>
+      </div>
+    </div>
+    <div id="postModalGrid" class="post-modal-grid"></div>
+  </div>
+</div>
+
 <!-- Edit Post Modal -->
 <div id="editModal" class="auth-overlay" style="display:none;">
-  <div class="auth-box">
-    <h3>게시글 수정</h3>
-    <p class="auth-sub">제목, 교회, 연도를 수정하세요.</p>
-    <input type="hidden" id="editPhotoId">
-    <div class="auth-field">
-      <label>제목</label>
-      <input type="text" id="editTitle" placeholder="제목 입력">
+  <div class="auth-box" style="max-width:520px;max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden;">
+    <div style="padding:28px 28px 0;overflow-y:auto;flex:1;">
+      <h3 style="margin-bottom:20px;">게시글 수정</h3>
+      <input type="hidden" id="editPhotoId">
+      <div class="auth-field">
+        <label>제목</label>
+        <input type="text" id="editTitle" placeholder="제목 입력">
+      </div>
+      <div class="auth-field"><label>교회</label>
+        <select id="editChurch" style="background:#fff;">
+          <option value="sunwoo">성우성서교회</option>
+          <option value="okdong">옥동교회</option>
+          <option value="jinam">대지교회</option>
+          <option value="assembly">전체 집회</option>
+        </select>
+      </div>
+      <div class="auth-field"><label>연도</label>
+        <select id="editYear" style="background:#fff;">
+          <option value="2022">2022</option><option value="2023">2023</option>
+          <option value="2024">2024</option><option value="2025">2025</option>
+        </select>
+      </div>
+      <div class="auth-field" style="margin-bottom:0;">
+        <label style="margin-bottom:8px;display:block;">사진 <span style="font-size:11px;color:var(--muted);font-weight:400;">— X를 눌러 개별 삭제</span></label>
+        <div id="editPhotoGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;"></div>
+      </div>
     </div>
-    <div class="auth-field"><label>교회</label>
-      <select id="editChurch" style="background:#fff;">
-        <option value="sunwoo">성우성서교회</option>
-        <option value="okdong">옥동교회</option>
-        <option value="jinam">대지교회(지남교회)</option>
-        <option value="assembly">전체 집회</option>
-      </select>
+    <div style="padding:16px 28px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0;background:var(--white);">
+      <button class="auth-btn" style="flex:1;margin:0;" onclick="confirmEditPost()">수정 확인</button>
+      <button class="auth-cancel" style="flex:1;margin:0;" onclick="cancelEditPost()">취소 (이전으로)</button>
     </div>
-    <div class="auth-field"><label>연도</label>
-      <select id="editYear" style="background:#fff;">
-        <option value="2022">2022</option><option value="2023">2023</option>
-        <option value="2024">2024</option><option value="2025">2025</option>
-      </select>
+  </div>
+</div>
+
+<!-- Admin Panel Modal -->
+<div id="adminPanel" style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9992;display:none;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:20px;width:100%;max-width:980px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.35);">
+    <div style="padding:18px 24px;background:#1A2744;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+      <span style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-.01em;">🛡 관리자 패널</span>
+      <button onclick="closeAdminPanel()" style="background:rgba(255,255,255,.15);border:none;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;">✕</button>
     </div>
-    <button class="auth-btn" onclick="confirmEditPost()">저장</button>
-    <button class="auth-cancel" onclick="document.getElementById('editModal').style.display='none'">취소</button>
+    <div style="display:flex;border-bottom:1px solid var(--border);padding:0 16px;background:#F8F9FB;flex-shrink:0;">
+      <button class="admin-panel-tab ap-active" id="apTab-members" onclick="switchAdminTab('members')">👥 회원 관리</button>
+      <button class="admin-panel-tab" id="apTab-photos" onclick="switchAdminTab('photos')">🖼 사진 관리</button>
+      <button class="admin-panel-tab" id="apTab-reviews" onclick="switchAdminTab('reviews')">💬 후기 관리</button>
+      <button class="admin-panel-tab" id="apTab-applications" onclick="switchAdminTab('applications')">📋 신청 관리</button>
+      <button class="admin-panel-tab" id="apTab-inquiries" onclick="switchAdminTab('inquiries')">🔒 문의 관리</button>
+    </div>
+    <div id="adminPanelContent" style="flex:1;overflow-y:auto;padding:24px 28px;">
+      <div style="text-align:center;color:var(--muted);padding:40px;">로딩 중...</div>
+    </div>
   </div>
 </div>
 
@@ -813,6 +957,15 @@
 
 <!-- ════════════════════ HERO ════════════════════ -->
 <section id="home" class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active" style="background-image:url('images/slide1.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/slide2.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/slide3.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/slide4.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/slide5.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/slide6.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/slide7.jpg')"></div>
+  </div>
   <div class="hero-inner">
     <div class="hero-content">
       <div class="hero-badge"> 수영로교회 고등부 · 함양 국내선교</div>
@@ -886,7 +1039,7 @@
     <div class="ministry-grid">
 
       <div class="ministry-card reveal">
-        <div class="ministry-icon icon-amber"></div>
+        <div class="ministry-icon icon-amber"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="20" r="3" fill="#C17B4A"/><circle cx="21" cy="17" r="3" fill="#C17B4A"/><path d="M12 20V8l12-3v12" stroke="#C17B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 14l12-3" stroke="#C17B4A" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h3>공연 사역</h3>
         <p>학생들이 한 달 동안 함께 준비한 공연을 마을회관 어르신들께 선보입니다. 완성도보다 마음을 담는 것, 그 정성이 어르신들께 닿습니다.</p>
         <div class="ministry-tags">
@@ -897,7 +1050,7 @@
       </div>
 
       <div class="ministry-card reveal">
-        <div class="ministry-icon icon-rose"></div>
+        <div class="ministry-icon icon-rose"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 24s-9-5.5-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.5-9 12-9 12z" fill="#F9A8B8" stroke="#E05C7A" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
         <h3>섬김 사역</h3>
         <p>어르신들께 편육, 김치, 수박 등 간식을 대접하고, 매니큐어·팩·안마를 해드리며 따뜻한 대화를 나눕니다. 손발로 직접 섬기는 사역입니다.</p>
         <div class="ministry-tags">
@@ -909,9 +1062,19 @@
       </div>
 
       <div class="ministry-card reveal">
-        <div class="ministry-icon icon-blue"></div>
+        <div class="ministry-icon icon-blue"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="4" width="18" height="20" rx="3" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5"/><path d="M14 8v12M9 11.5h10" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h3>백지전도</h3>
         <p>빈 종이 한 장으로 복음의 핵심을 전달하는 방법을 배우고, 현장에서 어르신들께 직접 전도합니다. 준비 모임에서 암송하고 실습합니다.</p>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px;">
+          <a href="https://www.youtube.com/watch?v=UN7gsxalSaI" target="_blank" rel="noopener noreferrer" class="ministry-yt-link" style="margin-top:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            현장에서 우리가 하는 일들
+          </a>
+          <a href="#gallery" class="ministry-yt-link" style="margin-top:0;color:var(--green);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            갤러리에서 현장 사진 보기 →
+          </a>
+        </div>
         <div class="ministry-tags">
           <span class="ministry-tag">복음 전도</span>
           <span class="ministry-tag">암송</span>
@@ -920,7 +1083,7 @@
       </div>
 
       <div class="ministry-card reveal">
-        <div class="ministry-icon icon-purple"></div>
+        <div class="ministry-icon icon-purple"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="3" width="4" height="22" rx="2" fill="#7C3AED" opacity=".85"/><rect x="4" y="10" width="20" height="4" rx="2" fill="#7C3AED" opacity=".85"/></svg></div>
         <h3>기도와 예배</h3>
         <p>매일 아침 큐티와 묵상 나눔으로 시작하고, 저녁 예배와 기도회로 하루를 마칩니다. 섬김 이전에 하나님과의 시간이 중심이 됩니다.</p>
         <div class="ministry-tags">
@@ -931,7 +1094,7 @@
       </div>
 
       <div class="ministry-card reveal">
-        <div class="ministry-icon icon-green"></div>
+        <div class="ministry-icon icon-green"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="7" r="4" fill="#4A7C59"/><circle cx="6" cy="21" r="4" fill="#4A7C59" opacity=".7"/><circle cx="22" cy="21" r="4" fill="#4A7C59" opacity=".7"/></svg></div>
         <h3>팀 공동체 훈련</h3>
         <p>매일 저녁 팀 피드백 모임을 통해 그날의 사역을 되돌아보고 나눕니다. 처음 만난 친구들이 동역자가 되는 과정 자체가 훈련입니다.</p>
         <div class="ministry-tags">
@@ -942,7 +1105,7 @@
       </div>
 
       <div class="ministry-card reveal">
-        <div class="ministry-icon icon-teal"></div>
+        <div class="ministry-icon icon-teal"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 6h8v16H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z" fill="#B2F0E0" stroke="#0D9488" stroke-width="1.5"/><path d="M23 6h-8v16h8a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z" fill="#E8FAF5" stroke="#0D9488" stroke-width="1.5"/><path d="M13 6v16" stroke="#0D9488" stroke-width="1.5"/><path d="M8 10h3M8 13h3M8 16h3" stroke="#0D9488" stroke-width="1.2" stroke-linecap="round"/></svg></div>
         <h3>말씀 & 묵상</h3>
         <p>아침마다 말씀을 읽고 묵상을 나누며 하루를 열어갑니다. 마지막 날에는 세 팀이 옥동교회에 모여 함께 찬양과 말씀집회로 선교를 마무리합니다.</p>
         <div class="ministry-tags">
@@ -976,7 +1139,7 @@
           <div class="church-name">성우성서교회</div>
           <div class="church-years">2022년부터 이어온 섬김</div>
           <p class="church-desc">
-            5년간 변함없이 함께해온 교회입니다. 마을회관을 찾아다니며 어르신들께 공연과 간식을 대접하고, 복음을 전하는 사역을 함께해왔습니다. 해가 지날수록 어르신들도 우리 학생들의 얼굴을 기억해주시는 진한 관계가 쌓여 있습니다.
+            5년간 변함없이 함께해온 교회입니다. 마을회관 사역과 축호전도를 통해 어르신들을 찾아가고, 직접 초청하여 큰 잔치와 집회를 열어 하나님 나라의 잔치를 함께 누립니다.
           </p>
         </div>
       </div>
@@ -991,26 +1154,23 @@
           <div class="church-name">옥동교회</div>
           <div class="church-years">2022년부터 이어온 섬김</div>
           <p class="church-desc">
-            성우성서교회와 함께 5년을 이어온 협력 교회입니다. 마지막 날 전체 팀이 모두 옥동교회에 모여 찬양과 말씀집회로 선교를 마무리합니다. 이 자리는 세 팀이 하나가 되어 감사를 나누는 시간이기도 합니다.
+            5년간 변함없이 함께해온 교회입니다. 마을회관을 찾아 어르신들께 공연과 간식을 대접하고 복음을 전하며, 수요 예배를 현지 성도들과 함께 드리는 것이 이 사역의 특징입니다.
           </p>
         </div>
       </div>
 
-      <!-- 대지교회(지남교회) -->
+      <!-- 대지교회 -->
       <div class="church-card reveal">
         <div class="church-card-top church-card-top-3">
           <div class="church-icon"></div>
         </div>
         <div class="church-card-body">
           <span class="church-tag tag-brown">새로운 시작</span>
-          <div class="church-name">대지교회(지남교회)</div>
-          <div class="church-years">새롭게 함께하는 사역지</div>
+          <div class="church-name">대지교회</div>
+          <div class="church-years">4년의 섬김, 새롭게 이어지는 사역지</div>
           <p class="church-desc">
-            이전에 4년간 섬겨온 대지교회와의 사역 경험을 바탕으로 새롭게 함께하게 된 교회입니다. 쌓아온 사역의 노하우와 성숙한 팀 문화를 가지고 새로운 만남을 이어가고 있습니다.
+            4년간 대지교회를 섬겨온 경험을 바탕으로, 올해부터는 지남교회와 새롭게 사역을 이어갑니다. 쌓아온 관계와 섬김의 마음을 그대로 담아 새로운 만남을 시작합니다.
           </p>
-          <div class="church-new">
-             대지교회에서 4년간 쌓아온 섬김의 경험이 이어집니다.
-          </div>
         </div>
       </div>
 
@@ -1104,6 +1264,95 @@
       <h2 class="section-title">7월 21일(화) – 23일(목),<br>함양에서의 시간</h2>
       <p class="section-desc">새벽기도 후 출발해 3일간 함양 마을 곳곳을 섬기고 돌아옵니다.</p>
     </div>
+
+    <!-- 2026년 7월 달력 -->
+    <div class="reveal" style="margin-bottom:48px;">
+      <div style="background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden;max-width:480px;">
+        <!-- 달력 헤더 -->
+        <div style="background:linear-gradient(135deg,var(--amber),var(--green));padding:20px 24px;color:#fff;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:12px;font-weight:600;opacity:.8;letter-spacing:.08em;margin-bottom:4px;">2026년</div>
+            <div style="font-size:26px;font-weight:900;letter-spacing:-.02em;">7월 JULY</div>
+          </div>
+          <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:12px 16px;text-align:center;border:1px solid rgba(255,255,255,.25);">
+            <div style="font-size:11px;font-weight:600;opacity:.8;margin-bottom:2px;">함양 사역</div>
+            <div style="font-size:18px;font-weight:900;">21–23일</div>
+            <div style="font-size:11px;opacity:.7;margin-top:2px;">2박 3일</div>
+          </div>
+        </div>
+        <!-- 요일 헤더 -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);background:var(--dark);">
+          <div style="padding:8px 0;text-align:center;font-size:11px;font-weight:700;color:#f87171;">일</div>
+          <div style="padding:8px 0;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.7);">월</div>
+          <div style="padding:8px 0;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.85);">화</div>
+          <div style="padding:8px 0;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.85);">수</div>
+          <div style="padding:8px 0;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.85);">목</div>
+          <div style="padding:8px 0;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.7);">금</div>
+          <div style="padding:8px 0;text-align:center;font-size:11px;font-weight:700;color:#60a5fa;">토</div>
+        </div>
+        <!-- 날짜 그리드 (2026년 7월: 수요일 시작) -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);padding:8px;">
+          <!-- 빈칸 1~3 (수요일이 1일) -->
+          <div></div><div></div><div></div>
+          <!-- 1 -->
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">1</div>
+          <!-- 2 목 -->
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">2</div>
+          <!-- 3 금 -->
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">3</div>
+          <!-- 4 토 -->
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#60a5fa;">4</div>
+          <!-- 5 일 -->
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#f87171;">5</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">6</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">7</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">8</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">9</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">10</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#60a5fa;">11</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#f87171;">12</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">13</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">14</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">15</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">16</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">17</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#60a5fa;">18</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#f87171;">19</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">20</div>
+          <!-- 21 화 — 출발 -->
+          <div style="position:relative;padding:6px 0;text-align:center;">
+            <div style="background:var(--amber);color:#fff;border-radius:6px 0 0 6px;font-size:13px;font-weight:800;padding:6px 0;line-height:1;">21</div>
+            <div style="font-size:9px;color:var(--amber);font-weight:700;margin-top:3px;">출발</div>
+          </div>
+          <!-- 22 수 -->
+          <div style="position:relative;padding:6px 0;text-align:center;">
+            <div style="background:var(--amber);color:#fff;font-size:13px;font-weight:800;padding:6px 0;line-height:1;">22</div>
+            <div style="font-size:9px;color:var(--amber);font-weight:700;margin-top:3px;">사역</div>
+          </div>
+          <!-- 23 목 — 귀가 -->
+          <div style="position:relative;padding:6px 0;text-align:center;">
+            <div style="background:var(--green);color:#fff;border-radius:0 6px 6px 0;font-size:13px;font-weight:800;padding:6px 0;line-height:1;">23</div>
+            <div style="font-size:9px;color:var(--green);font-weight:700;margin-top:3px;">귀가</div>
+          </div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">24</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#60a5fa;">25</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:#f87171;">26</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">27</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">28</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">29</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">30</div>
+          <div style="padding:8px 0;text-align:center;font-size:13px;color:var(--body);">31</div>
+          <div></div><div></div><div></div><div></div><div></div>
+        </div>
+        <!-- 범례 -->
+        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:16px;align-items:center;background:var(--bg);">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--body);"><span style="width:14px;height:14px;background:var(--amber);border-radius:3px;display:inline-block;flex-shrink:0;"></span>출발·사역일</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--body);"><span style="width:14px;height:14px;background:var(--green);border-radius:3px;display:inline-block;flex-shrink:0;"></span>귀가일</div>
+          <div style="margin-left:auto;font-size:12px;color:var(--muted);">2026. 7. 21(화) – 23(목)</div>
+        </div>
+      </div>
+    </div>
+
     <div class="schedule-tabs">
       <button class="tab-btn active" onclick="switchTab('tue', this)"> 7/21 화요일 · 출발</button>
       <button class="tab-btn" onclick="switchTab('wed', this)"> 7/22 수요일 · 본 사역</button>
@@ -1292,24 +1541,8 @@
       <p class="section-desc">이미 다녀온 학생들이 직접 올린 사진들. 말보다 사진이 더 많은 걸 담습니다.</p>
     </div>
 
-    <!-- 교회 필터 -->
-    <div class="gallery-filters reveal">
-      <button class="filter-btn active" onclick="filterChurch('sunwoo', this)">성우성서교회</button>
-      <button class="filter-btn" onclick="filterChurch('okdong', this)">옥동교회</button>
-      <button class="filter-btn" onclick="filterChurch('jinam', this)">대지교회(지남교회)</button>
-      <button class="filter-btn" onclick="filterChurch('assembly', this)">전체 집회</button>
-    </div>
 
-    <!-- 연도 필터 -->
-    <div id="yearFilters" class="gallery-filters reveal" style="margin-top:0;padding-top:0;">
-      <button class="filter-btn filter-year active" style="font-size:13px;padding:8px 18px;" onclick="filterYear('all', this)">전체</button>
-      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2022', this)">2022</button>
-      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2023', this)">2023</button>
-      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2024', this)">2024</button>
-      <button class="filter-btn filter-year" style="font-size:13px;padding:8px 18px;" onclick="filterYear('2025', this)">2025</button>
-    </div>
-
-    <!-- 업로드된 실제 사진 -->
+<!-- 업로드된 실제 사진 -->
     <div id="savedPhotos" class="reveal" style="margin-top:0;"></div>
 
     <!-- 사진 없을 때 빈 상태 -->
@@ -1332,7 +1565,7 @@
             <select id="uploadChurch" class="form-input" style="padding:10px 14px;font-size:14px;">
               <option value="sunwoo">성우성서교회</option>
               <option value="okdong">옥동교회</option>
-              <option value="jinam">대지교회(지남교회)</option>
+              <option value="jinam">대지교회</option>
               <option value="assembly">전체 집회</option>
             </select>
           </div>
@@ -1390,15 +1623,9 @@
           <p style="font-size:13px;color:var(--muted);margin-top:4px;">함양 국내선교를 다녀온 분만 작성해 주세요.</p>
         </div>
         <form id="reviewForm" onsubmit="submitReview(event)" style="padding:28px;display:flex;flex-direction:column;gap:16px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <label class="form-label">이름 <span class="req">*</span></label>
-              <input required name="rName" class="form-input" placeholder="예: 김○○">
-            </div>
-            <div>
-              <label class="form-label">참여 연도 & 팀</label>
-              <input name="rTeam" class="form-input" placeholder="예: 2024 · 성우성서교회팀">
-            </div>
+          <div>
+            <label class="form-label">참여 연도 & 팀 <span style="color:#8890A4;font-weight:400;">(선택)</span></label>
+            <input name="rTeam" class="form-input" placeholder="예: 2024 · 성우성서교회팀">
           </div>
           <div>
             <label class="form-label">후기 <span class="req">*</span></label>
@@ -1456,7 +1683,7 @@
         </div>
         <div class="faq-answer">
           준비 모임부터가 사역의 시작입니다. 함양에 도착하기 전, 함께 모여 기도하고, 백지전도를 연습하고, 팀원들과 마음을 맞춰가는 그 과정 자체가 사역이에요.<br><br>
-          현장에서 한 팀으로 움직이려면 그 시간들이 반드시 필요합니다. 준비 모임에 빠지면 팀 전체의 흐름이 흔들릴 수 있어요. 부득이한 사정이 생기면 미리 담당 교사에게 꼭 알려주세요.
+          현장에서 한 팀으로 움직이려면 그 시간들이 반드시 필요합니다. 준비 모임에 빠지면 팀 전체의 흐름이 흔들릴 수 있어요. 부득이한 사정이 생기면 미리 교역자에게 꼭 알려주세요.
         </div>
       </div>
 
@@ -1507,7 +1734,7 @@
           <span class="faq-icon">+</span>
         </div>
         <div class="faq-answer">
-          참가비는 10만원입니다. 단, 입금 전에 담당 교사와 짧은 면접이 있을 예정이니 신청 후 연락을 기다려 주세요.
+          선교비는 10만원입니다. 신청 후 교역자와 짧은 면접이 진행되며, 면접 후 상세 안내를 받으실 수 있어요.
         </div>
       </div>
 
@@ -1523,12 +1750,37 @@
 
     </div>
 
-    <div class="reveal" style="text-align:center;margin-top:40px;padding:28px;background:var(--amber-pale);border-radius:var(--radius);max-width:560px;margin-left:auto;margin-right:auto;">
-      <p style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:8px;">다른 질문이 있으신가요?</p>
-      <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">FAQ에 없는 내용은 메일로 바로 문의해 주세요.</p>
-      <a href="mailto:hwanedla@hanmail.net" class="btn btn-primary" style="display:inline-flex;">
-         문의 메일 보내기
-      </a>
+    <div class="reveal" style="margin-top:48px;max-width:640px;margin-left:auto;margin-right:auto;">
+      <div style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);">
+        <div style="background:var(--amber-pale);padding:22px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">🔒</span>
+          <div>
+            <p style="font-size:15px;font-weight:800;color:var(--dark);margin-bottom:2px;">비밀 문의</p>
+            <p style="font-size:13px;color:var(--muted);">로그인 후 문의하면 관리자만 확인하고 답변을 달아드립니다. 본인 글만 내용을 볼 수 있습니다.</p>
+          </div>
+        </div>
+
+        <!-- 문의 목록 -->
+        <div id="inquiryList" style="padding:16px 24px;"></div>
+
+        <!-- 로그인 안 한 경우 -->
+        <div id="inquiryLoginPrompt" style="display:none;padding:20px 24px;text-align:center;border-top:1px solid var(--border);">
+          <p style="font-size:14px;color:var(--muted);margin-bottom:12px;">문의하려면 먼저 로그인해 주세요.</p>
+          <button onclick="showLoginModal(renderInquirySection)" class="btn btn-primary" style="padding:9px 24px;">로그인하기</button>
+        </div>
+
+        <!-- 문의 작성 폼 (로그인 시) -->
+        <div id="inquiryFormSection" style="display:none;border-top:1px solid var(--border);padding:20px 24px;">
+          <p style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:12px;">새 문의 작성</p>
+          <form onsubmit="submitInquiry(event)" style="display:flex;flex-direction:column;gap:10px;">
+            <input id="inquirySubject" class="form-input" placeholder="제목" required>
+            <textarea id="inquiryContent" class="form-textarea" rows="4" placeholder="궁금한 점을 자유롭게 적어주세요." required></textarea>
+            <div style="display:flex;justify-content:flex-end;">
+              <button type="submit" class="btn btn-primary" style="padding:9px 22px;">문의 등록 →</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -1543,7 +1795,9 @@
     <div style="position:relative;max-width:640px;margin:0 auto;padding:0 24px;">
       <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:11px;font-weight:700;letter-spacing:.1em;padding:6px 16px;border-radius:100px;margin-bottom:20px;">신청 안내</div>
       <h2 style="font-size:clamp(26px,4vw,38px);font-weight:900;color:#fff;line-height:1.25;letter-spacing:-.02em;margin-bottom:14px;">함양 국내선교,<br>함께 가실래요?</h2>
-      <p style="color:rgba(255,255,255,.7);font-size:16px;line-height:1.75;">처음이어도 괜찮습니다. 잘 못해도 괜찮습니다.<br>섬기고 싶은 마음 하나면 충분합니다.</p>
+      <p style="color:rgba(255,255,255,.55);font-size:14px;font-style:italic;margin-bottom:6px;">"인자가 온 것은 섬김을 받으려 함이 아니라<br>도리어 섬기려 하고 자기 목숨을<br>많은 사람의 대속물로 주려 함이니라"</p>
+      <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:18px;">— 막 10:45</p>
+      <p style="color:rgba(255,255,255,.8);font-size:16px;font-weight:600;">그리스도의 섬김으로 섬깁니다.</p>
     </div>
   </div>
 
@@ -1555,19 +1809,14 @@
       <div id="applySuccess" style="display:none;background:#fff;border-radius:24px;border:1px solid #EAE2D8;padding:56px 32px;text-align:center;">
         <div style="width:72px;height:72px;background:#E8F4EC;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;"></div>
         <h3 style="font-size:22px;font-weight:900;color:#1A2744;margin-bottom:10px;">신청이 완료되었습니다!</h3>
-        <p style="font-size:14px;color:#4A4A5A;line-height:1.8;margin-bottom:24px;">담당 교사가 확인 후 연락드릴게요.<br>참가비는 아래 계좌로 입금해 주세요.</p>
-        <div style="background:#FFF8F0;border:1px solid #EAD5BB;border-radius:16px;padding:18px;text-align:left;">
-          <div style="font-size:11px;font-weight:700;color:#C17B4A;letter-spacing:.06em;margin-bottom:8px;"> 참가비 입금 계좌</div>
-          <div style="font-size:16px;font-weight:900;color:#1A2744;">○○은행 000-0000-0000</div>
-          <div style="font-size:13px;color:#4A4A5A;margin-top:4px;">예금주: ○○○ (회계 선생님 성함 입력)</div>
-          <div style="font-size:12px;color:#8890A4;margin-top:8px;">입금자명: 본인 이름으로 입금해 주세요</div>
-        </div>
+        <p style="font-size:14px;color:#4A4A5A;line-height:1.8;margin-bottom:24px;">교역자가 확인 후 연락드릴게요.<br>면접 후 선교비 안내가 이어질 예정입니다.</p>
         <button onclick="document.getElementById('applySuccess').style.display='none';document.getElementById('applyForm').style.display='block';"
           style="margin-top:20px;font-size:13px;color:#8890A4;background:none;border:none;cursor:pointer;text-decoration:underline;">다시 입력하기</button>
       </div>
 
       <!-- 신청 폼 -->
-      <form id="applyForm" onsubmit="submitApply(event)" style="background:#fff;border-radius:24px;border:1px solid #EAE2D8;overflow:hidden;">
+      <form id="applyForm" name="hamyang-apply" netlify data-netlify="true" onsubmit="submitApply(event)" novalidate style="background:#fff;border-radius:24px;border:1px solid #EAE2D8;overflow:hidden;">
+        <input type="hidden" name="form-name" value="hamyang-apply">
 
         <style>
           .form-section { padding:28px; border-bottom:1px solid #F5EFE6; }
@@ -1603,46 +1852,9 @@
           .account-box { background:#FFF8F0;border:1px solid #EAD5BB;border-radius:16px;padding:18px; }
         </style>
 
-        <!-- 1. 기본 정보 -->
+        <!-- 1. 받은 훈련 -->
         <div class="form-section">
-          <div class="form-step-title"><span class="step-badge">1</span>기본 정보</div>
-          <div class="form-grid">
-            <div>
-              <label class="form-label">이름 <span class="req">*</span></label>
-              <input required name="name" class="form-input" placeholder="홍길동">
-            </div>
-            <div>
-              <label class="form-label">예배 <span class="req">*</span></label>
-              <div class="radio-group" style="margin-top:2px;">
-                <label class="radio-label" onclick="selectRadio(this,'service')"><input type="radio" name="service" value="1부" required>1부</label>
-                <label class="radio-label" onclick="selectRadio(this,'service')"><input type="radio" name="service" value="2부">2부</label>
-              </div>
-            </div>
-            <div>
-              <label class="form-label">학년 <span class="req">*</span></label>
-              <select required name="grade" class="form-select">
-                <option value="">선택</option>
-                <option>고1</option><option>고2</option><option>고3</option>
-              </select>
-            </div>
-            <div>
-              <label class="form-label">반 <span class="req">*</span></label>
-              <input required name="classNum" class="form-input" placeholder="예: 3반">
-            </div>
-            <div>
-              <label class="form-label">핸드폰 번호 <span class="req">*</span></label>
-              <input required name="phone" type="tel" class="form-input" placeholder="010-0000-0000">
-            </div>
-            <div>
-              <label class="form-label">부모님 연락처 <span class="req">*</span></label>
-              <input required name="parentPhone" type="tel" class="form-input" placeholder="010-0000-0000">
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. 받은 훈련 -->
-        <div class="form-section">
-          <div class="form-step-title"><span class="step-badge">2</span>받은 훈련</div>
+          <div class="form-step-title"><span class="step-badge">1</span>받은 훈련</div>
           <p style="font-size:12px;color:#8890A4;margin:-10px 0 14px 34px;">해당되는 것을 모두 선택해 주세요</p>
           <div class="check-group" id="trainingGroup">
             <label class="check-label" onclick="toggleCheck(this)"><input type="checkbox" name="training" value="양육"><span class="check-box"></span>양육</label>
@@ -1655,13 +1867,13 @@
           </div>
         </div>
 
-        <!-- 3. 건강 및 참가 정보 -->
+        <!-- 2. 건강 및 참가 정보 -->
         <div class="form-section">
-          <div class="form-step-title"><span class="step-badge">3</span>건강 및 참가 정보</div>
+          <div class="form-step-title"><span class="step-badge">2</span>건강 및 참가 정보</div>
           <div style="display:flex;flex-direction:column;gap:16px;">
             <div>
               <label class="form-label">알레르기 / 건강 특이사항 <span class="req">*</span></label>
-              <textarea required name="health" class="form-textarea" rows="3"
+              <textarea name="health" class="form-textarea" rows="3"
                 placeholder="없으면 '없음'으로 적어주세요. (음식 알레르기, 복용 중인 약, 기타 건강 상태 등)"></textarea>
             </div>
             <div>
@@ -1682,20 +1894,9 @@
               <label class="form-label">참가 동기 <span style="color:#8890A4;font-weight:400;">(선택)</span></label>
               <textarea name="motivation" class="form-textarea" rows="2" placeholder="한두 줄로 자유롭게 적어주세요."></textarea>
             </div>
-          </div>
-        </div>
-
-        <!-- 4. 참가비 안내 -->
-        <div class="form-section">
-          <div class="form-step-title"><span class="step-badge">4</span>참가비 안내</div>
-          <div class="account-box">
-            <div style="font-size:11px;font-weight:700;color:#C17B4A;letter-spacing:.06em;margin-bottom:10px;"> 입금 계좌</div>
-            <div style="font-size:16px;font-weight:900;color:#1A2744;">○○은행 000-0000-0000</div>
-            <div style="font-size:13px;color:#4A4A5A;margin-top:3px;">예금주: ○○○ <span style="font-size:11px;color:#8890A4;">(회계 선생님 성함 입력)</span></div>
-            <div style="margin-top:12px;padding-top:12px;border-top:1px solid #EAD5BB;display:flex;flex-direction:column;gap:5px;">
-              <div style="font-size:12px;color:#4A4A5A;">• 신청 후 담당 교사와 <strong>면접</strong>이 진행됩니다</div>
-              <div style="font-size:12px;color:#4A4A5A;">• 면접 후 입금 계좌가 안내됩니다 · 참가비: <strong>10만원</strong></div>
-              <div style="font-size:12px;color:#4A4A5A;">• 입금자명: <strong>본인 이름</strong>으로 입금해 주세요</div>
+            <div>
+              <label class="form-label">추천인 <span style="color:#8890A4;font-weight:400;">(선택)</span></label>
+              <input type="text" name="referrer" class="form-input" placeholder="추천해 준 선생님 또는 친구 이름 (없으면 비워두세요)">
             </div>
           </div>
         </div>
@@ -1703,7 +1904,7 @@
         <!-- 제출 -->
         <div style="padding:24px 28px;">
           <button type="submit" class="btn-apply">함양 국내선교 신청하기 →</button>
-          <p style="text-align:center;font-size:12px;color:#8890A4;margin-top:12px;">신청 후 담당 교사의 확인 연락을 기다려 주세요 · 문의: 고등부 교역자실</p>
+          <p style="text-align:center;font-size:12px;color:#8890A4;margin-top:12px;">신청 후 교역자와 면접이 진행됩니다 · 문의: 고등부 교역자실</p>
         </div>
 
       </form>
@@ -1740,7 +1941,7 @@
     </div>
     <div class="footer-bottom">
       <span>© 2025 수영로교회 고등부. All rights reserved.</span>
-      <span>함양 국내선교 · 성우성서교회 · 옥동교회 · 대지교회(지남교회)</span>
+      <span>함양 국내선교 · 성우성서교회 · 옥동교회 · 대지교회</span>
       <button onclick="showAdminModal()" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:11px;cursor:pointer;margin-top:8px;display:block;">관리자</button>
     </div>
   </div>
@@ -1789,93 +1990,240 @@
 
   /* 초기 로딩: 성우성서교회만 표시 */
   /* ── Gallery state ── */
-  let currentChurch = 'sunwoo';
+  let currentChurch = 'all';
   let currentYear = 'all';
 
-  /* ── IndexedDB (용량 제한 없음) ── */
+  /* ── Firebase 설정 ──────────────────────────────────────────
+     1. https://console.firebase.google.com 에서 프로젝트 생성
+     2. Firestore Database 활성화 (테스트 모드로 시작)
+     3. Storage 활성화 (테스트 모드로 시작)
+     4. 프로젝트 설정 > 앱 추가(웹) 후 아래 값 복사·붙여넣기
+  ─────────────────────────────────────────────────────────── */
+  const firebaseConfig = {
+    apiKey:            "여기에_API_KEY_입력",
+    authDomain:        "여기에_프로젝트ID.firebaseapp.com",
+    projectId:         "여기에_프로젝트ID",
+    storageBucket:     "여기에_프로젝트ID.appspot.com",
+    messagingSenderId: "여기에_SENDER_ID",
+    appId:             "여기에_APP_ID"
+  };
+  let firestoreDB = null;
+  let firebaseStorage = null;
+  const _fbReady = !firebaseConfig.apiKey.includes('여기에') && !firebaseConfig.projectId.includes('여기에');
+  if (_fbReady) {
+    try {
+      firebase.initializeApp(firebaseConfig);
+      firestoreDB     = firebase.firestore();
+      firebaseStorage = firebase.storage();
+    } catch(e) {
+      console.warn('Firebase 초기화 실패:', e.message);
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     로컬 스토리지 헬퍼 (Firebase 미설정 시 완전 대체)
+     모든 데이터는 동기적으로 저장·읽기 → 무한 대기 없음
+  ══════════════════════════════════════════════════════ */
+  function _ls(key)       { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; } }
+  function _lsSave(key,v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch(e) { console.warn('localStorage 저장 실패:', e); throw e; } }
+  function _lsAdd(key, item) {
+    const list = _ls(key);
+    const id   = Date.now().toString() + Math.random().toString(36).slice(2,6);
+    list.push({ ...item, id });
+    _lsSave(key, list);
+    return id;
+  }
+  function _lsDel(key, id) {
+    _lsSave(key, _ls(key).filter(x => String(x.id) !== String(id)));
+  }
+
+  function _lsGetUsers() { return _ls('hm_users'); }
+  function _lsSaveUsers(u) { _lsSave('hm_users', u); }
+
+  /* ── IndexedDB (사진 전용, 용량 수백MB) ── */
   let _idb = null;
-  function openDB() {
+  function _openIDB() {
+    if (_idb) return Promise.resolve(_idb);
     return new Promise((resolve, reject) => {
-      if (_idb) { resolve(_idb); return; }
-      const req = indexedDB.open('hamyangPhotosDB', 2);
+      const req = indexedDB.open('hm_db', 1);
       req.onupgradeneeded = e => {
-        const d = e.target.result;
-        if (!d.objectStoreNames.contains('photos'))
-          d.createObjectStore('photos', { keyPath: 'id', autoIncrement: true });
-        if (!d.objectStoreNames.contains('users')) {
-          const us = d.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
-          us.createIndex('name', 'name', { unique: true });
-        }
-        if (!d.objectStoreNames.contains('reviews'))
-          d.createObjectStore('reviews', { keyPath: 'id', autoIncrement: true });
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('photos')) db.createObjectStore('photos', { keyPath: 'id' });
       };
       req.onsuccess = e => { _idb = e.target.result; resolve(_idb); };
-      req.onerror  = e => reject(e.target.error);
+      req.onerror   = () => reject(req.error);
     });
   }
-  function dbGetAll() {
-    return openDB().then(db => new Promise((resolve, reject) => {
+  async function _idbGetAll() {
+    const db = await _openIDB();
+    return new Promise((resolve, reject) => {
       const req = db.transaction('photos','readonly').objectStore('photos').getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror   = () => reject(req.error);
+    });
+  }
+  async function _idbAdd(item) {
+    const db = await _openIDB();
+    return new Promise((resolve, reject) => {
+      const req = db.transaction('photos','readwrite').objectStore('photos').add(item);
       req.onsuccess = () => resolve(req.result);
-      req.onerror  = () => reject(req.error);
-    }));
+      req.onerror   = () => reject(req.error);
+    });
+  }
+  async function _idbDelete(id) {
+    const db = await _openIDB();
+    return new Promise((resolve, reject) => {
+      const req = db.transaction('photos','readwrite').objectStore('photos').delete(id);
+      req.onsuccess = () => resolve();
+      req.onerror   = () => reject(req.error);
+    });
+  }
+  async function _idbClear() {
+    const db = await _openIDB();
+    return new Promise((resolve, reject) => {
+      const req = db.transaction('photos','readwrite').objectStore('photos').clear();
+      req.onsuccess = () => resolve();
+      req.onerror   = () => reject(req.error);
+    });
   }
 
-  function dbGetUser(name) {
-    return openDB().then(db => new Promise((res,rej) => {
-      const r = db.transaction('users','readonly').objectStore('users').index('name').get(name);
-      r.onsuccess = () => res(r.result || null);
-      r.onerror   = () => rej(r.error);
-    }));
-  }
-  function dbAddUser(name, grade, pin) {
-    return openDB().then(db => new Promise((res,rej) => {
-      const tx = db.transaction('users','readwrite');
-      const r  = tx.objectStore('users').add({ name, grade, pin });
-      r.onsuccess = () => res(r.result);
-      tx.onerror  = () => rej(tx.error);
-    }));
-  }
-  function dbGetReviews() {
-    return openDB().then(db => new Promise((res,rej) => {
-      const r = db.transaction('reviews','readonly').objectStore('reviews').getAll();
-      r.onsuccess = () => res(r.result);
-      r.onerror   = () => rej(r.error);
-    }));
-  }
-  function dbAddReview(rv) {
-    return openDB().then(db => new Promise((res,rej) => {
-      const tx = db.transaction('reviews','readwrite');
-      const r  = tx.objectStore('reviews').add(rv);
-      r.onsuccess = () => res(r.result);
-      tx.onerror  = () => rej(tx.error);
-    }));
-  }
-  function dbDeleteItem(store, id) {
-    return openDB().then(db => new Promise((res,rej) => {
-      const tx = db.transaction(store,'readwrite');
-      tx.objectStore(store).delete(id);
-      tx.oncomplete = res;
-      tx.onerror    = () => rej(tx.error);
-    }));
-  }
-  function dbPutPhoto(p) {
-    return openDB().then(db => new Promise((res,rej) => {
-      const tx = db.transaction('photos','readwrite');
-      tx.objectStore('photos').put(p);
-      tx.oncomplete = res;
-      tx.onerror    = () => rej(tx.error);
-    }));
-  }
+  /* ── DB helpers ── */
+  function _checkDB(msg) { return true; }
 
-  function dbAddAll(entries) {
-    return openDB().then(db => new Promise((resolve, reject) => {
-      const tx = db.transaction('photos','readwrite');
-      const store = tx.objectStore('photos');
-      entries.forEach(e => store.add(e));
-      tx.oncomplete = () => resolve();
-      tx.onerror    = () => reject(tx.error);
-    }));
+  async function dbGetAll() {
+    if (firestoreDB) {
+      try {
+        const snap = await firestoreDB.collection('photos').orderBy('timestamp','asc').get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch { /* fall through */ }
+    }
+    try {
+      const items = await _idbGetAll();
+      /* localStorage 구버전 데이터 마이그레이션 */
+      const legacy = _ls('hm_photos');
+      if (legacy.length && !items.length) {
+        for (const p of legacy) await _idbAdd(p).catch(() => {});
+        localStorage.removeItem('hm_photos');
+        return legacy;
+      }
+      return items.sort((a, b) => (a.timestamp||0) - (b.timestamp||0));
+    } catch {
+      return _ls('hm_photos');
+    }
+  }
+  async function dbGetAllUsers() {
+    if (firestoreDB) {
+      try {
+        const snap = await firestoreDB.collection('users').get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch { /* fall through */ }
+    }
+    return _lsGetUsers();
+  }
+  async function dbGetUser(name) {
+    /* localStorage 항상 먼저 */
+    const lsUser = _lsGetUsers().find(u => u.name === name) || null;
+    if (lsUser) return lsUser;
+    if (!firestoreDB) return null;
+    try {
+      const snap = await firestoreDB.collection('users').where('name','==',name).limit(1).get();
+      if (snap.empty) return null;
+      const d = snap.docs[0]; return { id: d.id, ...d.data() };
+    } catch { return null; }
+  }
+  async function dbAddUser(name, grade, pin, extra = {}) {
+    /* localStorage에 즉시 저장 */
+    const users = _lsGetUsers();
+    const id    = Date.now().toString();
+    users.push({ id, name, grade, pin, ...extra, createdAt: Date.now() });
+    _lsSaveUsers(users);
+    /* Firebase도 시도 (비동기, 실패해도 무관) */
+    if (firestoreDB) firestoreDB.collection('users').add({ name, grade, pin, ...extra, createdAt: Date.now() }).catch(()=>{});
+    return id;
+  }
+  async function dbGetReviews() {
+    if (firestoreDB) {
+      try {
+        const snap = await firestoreDB.collection('reviews').orderBy('timestamp','asc').get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch { /* fall through */ }
+    }
+    return _ls('hm_reviews');
+  }
+  async function dbAddReview(rv) {
+    const id = _lsAdd('hm_reviews', rv);
+    if (firestoreDB) firestoreDB.collection('reviews').add(rv).catch(()=>{});
+    return id;
+  }
+  async function dbUpdateReview(id, data) {
+    const list = _ls('hm_reviews');
+    const idx = list.findIndex(x => String(x.id) === String(id));
+    if (idx >= 0) { list[idx] = { ...list[idx], ...data }; _lsSave('hm_reviews', list); }
+    if (firestoreDB) firestoreDB.collection('reviews').doc(id).update(data).catch(()=>{});
+  }
+  async function dbDeleteItem(store, id) {
+    if (store === 'photos') {
+      await _idbDelete(id).catch(() => {});
+      _lsDel('hm_photos', id);
+    } else {
+      const lsKeyMap = { reviews: 'hm_reviews', users: 'hm_users', applications: 'hm_applications', inquiries: 'hm_inquiries' };
+      const lsKey = lsKeyMap[store];
+      if (lsKey) _lsDel(lsKey, id);
+    }
+    if (firestoreDB) firestoreDB.collection(store).doc(id).delete().catch(()=>{});
+  }
+  async function dbGetApplications() {
+    if (firestoreDB) {
+      try {
+        const snap = await firestoreDB.collection('applications').orderBy('submittedAt','desc').get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch { /* fall through */ }
+    }
+    return _ls('hm_applications').slice().reverse();
+  }
+  async function dbAddApplication(payload) {
+    const id = _lsAdd('hm_applications', payload);
+    if (firestoreDB) firestoreDB.collection('applications').add(payload).catch(()=>{});
+    return id;
+  }
+  async function dbUpdateApplication(id, data) {
+    const list = _ls('hm_applications');
+    const idx  = list.findIndex(x => String(x.id) === String(id));
+    if (idx >= 0) { list[idx] = { ...list[idx], ...data }; _lsSave('hm_applications', list); }
+    if (firestoreDB) firestoreDB.collection('applications').doc(id).update(data).catch(()=>{});
+  }
+  async function dbGetInquiries() { return _ls('hm_inquiries').slice().reverse(); }
+  async function dbAddInquiry(data) { return _lsAdd('hm_inquiries', data); }
+  async function dbUpdateInquiry(id, data) {
+    const list = _ls('hm_inquiries');
+    const idx = list.findIndex(x => String(x.id) === String(id));
+    if (idx >= 0) { list[idx] = { ...list[idx], ...data }; _lsSave('hm_inquiries', list); }
+  }
+  async function dbPutPhoto(p) {
+    /* IndexedDB 업데이트 */
+    try {
+      const db = await _openIDB();
+      await new Promise((resolve, reject) => {
+        const req = db.transaction('photos','readwrite').objectStore('photos').put(p);
+        req.onsuccess = () => resolve();
+        req.onerror   = () => reject(req.error);
+      });
+    } catch(e) { console.warn('idb put 실패:', e); }
+    /* localStorage 레거시도 반영 */
+    const list = _ls('hm_photos');
+    const idx  = list.findIndex(x => String(x.id) === String(p.id));
+    if (idx >= 0) { list[idx] = p; _lsSave('hm_photos', list); }
+    if (firestoreDB) { const { id, ...data } = p; firestoreDB.collection('photos').doc(id).set(data).catch(()=>{}); }
+  }
+  async function dbAddAll(entries) {
+    entries.forEach(e => _lsAdd('hm_photos', e));
+    if (firestoreDB) {
+      try {
+        const batch = firestoreDB.batch();
+        entries.forEach(e => { const ref = firestoreDB.collection('photos').doc(); batch.set(ref, e); });
+        await batch.commit();
+      } catch { /* 무시 */ }
+    }
   }
 
 
@@ -1908,46 +2256,119 @@
       el.innerHTML = '<span style="font-size:13px;font-weight:700;color:#C17B4A;"> 관리자</span>';
     } else if (s) {
       el.innerHTML = '<span style="font-size:13px;font-weight:600;color:var(--dark);">' + s.name + '</span>'
-        + '<button style="font-size:11px;color:#8890A4;border:none;background:none;cursor:pointer;margin-left:6px;" onclick="clearSession()">로그아웃</button>';
+        + '<button onclick="showMyApplication()" style="font-size:11px;color:var(--amber);border:1.5px solid var(--amber);background:none;padding:3px 10px;border-radius:20px;cursor:pointer;margin-left:8px;font-family:inherit;">내 신청서</button>'
+        + '<button style="font-size:11px;color:#8890A4;border:none;background:none;cursor:pointer;margin-left:4px;" onclick="clearSession()">로그아웃</button>';
     } else {
       el.innerHTML = '<button onclick="showLoginModal()" style="font-size:13px;font-weight:600;color:var(--amber);border:1.5px solid var(--amber);background:none;padding:4px 14px;border-radius:20px;cursor:pointer;font-family:inherit;">로그인</button>';
     }
   }
 
   let _loginCb = null;
-  function showLoginModal(cb) {
+  function showLoginModal(cb, tab) {
     _loginCb = cb || null;
     document.getElementById('authName').value = '';
-    document.getElementById('authGrade').value = '';
     document.getElementById('authPin').value = '';
+    document.getElementById('regName').value = '';
+    document.getElementById('regGrade').value = '';
+    document.getElementById('regPin').value = '';
+    document.getElementById('regPinConfirm').value = '';
     document.getElementById('authMsg').textContent = '';
+    document.getElementById('regMsg').textContent = '';
+    switchAuthTab(tab || 'login');
     document.getElementById('loginModal').style.display = 'flex';
-    setTimeout(() => document.getElementById('authName').focus(), 50);
+    setTimeout(() => {
+      const el = document.getElementById(tab === 'register' ? 'regName' : 'authName');
+      if (el) el.focus();
+    }, 50);
+  }
+  function switchAuthTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('authFormLogin').style.display = isLogin ? 'block' : 'none';
+    document.getElementById('authFormRegister').style.display = isLogin ? 'none' : 'block';
+    document.getElementById('authTabLogin').classList.toggle('at-active', isLogin);
+    document.getElementById('authTabRegister').classList.toggle('at-active', !isLogin);
   }
   function closeLoginModal() {
     document.getElementById('loginModal').style.display = 'none';
     _loginCb = null;
   }
+  function showLoginToast(name) {
+    const t = document.getElementById('loginToast');
+    if (!t) return;
+    t.textContent = name + '님, 환영합니다!';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
   async function doLogin() {
-    const name  = document.getElementById('authName').value.trim();
-    const grade = document.getElementById('authGrade').value;
-    const pin   = document.getElementById('authPin').value;
-    const msg   = document.getElementById('authMsg');
+    const name = document.getElementById('authName').value.trim();
+    const pin  = document.getElementById('authPin').value;
+    const msg  = document.getElementById('authMsg');
     msg.textContent = '';
     if (!name) { msg.textContent = '이름을 입력해주세요.'; return; }
     if (!pin)  { msg.textContent = '비밀번호를 입력해주세요.'; return; }
+    msg.textContent = '확인 중...';
+    try {
+      /* localStorage에서 먼저 확인 */
+      let ex = _lsGetUsers().find(u => u.name === name) || null;
+      /* Firebase에도 시도 */
+      if (!ex && firestoreDB) {
+        try {
+          const snap = await firestoreDB.collection('users').where('name','==',name).limit(1).get();
+          if (!snap.empty) { const d = snap.docs[0]; ex = { id: d.id, ...d.data() }; }
+        } catch(e) { /* Firebase 실패 시 무시 */ }
+      }
+      if (!ex) { msg.textContent = '이름을 찾을 수 없습니다. 회원가입을 해주세요.'; return; }
+      if (ex.pin !== pin) { msg.textContent = '비밀번호가 맞지 않습니다.'; return; }
+      setSession({ id: ex.id, name });
+      closeLoginModal();
+      showLoginToast(name);
+      if (_loginCb) _loginCb();
+    } catch(err) {
+      console.error('doLogin error:', err);
+      msg.textContent = '오류: ' + (err && err.message ? err.message : String(err));
+    }
+  }
+  function updateRegFields() {
+    const grade = document.getElementById('regGrade').value;
+    const adult = ['졸업생','교사','교역자/부장'].includes(grade);
+    document.getElementById('regClassField').style.display       = adult ? 'none' : '';
+    document.getElementById('regParentPhoneField').style.display = adult ? 'none' : '';
+  }
+
+  async function doRegister() {
+    const name        = document.getElementById('regName').value.trim();
+    const serviceEl   = document.querySelector('input[name="regService"]:checked');
+    const service     = serviceEl ? serviceEl.value : '';
+    const grade       = document.getElementById('regGrade').value;
+    const classNum    = document.getElementById('regClass').value.trim();
+    const phone       = document.getElementById('regPhone').value.trim();
+    const parentPhone = document.getElementById('regParentPhone').value.trim();
+    const pin         = document.getElementById('regPin').value;
+    const pinConfirm  = document.getElementById('regPinConfirm').value;
+    const msg         = document.getElementById('regMsg');
+    msg.textContent   = '';
+    const _adultGrade = ['졸업생','교사','교역자/부장'].includes(grade);
+    if (!name)        { msg.textContent = '이름을 입력해주세요.'; return; }
+    if (!service)     { msg.textContent = '예배를 선택해주세요. (1부/2부)'; return; }
+    if (!grade)       { msg.textContent = '학년을 선택해주세요.'; return; }
+    if (!_adultGrade && !classNum)    { msg.textContent = '반을 입력해주세요.'; return; }
+    if (!phone)       { msg.textContent = '핸드폰 번호를 입력해주세요.'; return; }
+    if (!_adultGrade && !parentPhone) { msg.textContent = '부모님 연락처를 입력해주세요.'; return; }
+    if (!pin)         { msg.textContent = '비밀번호를 입력해주세요.'; return; }
+    if (pin !== pinConfirm) { msg.textContent = '비밀번호가 일치하지 않습니다.'; return; }
+    msg.textContent = '처리 중...';
     try {
       const ex = await dbGetUser(name);
-      if (ex) {
-        if (ex.pin !== pin) { msg.textContent = '비밀번호가 맞지 않습니다.'; return; }
-        setSession({ id: ex.id, name });
-      } else {
-        const id = await dbAddUser(name, grade, pin);
-        setSession({ id, name });
-      }
-      closeLoginModal();
-      if (_loginCb) _loginCb();
-    } catch { msg.textContent = '오류가 발생했습니다. 다시 시도해주세요.'; }
+      if (ex) { msg.textContent = '이미 사용 중인 이름입니다.'; return; }
+      const id = await dbAddUser(name, grade, pin, { service, classNum, phone, parentPhone });
+      setSession({ id, name });
+      try { closeLoginModal(); } catch(e2) { console.warn(e2); }
+      try { showLoginToast(name); } catch(e4) { console.warn(e4); }
+      try { if (_loginCb) _loginCb(); } catch(e3) { console.warn(e3); }
+    } catch(err) {
+      console.error('doRegister error:', err);
+      msg.textContent = '가입 오류: ' + (err && err.message ? err.message : String(err));
+    }
   }
 
   function showAdminModal() {
@@ -1988,7 +2409,11 @@
     document.body.style.overflow = 'hidden';
   }
   function lbRender() {
-    document.getElementById('lightboxImg').src = _lbPhotos[_lbIndex] || '';
+    const img = document.getElementById('lightboxImg');
+    img.src = _lbPhotos[_lbIndex] || '';
+    img.classList.remove('zoomed');
+    document.getElementById('lightboxImg').parentElement.scrollTop = 0;
+    document.getElementById('lightboxImg').parentElement.scrollLeft = 0;
     document.getElementById('lightboxTitle').textContent = _lbTitle;
     document.getElementById('lightboxAuthor').textContent = _lbAuthor;
     const counter = document.getElementById('lbCounter');
@@ -1996,14 +2421,35 @@
     document.querySelector('.lb-prev').style.display = _lbPhotos.length > 1 ? '' : 'none';
     document.querySelector('.lb-next').style.display = _lbPhotos.length > 1 ? '' : 'none';
   }
+  function toggleLbZoom(img) {
+    img.classList.toggle('zoomed');
+    const wrap = img.parentElement;
+    if (!img.classList.contains('zoomed')) { wrap.scrollTop = 0; wrap.scrollLeft = 0; }
+  }
   function lbGo(index) {
     _lbIndex = (_lbPhotos.length + index) % _lbPhotos.length;
     lbRender();
   }
   function closeLightbox() {
     document.getElementById('lightbox').style.display = 'none';
+    document.getElementById('lightboxImg').classList.remove('zoomed');
     document.body.style.overflow = '';
   }
+
+  /* 라이트박스 터치 스와이프 */
+  (function() {
+    let lbTx = 0;
+    const lb = () => document.getElementById('lightbox');
+    document.addEventListener('touchstart', e => {
+      if (lb().style.display === 'none') return;
+      lbTx = e.touches[0].clientX;
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      if (lb().style.display === 'none') return;
+      const dx = e.changedTouches[0].clientX - lbTx;
+      if (Math.abs(dx) > 50) { if (dx < 0) lbGo(_lbIndex + 1); else lbGo(_lbIndex - 1); }
+    }, { passive: true });
+  })();
   document.addEventListener('keydown', e => {
     if (document.getElementById('lightbox').style.display !== 'none') {
       if (e.key === 'Escape')      closeLightbox();
@@ -2011,32 +2457,72 @@
       else if (e.key === 'ArrowLeft')  lbGo(_lbIndex - 1);
     }
     if (document.getElementById('postModal').style.display !== 'none' && e.key === 'Escape') closePostModal();
+    if (document.getElementById('adminPanel').style.display !== 'none' && e.key === 'Escape') closeAdminPanel();
   });
 
+  let _modalPost = null;
   function openPostModal(p, title, author, timeStr) {
+    _modalPost = p;
     const photos = getPostPhotos(p);
-    if (photos.length === 1) { openLightbox(photos, 0, title, author + ' · ' + timeStr); return; }
+    const admin = isAdmin();
+    const session = getSession();
+    const canManage = admin || (session && (String(p.authorId) === String(session.id) || p.authorName === session.name));
+    if (photos.length === 1 && !canManage) { openLightbox(photos, 0, title, author + ' · ' + timeStr); return; }
     document.getElementById('postModalTitle').textContent = title;
     document.getElementById('postModalMeta').textContent = (author || '') + (timeStr ? ' · ' + timeStr : '');
+    document.getElementById('postModalEditBtn').style.display = canManage ? '' : 'none';
+    document.getElementById('postModalDelBtn').style.display = canManage ? '' : 'none';
+    _renderPostModalGrid(p, canManage, title, author);
+    document.getElementById('postModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function _renderPostModalGrid(p, canManage, title, author) {
+    const photos = getPostPhotos(p);
     const grid = document.getElementById('postModalGrid');
     grid.innerHTML = '';
     photos.forEach((src, i) => {
       const item = document.createElement('div');
       item.className = 'post-modal-item';
+      item.style.position = 'relative';
       const img = document.createElement('img');
-      img.src = src;
-      img.alt = '';
-      img.loading = 'lazy';
+      img.src = src; img.alt = ''; img.loading = 'lazy';
       item.appendChild(img);
       item.addEventListener('click', () => openLightbox(photos, i, title, author));
+      if (canManage) {
+        const xBtn = document.createElement('button');
+        xBtn.textContent = '×';
+        xBtn.title = '사진 삭제';
+        xBtn.style.cssText = 'position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(220,50,50,.92);color:#fff;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;z-index:3;';
+        xBtn.onclick = async e => {
+          e.stopPropagation();
+          if (getPostPhotos(_modalPost).length <= 1) { alert('사진이 최소 1장은 있어야 합니다.'); return; }
+          const newPhotos = getPostPhotos(_modalPost).filter((_, idx) => idx !== i);
+          await dbPutPhoto({ ..._modalPost, photos: newPhotos });
+          _modalPost = { ..._modalPost, photos: newPhotos };
+          _renderPostModalGrid(_modalPost, canManage, title, author);
+          renderSavedPhotos();
+        };
+        item.appendChild(xBtn);
+      }
       grid.appendChild(item);
     });
-    document.getElementById('postModal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+  }
+  function postModalEdit() {
+    if (!_modalPost) return;
+    closePostModal();
+    adminEditPost(_modalPost.id, _modalPost.title, _modalPost.church, _modalPost.year);
+  }
+  async function postModalDelete() {
+    if (!_modalPost) return;
+    if (!confirm('이 게시글을 삭제할까요?')) return;
+    await dbDeleteItem('photos', _modalPost.id);
+    closePostModal();
+    renderSavedPhotos();
   }
   function closePostModal() {
     document.getElementById('postModal').style.display = 'none';
     document.body.style.overflow = '';
+    _modalPost = null;
   }
 
   /* ── Gallery upload (로그인 필요) ── */
@@ -2050,32 +2536,14 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    /* localStorage → IndexedDB 마이그레이션 */
-    const old = localStorage.getItem('hamyangPhotos');
-    if (old) {
-      try {
-        const arr = JSON.parse(old);
-        if (arr.length) dbAddAll(arr).catch(() => {});
-      } catch {}
-      localStorage.removeItem('hamyangPhotos');
-    }
     renderSavedPhotos();
     renderReviews();
+    renderInquirySection();
     updateNavUser();
     if (isAdmin()) document.getElementById('adminBar').style.display = 'flex';
   });
 
-  function filterChurch(church, btn) {
-    currentChurch = church;
-    currentYear = 'all';
-    document.querySelectorAll('.filter-btn:not(.filter-year)').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.filter-year').forEach(b => b.classList.remove('active'));
-    document.querySelector('.filter-year').classList.add('active');
-    renderSavedPhotos();
-  }
-
-  function filterYear(year, btn) {
+function filterYear(year, btn) {
     currentYear = year;
     document.querySelectorAll('.filter-year').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -2088,7 +2556,7 @@
   function renderSavedPhotos() {
     dbGetAll().then(all => {
       const filtered = all.filter(p =>
-        p.church === currentChurch &&
+        (currentChurch === 'all' || p.church === currentChurch) &&
         (currentYear === 'all' || p.year === currentYear)
       );
       const wrap  = document.getElementById('savedPhotos');
@@ -2102,112 +2570,64 @@
         wrap.style.display = 'block';
         const admin = isAdmin();
 
-        /* 관리자 모드: 일괄 작업 툴바 */
-        if (admin) {
-          const bulkBar = document.createElement('div');
-          bulkBar.id = 'bulkBar';
-          bulkBar.className = 'gallery-bulk-bar';
-          bulkBar.style.display = 'none';
-          bulkBar.innerHTML = '<span class="bulk-count" id="bulkCount">0개 선택됨</span>'
-            + '<button class="bulk-del-btn" onclick="adminBulkDelete()">선택 삭제</button>'
-            + '<button class="bulk-cancel-btn" onclick="clearAllChecks()">선택 해제</button>';
-          wrap.appendChild(bulkBar);
-        }
+        filtered.slice().reverse().forEach(p => {
+          const photos   = getPostPhotos(p);
+          const title    = p.title || '(제목 없음)';
+          const author   = p.authorName || '-';
+          const ts       = p.timestamp ? new Date(p.timestamp) : null;
+          const dateStr  = ts ? ts.getFullYear() + '.' + String(ts.getMonth()+1).padStart(2,'0') + '.' + String(ts.getDate()).padStart(2,'0') : '-';
+          const yearSuffix  = p.year ? p.year.toString().slice(2) + '년' : '';
+          const churchName  = CHURCH_LABELS[p.church] || p.church || '';
+          const churchLabel = [yearSuffix, churchName].filter(Boolean).join(' ');
 
-        const table = document.createElement('table');
-        table.className = 'gallery-board';
-        table.innerHTML = '<thead><tr>'
-          + (admin ? '<th class="col-check"><input type="checkbox" class="photo-check" onchange="toggleAllPhotos(this)" title="전체 선택"></th>' : '<th class="col-num">번호</th>')
-          + '<th>제목</th>'
-          + '<th class="col-author">글쓴이</th>'
-          + '<th class="col-time">시간</th>'
-          + (admin ? '<th class="col-admin">관리</th>' : '')
-          + '</tr></thead>';
-        const tbody = document.createElement('tbody');
-        filtered.slice().reverse().forEach((p, i) => {
-          const title  = p.title || '(제목 없음)';
-          const author = p.authorName || '-';
-          const ts     = p.timestamp ? new Date(p.timestamp) : null;
-          const timeStr = ts
-            ? ts.getFullYear() + '.' + String(ts.getMonth()+1).padStart(2,'0') + '.' + String(ts.getDate()).padStart(2,'0')
-              + ' ' + String(ts.getHours()).padStart(2,'0') + ':' + String(ts.getMinutes()).padStart(2,'0')
-            : '-';
-          const tr = document.createElement('tr');
+          const group = document.createElement('div');
+          group.style.cssText = 'position:relative;margin-bottom:10px;';
 
-          if (admin) {
-            const checkTd = document.createElement('td');
-            checkTd.className = 'col-check';
-            const cb = document.createElement('input');
-            cb.type = 'checkbox';
-            cb.className = 'photo-check';
-            cb.value = p.id;
-            cb.addEventListener('change', updateBulkBar);
-            cb.addEventListener('click', e => e.stopPropagation());
-            checkTd.appendChild(cb);
-            tr.appendChild(checkTd);
-          } else {
-            const numTd = document.createElement('td');
-            numTd.className = 'col-num';
-            numTd.textContent = filtered.length - i;
-            tr.appendChild(numTd);
-          }
-
-          const titleTd = document.createElement('td');
-          titleTd.className = 'col-title';
-          const thumb = document.createElement('img');
-          thumb.className = 'thumb';
-          thumb.src = getPostCover(p);
-          thumb.alt = '';
-          const titleSpan = document.createElement('span');
-          titleSpan.textContent = title;
-          const wrap2 = document.createElement('div');
-          wrap2.className = 'title-wrap';
-          wrap2.appendChild(thumb);
-          wrap2.appendChild(titleSpan);
-          titleTd.appendChild(wrap2);
-
-          const authorTd = document.createElement('td');
-          authorTd.className = 'col-author';
-          authorTd.textContent = author;
-
-          const timeTd = document.createElement('td');
-          timeTd.className = 'col-time';
-          timeTd.textContent = timeStr;
-
-          tr.appendChild(titleTd);
-          tr.appendChild(authorTd);
-          tr.appendChild(timeTd);
-
-          const photoCount = getPostPhotos(p).length;
-          if (photoCount > 1) {
-            const countBadge = document.createElement('span');
-            countBadge.textContent = ' (' + photoCount + '장)';
-            countBadge.style.cssText = 'font-size:11px;color:var(--muted);font-weight:400;';
-            titleSpan.appendChild(countBadge);
-          }
-          tr.addEventListener('click', () => openPostModal(p, title, author, timeStr));
-
-          if (admin) {
-            const adminTd = document.createElement('td');
-            adminTd.className = 'col-admin';
+          const curSession = getSession();
+          const isOwnPost = curSession && (String(p.authorId) === String(curSession.id) || p.authorName === curSession.name);
+          if (admin || isOwnPost) {
+            const actions = document.createElement('div');
+            actions.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:2;';
             const editBtn = document.createElement('button');
             editBtn.className = 'admin-photo-move';
             editBtn.textContent = '✏';
             editBtn.title = '수정';
-            editBtn.addEventListener('click', e => { e.stopPropagation(); adminEditPost(p.id, p.title, p.church, p.year); });
-            const del = document.createElement('button');
-            del.className = 'admin-photo-del';
-            del.textContent = '';
-            del.title = '삭제';
-            del.addEventListener('click', e => { e.stopPropagation(); adminDeletePhoto(p.id); });
-            adminTd.appendChild(editBtn);
-            adminTd.appendChild(del);
-            tr.appendChild(adminTd);
+            editBtn.onclick = e => { e.stopPropagation(); adminEditPost(p.id, p.title, p.church, p.year); };
+            const delBtn = document.createElement('button');
+            delBtn.className = 'admin-photo-del';
+            delBtn.textContent = '';
+            delBtn.title = '삭제';
+            delBtn.onclick = e => { e.stopPropagation(); adminDeletePhoto(p.id); };
+            actions.appendChild(editBtn);
+            actions.appendChild(delBtn);
+            group.appendChild(actions);
           }
-          tbody.appendChild(tr);
+
+          /* 대표 사진 카드 */
+          const card = document.createElement('div');
+          card.className = 'post-card';
+          card.style.cssText = 'display:flex;align-items:center;gap:16px;padding:14px;background:var(--white);border-radius:14px;box-shadow:var(--shadow-sm);cursor:pointer;transition:box-shadow .2s;';
+          card.addEventListener('mouseenter', () => { card.style.boxShadow = 'var(--shadow)'; });
+          card.addEventListener('mouseleave', () => { card.style.boxShadow = 'var(--shadow-sm)'; });
+          card.addEventListener('click', () => openPostModal(p, title, author, dateStr));
+
+          const cover = document.createElement('img');
+          cover.src = getPostCover(p);
+          cover.alt = '';
+          cover.loading = 'lazy';
+          cover.style.cssText = 'width:96px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--bg-alt);';
+
+          const info = document.createElement('div');
+          info.style.cssText = 'flex:1;min-width:0;';
+          info.innerHTML = (churchLabel ? `<div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:3px;">${churchLabel}</div>` : '')
+            + `<div style="font-size:14px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${title}${photos.length > 1 ? `<span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px;">${photos.length}장</span>` : ''}</div>`
+            + `<div style="font-size:12px;color:var(--muted);margin-top:3px;">${author} · ${dateStr}</div>`;
+
+          card.appendChild(cover);
+          card.appendChild(info);
+          group.appendChild(card);
+          wrap.appendChild(group);
         });
-        table.appendChild(tbody);
-        wrap.appendChild(table);
       }
     }).catch(() => {});
   }
@@ -2218,6 +2638,95 @@
     const isOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
     if (!isOpen) item.classList.add('open');
+  }
+
+  /* ── 비밀 문의 ── */
+  function renderInquirySection() {
+    const session = getSession();
+    const admin   = isAdmin();
+    const formEl  = document.getElementById('inquiryFormSection');
+    const prompt  = document.getElementById('inquiryLoginPrompt');
+    if (formEl)  formEl.style.display  = (session || admin) ? 'block' : 'none';
+    if (prompt)  prompt.style.display  = (session || admin) ? 'none'  : 'block';
+    loadInquiries();
+  }
+
+  async function loadInquiries() {
+    const el = document.getElementById('inquiryList');
+    if (!el) return;
+    const inquiries = await dbGetInquiries();
+    const session = getSession();
+    const admin   = isAdmin();
+    if (!inquiries.length) {
+      el.innerHTML = '<p style="text-align:center;color:var(--muted);padding:20px 0;font-size:14px;">아직 문의가 없습니다.</p>';
+      return;
+    }
+    el.innerHTML = inquiries.map(inq => {
+      const isMine = session && String(inq.authorId) === String(session.id);
+      const canSee = admin || isMine;
+      const date   = inq.timestamp ? new Date(inq.timestamp).toLocaleDateString('ko-KR') : '';
+      const safeId = String(inq.id).replace(/'/g,"\\'");
+      return `<div style="border:1px solid ${isMine ? '#EAD5BB' : 'var(--border)'};border-radius:12px;padding:16px;margin-bottom:10px;background:${isMine ? '#FFF8F0' : 'var(--white)'};" id="inq-${inq.id}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <span style="font-weight:700;font-size:14px;color:var(--dark);flex:1;" id="inq-subj-${inq.id}">${canSee ? '' : '🔒 '}${inq.subject}</span>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <span style="font-size:12px;color:var(--muted);white-space:nowrap;">${isMine ? '나' : '익명'} · ${date}</span>
+            ${isMine ? `<button onclick="startEditInquiry('${safeId}')" style="border:none;background:#C17B4A;color:#fff;border-radius:10px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;">수정</button>
+            <button onclick="deleteInquiry('${safeId}')" style="border:none;background:#E05252;color:#fff;border-radius:10px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;">삭제</button>` : ''}
+            ${admin && !isMine ? `<button onclick="deleteInquiry('${safeId}')" style="border:none;background:#E05252;color:#fff;border-radius:10px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;">삭제</button>` : ''}
+          </div>
+        </div>
+        ${canSee ? `
+          <div id="inq-body-${inq.id}" style="margin-top:10px;font-size:14px;color:#4A4A5A;line-height:1.75;border-top:1px solid var(--border);padding-top:10px;">${(inq.content||'').replace(/\n/g,'<br>')}</div>
+          <div id="inq-edit-${inq.id}" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+            <input id="inq-esubj-${inq.id}" value="${(inq.subject||'').replace(/"/g,'&quot;')}" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;margin-bottom:8px;">
+            <textarea id="inq-etxt-${inq.id}" rows="4" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;line-height:1.6;resize:vertical;">${inq.content||''}</textarea>
+            <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end;">
+              <button onclick="cancelEditInquiry('${safeId}')" style="border:1px solid #EAE2D8;background:#fff;color:#8890A4;border-radius:10px;padding:6px 16px;cursor:pointer;font-size:13px;font-family:inherit;">취소</button>
+              <button onclick="saveEditInquiry('${safeId}')" style="border:none;background:#C17B4A;color:#fff;border-radius:10px;padding:6px 16px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;">저장</button>
+            </div>
+          </div>
+          ${inq.reply ? `<div style="margin-top:10px;padding:12px;background:#E8F4EC;border-radius:8px;border-left:3px solid var(--green);"><span style="font-size:11px;font-weight:700;color:var(--green);display:block;margin-bottom:4px;">📌 관리자 답변</span><span style="font-size:14px;color:var(--dark);">${(inq.reply||'').replace(/\n/g,'<br>')}</span></div>`
+          : (isMine ? '<p style="font-size:12px;color:var(--muted);margin-top:8px;">답변 대기 중입니다.</p>' : '')}
+        ` : '<p style="font-size:13px;color:var(--muted);margin-top:6px;">본인만 내용을 확인할 수 있습니다.</p>'}
+      </div>`;
+    }).join('');
+  }
+
+  async function submitInquiry(e) {
+    e.preventDefault();
+    const session = getSession();
+    if (!session) { showLoginModal(renderInquirySection); return; }
+    const subject = document.getElementById('inquirySubject').value.trim();
+    const content = document.getElementById('inquiryContent').value.trim();
+    if (!subject || !content) { alert('제목과 내용을 입력해주세요.'); return; }
+    await dbAddInquiry({ authorId: session.id, authorName: session.name, subject, content, reply: null, repliedAt: null, timestamp: Date.now() });
+    document.getElementById('inquirySubject').value = '';
+    document.getElementById('inquiryContent').value = '';
+    loadInquiries();
+  }
+  function startEditInquiry(id) {
+    document.getElementById('inq-body-' + id).style.display = 'none';
+    document.getElementById('inq-edit-' + id).style.display = 'block';
+  }
+  function cancelEditInquiry(id) {
+    document.getElementById('inq-body-' + id).style.display = '';
+    document.getElementById('inq-edit-' + id).style.display = 'none';
+  }
+  async function saveEditInquiry(id) {
+    const subj = document.getElementById('inq-esubj-' + id).value.trim();
+    const txt  = document.getElementById('inq-etxt-' + id).value.trim();
+    if (!subj || !txt) return;
+    const list = _ls('hm_inquiries');
+    const idx  = list.findIndex(x => String(x.id) === String(id));
+    if (idx >= 0) { list[idx].subject = subj; list[idx].content = txt; _lsSave('hm_inquiries', list); }
+    if (firestoreDB) firestoreDB.collection('inquiries').doc(id).update({ subject: subj, content: txt }).catch(()=>{});
+    loadInquiries();
+  }
+  async function deleteInquiry(id) {
+    if (!confirm('이 문의를 삭제할까요?')) return;
+    await dbDeleteItem('inquiries', id);
+    loadInquiries();
   }
 
   /* ── Scroll reveal ── */
@@ -2250,52 +2759,111 @@
   /* ── Gallery upload ── */
   let pendingImages = [];
 
-  function compressImage(src) {
+  function compressImage(src, maxPx, quality) {
+    const MAX = maxPx || 1200;
+    const Q   = quality || 0.88;
     return new Promise(resolve => {
       const img = new Image();
       img.onload = () => {
-        const MAX = 900;
         let w = img.width, h = img.height;
         if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
         if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', 0.72));
+        resolve(canvas.toDataURL('image/jpeg', Q));
       };
+      img.onerror = () => resolve(null); /* 실패 시 null로 안전하게 처리 */
       img.src = src;
     });
   }
 
-  function handleGalleryUpload(e) {
+  function renderPreviewGrid() {
+    const grid  = document.getElementById('uploadPreviewGrid');
+    const valid = pendingImages.filter(Boolean);
+    grid.innerHTML = '';
+    document.getElementById('uploadFileName').textContent = valid.length + '장 선택됨';
+    let dragSrc = null;
+
+    valid.forEach((src, i) => {
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'position:relative;aspect-ratio:1;overflow:hidden;border-radius:8px;cursor:grab;user-select:none;transition:opacity .2s,outline .15s;';
+      wrap.draggable = true;
+      wrap.dataset.idx = String(i);
+
+      if (i === 0) {
+        wrap.style.outline = '3px solid #C17B4A';
+        const badge = document.createElement('div');
+        badge.textContent = '대표';
+        badge.style.cssText = 'position:absolute;top:5px;left:5px;background:#C17B4A;color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;z-index:3;letter-spacing:.03em;';
+        wrap.appendChild(badge);
+      }
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;pointer-events:none;';
+      wrap.appendChild(img);
+
+      wrap.addEventListener('dragstart', e => {
+        dragSrc = i;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => { wrap.style.opacity = '0.35'; }, 0);
+      });
+      wrap.addEventListener('dragend', () => { wrap.style.opacity = '1'; });
+      wrap.addEventListener('dragover', e => {
+        e.preventDefault();
+        wrap.style.outline = '2px dashed #C17B4A';
+      });
+      wrap.addEventListener('dragleave', () => {
+        wrap.style.outline = i === 0 ? '3px solid #C17B4A' : '';
+      });
+      wrap.addEventListener('drop', e => {
+        e.preventDefault();
+        if (dragSrc === null || dragSrc === i) return;
+        const arr = pendingImages.filter(Boolean);
+        const [moved] = arr.splice(dragSrc, 1);
+        arr.splice(i, 0, moved);
+        pendingImages = arr;
+        renderPreviewGrid();
+      });
+
+      grid.appendChild(wrap);
+    });
+  }
+
+  async function handleGalleryUpload(e) {
     const files = Array.from(e.target.files);
     if (!files.length) return;
+
+    /* 새 선택마다 초기화 */
     pendingImages = [];
-    const grid = document.getElementById('uploadPreviewGrid');
-    grid.innerHTML = '';
+    const regBtn = document.querySelector('[onclick="registerPhotos()"]');
+    if (regBtn) regBtn.disabled = true;
     document.getElementById('uploadFileName').textContent = '불러오는 중...';
     document.getElementById('uploadCount').textContent = '';
-    let done = 0;
+
     const total = files.length;
-    files.forEach((file, idx) => {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        compressImage(ev.target.result).then(compressed => {
-          pendingImages[idx] = compressed;
-          const wrap = document.createElement('div');
-          wrap.style.cssText = 'aspect-ratio:1;overflow:hidden;border-radius:8px;' + (idx===0 ? 'outline:3px solid var(--amber);' : '');
-          const img = document.createElement('img');
-          img.src = compressed;
-          img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-          wrap.appendChild(img);
-          grid.appendChild(wrap);
-          done++;
-          document.getElementById('uploadCount').textContent = done + '/' + total + '장 로딩됨';
-          if (done === total) document.getElementById('uploadFileName').textContent = total + '장 선택됨';
-        });
-      };
-      reader.readAsDataURL(file);
-    });
+
+    /* 1장씩 순차 처리 — 동시 처리 시 폰 카메라 원본(48MB)이 n장 × 메모리를 차지해 크래시 */
+    for (let i = 0; i < total; i++) {
+      document.getElementById('uploadCount').textContent = `(${i + 1}/${total} 처리 중...)`;
+      const dataUrl = await new Promise(res => {
+        const reader = new FileReader();
+        reader.onload  = ev => res(ev.target.result);
+        reader.onerror = ()  => res(null);
+        reader.readAsDataURL(files[i]);
+      });
+      if (!dataUrl) continue;
+      /* 800px/0.82 — 저장용과 동일 크기로 한 번만 압축 (이중 압축 제거) */
+      const compressed = await compressImage(dataUrl, 1600, 0.92).catch(() => null);
+      if (compressed) pendingImages.push(compressed);
+      document.getElementById('uploadFileName').textContent = `${pendingImages.length}장 선택됨`;
+      await new Promise(r => setTimeout(r, 30)); /* GC 여유 */
+    }
+
+    document.getElementById('uploadCount').textContent = '';
+    renderPreviewGrid();
+    if (regBtn) regBtn.disabled = false;
   }
 
   function cancelUpload() {
@@ -2309,36 +2877,105 @@
     document.getElementById('uploadCount').textContent = '';
   }
 
-  function registerPhotos() {
-    if (!pendingImages.length) { alert('사진을 선택해주세요.'); return; }
+  async function registerPhotos() {
+    const valid = pendingImages.filter(Boolean);
+    if (!valid.length) { alert('사진을 선택해주세요.'); return; }
     const title  = (document.getElementById('uploadTitle').value || '').trim();
     if (!title) { alert('제목을 입력해주세요.'); return; }
     const church = document.getElementById('uploadChurch').value;
     const year   = document.getElementById('uploadYear').value;
     const s      = getSession();
     const authorName = s ? s.name : (isAdmin() ? '관리자' : '');
-    const newEntries = [{ photos: pendingImages.filter(Boolean), title, authorName, church, year, timestamp: Date.now() }];
-    dbAddAll(newEntries).then(() => {
-      currentChurch = church;
+
+    const regBtn = document.querySelector('[onclick="registerPhotos()"]');
+    if (regBtn) { regBtn.textContent = '업로드 중...'; regBtn.disabled = true; }
+
+    try {
+      const uploadCount = document.getElementById('uploadCount');
+      let urls;
+
+      if (firebaseStorage && firestoreDB) {
+        /* ── Firebase Storage 업로드 ── */
+        let uploadDone = 0;
+        urls = new Array(valid.length);
+        const BATCH = 5;
+        for (let b = 0; b < valid.length; b += BATCH) {
+          const slice = valid.slice(b, b + BATCH);
+          await Promise.all(slice.map(async (dataUrl, j) => {
+            const i = b + j;
+            const blob = await fetch(dataUrl).then(r => r.blob());
+            const path = `photos/${year}/${church}/${Date.now()}_${i}_${Math.random().toString(36).slice(2)}.jpg`;
+            const ref  = firebaseStorage.ref(path);
+            await ref.put(blob, { contentType: 'image/jpeg' });
+            urls[i] = await ref.getDownloadURL();
+            uploadDone++;
+            if (uploadCount) uploadCount.textContent = `${uploadDone}/${valid.length}장 업로드됨`;
+          }));
+        }
+        await firestoreDB.collection('photos').add({ photos: urls.filter(Boolean), title, authorName, authorId: s ? s.id : '', church, year, timestamp: Date.now() });
+      } else {
+        /* ── IndexedDB 저장 (이미 선택 단계에서 압축 완료, 재압축 없음) ── */
+        if (!valid.length) { alert('이미지 처리에 실패했습니다.'); return; }
+        if (uploadCount) uploadCount.textContent = `저장 중...`;
+        try {
+          const newId = Date.now().toString() + Math.random().toString(36).slice(2,6);
+          await _idbAdd({ id: newId, photos: valid, title, authorName, authorId: s ? s.id : '', church, year, timestamp: Date.now() });
+          if (uploadCount) uploadCount.textContent = `${valid.length}장 저장됨`;
+        } catch(storageErr) {
+          alert('저장 중 오류가 발생했습니다.\n' + (storageErr && storageErr.message ? storageErr.message : storageErr));
+          return;
+        }
+        urls = valid;
+      }
+
       currentYear = year;
-      document.querySelectorAll('.filter-btn:not(.filter-year)').forEach(b => b.classList.remove('active'));
-      const churchBtn = document.querySelector(`.filter-btn[onclick*="'${church}'"]`);
-      if (churchBtn) churchBtn.classList.add('active');
       document.querySelectorAll('.filter-year').forEach(b => {
         b.classList.toggle('active', b.textContent.trim() === year);
       });
       cancelUpload();
       renderSavedPhotos();
-    }).catch(err => {
-      alert('사진 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
-    });
+    } catch (err) {
+      console.error(err);
+      alert('사진 저장 중 오류가 발생했습니다.\nFirebase 설정(firebase-config)을 확인해주세요.');
+    } finally {
+      if (regBtn) { regBtn.textContent = '등록하기'; regBtn.disabled = false; }
+    }
   }
 
-  function submitApply(e) {
+  async function submitApply(e) {
     e.preventDefault();
+    const form = e.target;
+    const session = getSession();
+    /* 세션엔 id·name만 있으므로 localStorage에서 전체 프로필 조회 */
+    const userProfile = session ? (_lsGetUsers().find(u => String(u.id) === String(session.id)) || {}) : {};
+    const training = Array.from(form.querySelectorAll('input[name="training"]:checked')).map(cb => cb.value);
+    const payload = {
+      name:        session ? session.name : '비회원',
+      authorId:    session ? session.id   : '',
+      grade:       userProfile.grade       || '',
+      classNum:    userProfile.classNum    || '',
+      phone:       userProfile.phone       || '',
+      parentPhone: userProfile.parentPhone || '',
+      service:     userProfile.service     || '',
+      training:    training.join(', ') || '없음',
+      health:      form.health ? form.health.value.trim() : '',
+      firstTime:   form.firstTime ? ((form.querySelector('input[name="firstTime"]:checked') || {}).value || '') : '',
+      overseas:    form.overseas  ? ((form.querySelector('input[name="overseas"]:checked')  || {}).value || '') : '',
+      motivation:  form.motivation ? form.motivation.value.trim() : '',
+      referrer:    form.referrer   ? form.referrer.value.trim()   : '',
+      submittedAt: Date.now(),
+    };
+    await dbAddApplication(payload);
     document.getElementById('applyForm').style.display = 'none';
     document.getElementById('applySuccess').style.display = 'block';
     document.getElementById('apply').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function _gradeToReviewType(grade) {
+    if (!grade) return 'student';
+    if (['교역자/부장','교사'].includes(grade)) return 'teacher';
+    if (grade === '졸업생') return 'alumni';
+    return 'student';
   }
 
   function submitReview(e) {
@@ -2346,36 +2983,88 @@
     const session = getSession();
     if (!session) { showLoginModal(() => {}); return; }
     const form    = e.target;
-    const name    = form.rName.value.trim();
+    const name    = session.name;
     const team    = form.rTeam.value.trim();
     const content = form.rContent.value.trim();
-    dbAddReview({ name, team, content, authorId: session.id, timestamp: Date.now() }).then(() => {
+    if (!content) { return; }
+    const userGrade = (_lsGetUsers().find(u => String(u.id) === String(session.id)) || {}).grade || '';
+    const reviewType = _gradeToReviewType(userGrade);
+    dbAddReview({ name, team, content, authorId: session.id, reviewType, timestamp: Date.now() }).then(() => {
       document.getElementById('reviewForm').style.display = 'none';
       document.getElementById('reviewSuccess').style.display = 'block';
       renderReviews();
     });
   }
 
+  let _reviewTab = 'all';
+  const _reviewTypeLabel = { student: '학생 후기', alumni: '졸업생 후기', teacher: '교역자/교사 후기' };
+  const _reviewTypeBadge = { student: 'badge-student', alumni: 'badge-alumni', teacher: 'badge-teacher' };
+
   function renderReviews() {
     dbGetReviews().then(reviews => {
       const el = document.getElementById('dynamicReviews');
       if (!el) return;
+      const session = getSession();
       const admin = isAdmin();
-      el.innerHTML = reviews.map(r => `
-        <div class="review-card">
-          ${admin ? '<button onclick="adminDeleteReview(' + r.id + ')" style="float:right;border:none;background:#E05252;color:#fff;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;line-height:24px;margin-left:8px;"></button>' : ''}
+
+      /* tab counts */
+      const count = { all: reviews.length, student: 0, alumni: 0, teacher: 0 };
+      reviews.forEach(r => { const t = r.reviewType || 'student'; if (count[t] !== undefined) count[t]++; });
+
+      const tabs = [
+        { key:'all', label:'전체' },
+        { key:'student', label:'학생' },
+        { key:'alumni', label:'졸업생' },
+        { key:'teacher', label:'교역자/교사' },
+      ].map(t => `<button onclick="_reviewTab='${t.key}';renderReviews();" style="padding:7px 16px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:all .15s;${_reviewTab===t.key ? 'background:#C17B4A;color:#fff;' : 'background:#EAE2D8;color:#4A4A5A;'}">${t.label} <span style="font-size:11px;opacity:.7;">${count[t.key]}</span></button>`).join('');
+
+      const filtered = _reviewTab === 'all' ? reviews : reviews.filter(r => (r.reviewType||'student') === _reviewTab);
+
+      const cards = filtered.length ? filtered.map(r => {
+        const rType = r.reviewType || 'student';
+        const badgeLabel = _reviewTypeLabel[rType] || '학생 후기';
+        const canEdit = admin || (session && (String(r.authorId) === String(session.id) || r.name === session.name));
+        return `<div class="review-card" id="rcard-${r.id}">
+          <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px;">
+            ${canEdit ? `<button onclick="startEditReview('${r.id}')" style="border:none;background:#C17B4A;color:#fff;border-radius:12px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:700;">수정</button>` : ''}
+            ${canEdit ? `<button onclick="adminDeleteReview('${r.id}')" style="border:none;background:#E05252;color:#fff;border-radius:12px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:700;">삭제</button>` : ''}
+          </div>
           <div class="review-meta">
             <div class="review-avatar avatar-amber"></div>
             <div>
               <div class="review-author">${r.name}</div>
-              <div class="review-role">${r.team}</div>
+              <div class="review-role">${r.team || ''}</div>
             </div>
           </div>
-          <div class="review-type-badge badge-student">학생 후기</div>
-          <div class="review-quote">${r.content.replace(/\n/g,'<br>')}</div>
-        </div>
-      `).join('');
+          <div class="review-type-badge ${_reviewTypeBadge[rType] || 'badge-student'}">${badgeLabel}</div>
+          <div class="review-quote" id="rquote-${r.id}">${(r.content||'').replace(/\n/g,'<br>')}</div>
+          <div id="redit-${r.id}" style="display:none;margin-top:12px;">
+            <textarea id="rtxt-${r.id}" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid #EAE2D8;border-radius:10px;font-size:14px;font-family:inherit;line-height:1.6;resize:vertical;" rows="4">${r.content||''}</textarea>
+            <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end;">
+              <button onclick="cancelEditReview('${r.id}')" style="border:1px solid #EAE2D8;background:#fff;color:#8890A4;border-radius:10px;padding:6px 16px;cursor:pointer;font-size:13px;font-family:inherit;">취소</button>
+              <button onclick="saveEditReview('${r.id}')" style="border:none;background:#C17B4A;color:#fff;border-radius:10px;padding:6px 16px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;">저장</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('') : '<p style="text-align:center;color:var(--muted);padding:40px 0;">아직 이 카테고리의 후기가 없습니다.</p>';
+
+      el.innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">${tabs}</div>${cards}`;
     }).catch(() => {});
+  }
+
+  function startEditReview(id) {
+    document.getElementById('rquote-' + id).style.display = 'none';
+    document.getElementById('redit-' + id).style.display = 'block';
+  }
+  function cancelEditReview(id) {
+    document.getElementById('rquote-' + id).style.display = '';
+    document.getElementById('redit-' + id).style.display = 'none';
+  }
+  async function saveEditReview(id) {
+    const txt = document.getElementById('rtxt-' + id).value.trim();
+    if (!txt) return;
+    await dbUpdateReview(id, { content: txt });
+    renderReviews();
   }
 
   async function adminDeleteReview(id) {
@@ -2389,22 +3078,57 @@
     await dbDeleteItem('photos', id);
     renderSavedPhotos();
   }
-  function adminEditPost(id, title, church, year) {
+  let _editPhotos = [];
+  let _editOriginalPost = null;
+  function cancelEditPost() {
+    document.getElementById('editModal').style.display = 'none';
+    _editPhotos = [];
+    _editOriginalPost = null;
+  }
+  function _renderEditPhotoGrid() {
+    const grid = document.getElementById('editPhotoGrid');
+    grid.innerHTML = '';
+    _editPhotos.forEach((src, idx) => {
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--bg-alt);';
+      const img = document.createElement('img');
+      img.src = src;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      const btn = document.createElement('button');
+      btn.textContent = '×';
+      btn.title = '삭제';
+      btn.style.cssText = 'position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(220,50,50,.9);color:#fff;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;';
+      btn.onclick = () => {
+        if (_editPhotos.length <= 1) { alert('사진이 최소 1장은 있어야 합니다.'); return; }
+        _editPhotos.splice(idx, 1);
+        _renderEditPhotoGrid();
+      };
+      wrap.appendChild(img);
+      wrap.appendChild(btn);
+      grid.appendChild(wrap);
+    });
+  }
+  async function adminEditPost(id, title, church, year) {
     document.getElementById('editPhotoId').value = id;
     document.getElementById('editTitle').value   = title || '';
     document.getElementById('editChurch').value  = church || 'sunwoo';
     document.getElementById('editYear').value    = year   || '2025';
+    const all = await dbGetAll();
+    const p = all.find(x => x.id === id);
+    _editPhotos = p ? [...getPostPhotos(p)] : [];
+    _renderEditPhotoGrid();
     document.getElementById('editModal').style.display = 'flex';
   }
   async function confirmEditPost() {
-    const id     = Number(document.getElementById('editPhotoId').value);
+    const id     = document.getElementById('editPhotoId').value;
     const title  = document.getElementById('editTitle').value.trim();
     const church = document.getElementById('editChurch').value;
     const year   = document.getElementById('editYear').value;
     if (!title) { alert('제목을 입력해주세요.'); return; }
+    if (!_editPhotos.length) { alert('사진이 최소 1장은 있어야 합니다.'); return; }
     const all = await dbGetAll();
     const p = all.find(x => x.id === id);
-    if (p) await dbPutPhoto({ ...p, title, church, year });
+    if (p) await dbPutPhoto({ ...p, title, church, year, photos: _editPhotos });
     document.getElementById('editModal').style.display = 'none';
     renderSavedPhotos();
   }
@@ -2431,7 +3155,7 @@
     updateBulkBar();
   }
   async function adminBulkDelete() {
-    const ids = Array.from(document.querySelectorAll('.photo-check[value]:checked')).map(cb => Number(cb.value));
+    const ids = Array.from(document.querySelectorAll('.photo-check[value]:checked')).map(cb => cb.value);
     if (!ids.length) return;
     if (!confirm(ids.length + '개 게시글을 삭제할까요?')) return;
     for (const id of ids) await dbDeleteItem('photos', id);
@@ -2439,27 +3163,549 @@
   }
 
   async function adminMigrateAll() {
-    /* localStorage 잔여분 */
-    const old = localStorage.getItem('hamyangPhotos');
-    let cnt = 0;
-    if (old) {
-      try {
-        const arr = JSON.parse(old);
-        if (arr.length) {
-          await dbAddAll(arr.map(p => ({ src: p.src, church: 'jinam', year: '2025' })));
-          cnt += arr.length;
-        }
-      } catch {}
-      localStorage.removeItem('hamyangPhotos');
+    if (!confirm('성우성서교회로 등록된 사진을 대지교회 2025로 이동할까요?')) return;
+    try {
+      const snap = await firestoreDB.collection('photos').where('church','==','sunwoo').get();
+      if (snap.empty) { alert('이동할 성우성서교회 사진이 없습니다.'); return; }
+      const batch = firestoreDB.batch();
+      snap.docs.forEach(d => batch.update(d.ref, { church: 'jinam', year: '2025' }));
+      await batch.commit();
+      alert(snap.size + '장 대지교회 2025로 이동 완료!');
+      currentChurch = 'jinam'; currentYear = '2025';
+      renderSavedPhotos();
+    } catch (err) {
+      alert('오류가 발생했습니다: ' + err.message);
     }
-    /* IndexedDB sunwoo → jinam */
-    const all = await dbGetAll();
-    const sunwoo = all.filter(p => p.church === 'sunwoo');
-    for (const p of sunwoo) { await dbPutPhoto({ ...p, church: 'jinam', year: '2025' }); cnt++; }
-    alert(cnt ? cnt + '장 대지교회 2025로 이동 완료!' : '이동할 성우성서교회 사진이 없습니다.');
-    currentChurch = 'jinam'; currentYear = '2025';
+  }
+
+  /* ── Admin Panel ── */
+  const CHURCH_LABELS = { sunwoo:'성우성서교회', okdong:'옥동교회', jinam:'대지교회', assembly:'전체 집회' };
+
+  function openAdminPanel() {
+    document.getElementById('adminPanel').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    switchAdminTab('members');
+  }
+  function closeAdminPanel() {
+    document.getElementById('adminPanel').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  function switchAdminTab(tab) {
+    document.querySelectorAll('.admin-panel-tab').forEach(b => b.classList.remove('ap-active'));
+    document.getElementById('apTab-' + tab).classList.add('ap-active');
+    const content = document.getElementById('adminPanelContent');
+    content.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px;">로딩 중...</div>';
+    if (tab === 'members') renderAdminMembers();
+    else if (tab === 'photos') renderAdminPhotosAll();
+    else if (tab === 'reviews') renderAdminReviewsAll();
+    else if (tab === 'applications') renderAdminApplications();
+    else if (tab === 'inquiries') renderAdminInquiries();
+  }
+
+  /* 회원 관리 */
+  async function renderAdminMembers() {
+    const users = await dbGetAllUsers();
+    const content = document.getElementById('adminPanelContent');
+    if (!users.length) {
+      content.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px;">등록된 회원이 없습니다.</p>';
+      return;
+    }
+    let rows = '';
+    users.forEach((u, i) => {
+      const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('ko-KR') : '-';
+      const safeName = (u.name||'').replace(/'/g,"\\'");
+      const safeGrade = (u.grade||'').replace(/'/g,"\\'");
+      rows += `<tr>
+        <td style="color:var(--muted);font-size:12px;">${i+1}</td>
+        <td style="font-weight:600;">${u.name}</td>
+        <td>${u.grade || '-'}</td>
+        <td style="color:var(--muted);font-size:12px;">${u.service||'-'} · ${u.classNum ? u.classNum+'반' : '-'}</td>
+        <td style="color:var(--muted);font-size:12px;">${date}</td>
+        <td style="white-space:nowrap;">
+          <button class="ap-edit" onclick="adminEditUser('${u.id}','${safeName}','${safeGrade}','${u.service||''}','${u.phone||''}')">수정</button>
+          <button class="ap-del" onclick="adminDeleteUser('${u.id}','${safeName}')">삭제</button>
+        </td>
+      </tr>`;
+    });
+    content.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--dark);">전체 회원</span>
+        <span style="font-size:13px;color:var(--muted);">총 ${users.length}명</span>
+      </div>
+      <div id="adminMemberEditBox" style="display:none;background:#FFF8F0;border:1px solid #EAD5BB;border-radius:12px;padding:20px;margin-bottom:18px;">
+        <input type="hidden" id="amEditId">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+          <div><label style="font-size:12px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">이름</label><input id="amEditName" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">학년</label>
+            <select id="amEditGrade" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;">
+              <option value="고1">고1</option><option value="고2">고2</option><option value="고3">고3</option>
+              <option value="졸업생">졸업생</option><option value="교사">교사</option><option value="교역자/부장">교역자/부장</option>
+            </select>
+          </div>
+          <div><label style="font-size:12px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">예배</label>
+            <select id="amEditService" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;">
+              <option value="1부">1부</option><option value="2부">2부</option>
+            </select>
+          </div>
+          <div><label style="font-size:12px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">연락처</label><input id="amEditPhone" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;"></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button onclick="document.getElementById('adminMemberEditBox').style.display='none';" style="border:1px solid #EAE2D8;background:#fff;color:#8890A4;border-radius:10px;padding:7px 18px;cursor:pointer;font-size:13px;font-family:inherit;">취소</button>
+          <button onclick="adminSaveMemberEdit()" style="border:none;background:#C17B4A;color:#fff;border-radius:10px;padding:7px 18px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;">저장</button>
+        </div>
+      </div>
+      <table class="ap-table">
+        <thead><tr><th>#</th><th>이름</th><th>학년</th><th>예배/반</th><th>가입일</th><th>관리</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+  function adminEditUser(id, name, grade, service, phone) {
+    document.getElementById('amEditId').value = id;
+    document.getElementById('amEditName').value = name;
+    document.getElementById('amEditGrade').value = grade;
+    document.getElementById('amEditService').value = service || '1부';
+    document.getElementById('amEditPhone').value = phone || '';
+    document.getElementById('adminMemberEditBox').style.display = 'block';
+    document.getElementById('adminMemberEditBox').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+  async function adminSaveMemberEdit() {
+    const id = document.getElementById('amEditId').value;
+    const name = document.getElementById('amEditName').value.trim();
+    const grade = document.getElementById('amEditGrade').value;
+    const service = document.getElementById('amEditService').value;
+    const phone = document.getElementById('amEditPhone').value.trim();
+    if (!name) { alert('이름을 입력해주세요.'); return; }
+    const users = _lsGetUsers();
+    const idx = users.findIndex(u => String(u.id) === String(id));
+    if (idx >= 0) { users[idx] = { ...users[idx], name, grade, service, phone }; _lsSaveUsers(users); }
+    document.getElementById('adminMemberEditBox').style.display = 'none';
+    renderAdminMembers();
+  }
+  async function adminDeleteUser(id, name) {
+    if (!confirm(`"${name}" 회원을 삭제할까요?`)) return;
+    await dbDeleteItem('users', id);
+    renderAdminMembers();
+  }
+
+  /* 사진 관리 */
+  async function renderAdminPhotosAll() {
+    const photos = await dbGetAll();
+    const content = document.getElementById('adminPanelContent');
+    if (!photos.length) {
+      content.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px;">등록된 사진이 없습니다.</p>';
+      return;
+    }
+    let rows = '';
+    photos.slice().reverse().forEach((p, i) => {
+      const date   = p.timestamp ? new Date(p.timestamp).toLocaleDateString('ko-KR') : '-';
+      const church = CHURCH_LABELS[p.church] || p.church;
+      const cover  = getPostCover(p);
+      const safeTitle = (p.title||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+      rows += `<tr>
+        <td style="color:var(--muted);font-size:12px;">${i+1}</td>
+        <td>
+          ${cover ? `<img src="${cover}" style="width:44px;height:33px;object-fit:cover;border-radius:4px;margin-right:8px;vertical-align:middle;">` : ''}
+          <span style="font-weight:600;">${p.title||'(제목 없음)'}</span>
+        </td>
+        <td style="color:var(--muted);font-size:12px;">${p.authorName||'-'}</td>
+        <td style="font-size:12px;">${church}</td>
+        <td style="font-size:12px;">${p.year||'-'}</td>
+        <td style="color:var(--muted);font-size:12px;">${date}</td>
+        <td style="white-space:nowrap;">
+          <button class="ap-edit" onclick="adminEditPost('${p.id}','${safeTitle}','${p.church}','${p.year}')">수정</button>
+          <button class="ap-del" onclick="adminDeletePhotoFromPanel('${p.id}')">삭제</button>
+        </td>
+      </tr>`;
+    });
+    const lsBytes = new Blob([localStorage.getItem('hm_photos')||'']).size;
+    const lsKB = (lsBytes / 1024).toFixed(0);
+    const lsMB = (lsBytes / 1024 / 1024).toFixed(2);
+    const lsWarning = !firestoreDB
+      ? `<div style="background:#FFF3CD;border:1px solid #FFD97D;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#7A5800;">
+           ⚠️ Firebase 미연결 — 브라우저 로컬 저장소 사용 중<br>
+           현재 사진 데이터: <strong>${lsMB}MB (${lsKB}KB)</strong> / 한도 약 5MB
+           <button onclick="adminClearLocalPhotos()" style="margin-left:12px;padding:4px 12px;border:none;background:#E05252;color:#fff;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;">로컬 사진 전체 삭제</button>
+         </div>` : '';
+    content.innerHTML = lsWarning + `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--dark);">전체 사진 게시글</span>
+        <span style="font-size:13px;color:var(--muted);">총 ${photos.length}개</span>
+      </div>
+      <table class="ap-table">
+        <thead><tr><th>#</th><th>제목</th><th>글쓴이</th><th>교회</th><th>연도</th><th>날짜</th><th>관리</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+  async function showMyApplication() {
+    const session = getSession();
+    if (!session) return;
+    const all = await dbGetApplications();
+    const mine = all.filter(a => String(a.authorId) === String(session.id) || a.name === session.name);
+    if (!mine.length) { alert('아직 제출된 신청서가 없습니다.'); return; }
+    const a = mine[mine.length - 1];
+    _openAppModal(a);
+  }
+
+  function _openAppModal(a) {
+    document.getElementById('myAppModal') && document.getElementById('myAppModal').remove();
+    const date = a.submittedAt ? new Date(a.submittedAt).toLocaleString('ko-KR') : '-';
+    const f = (v) => (v || '-').replace(/</g,'&lt;');
+    const overlay = document.createElement('div');
+    overlay.id = 'myAppModal';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+
+    const adultGrades = ['졸업생','교사','교역자/부장'];
+    const isAdult = adultGrades.includes(a.grade);
+
+    overlay.innerHTML = `
+      <div style="background:#fff;border-radius:20px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3);">
+        <div style="padding:18px 24px;border-bottom:1px solid #EAE2D8;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;">
+          <span style="font-size:16px;font-weight:800;color:var(--dark);">내 신청서</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button id="appEditBtn" onclick="_toggleAppEdit()" style="font-size:12px;padding:5px 14px;border:1.5px solid #C17B4A;background:none;color:#C17B4A;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:700;">수정</button>
+            <button onclick="_deleteMyApp('${a.id}')" style="font-size:12px;padding:5px 14px;border:1.5px solid #E05252;background:none;color:#E05252;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:700;">삭제</button>
+            <button onclick="document.getElementById('myAppModal').remove()" style="border:none;background:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1;">×</button>
+          </div>
+        </div>
+
+        <!-- 보기 모드 -->
+        <div id="appView" style="padding:4px 0;">
+          <table style="width:100%;border-collapse:collapse;">
+            ${[['이름',f(a.name)],['예배',f(a.service)],['학년',f(a.grade)],
+               ...(!isAdult?[['반',f(a.classNum)],['부모님 연락처',f(a.parentPhone)]]: []),
+               ['연락처',f(a.phone)],['훈련',f(a.training)],['건강 사항',f(a.health)],
+               ['첫 참가',f(a.firstTime)],['해외선교',f(a.overseas)],
+               ['참가 동기',f(a.motivation)],['추천인',f(a.referrer)],['신청일',date]]
+              .map(([k,v])=>`<tr><td style="padding:9px 20px;font-size:13px;font-weight:700;color:#4A4A5A;white-space:nowrap;border-bottom:1px solid #EAE2D8;width:110px;">${k}</td><td style="padding:9px 20px;font-size:13px;color:var(--dark);border-bottom:1px solid #EAE2D8;">${v}</td></tr>`).join('')}
+          </table>
+        </div>
+
+        <!-- 수정 모드 -->
+        <div id="appEdit" style="display:none;padding:20px 24px;display:none;flex-direction:column;gap:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><label style="font-size:11px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">예배</label>
+              <select id="aeService" class="form-input" style="padding:8px 12px;font-size:13px;">
+                <option value="1부" ${a.service==='1부'?'selected':''}>1부</option>
+                <option value="2부" ${a.service==='2부'?'selected':''}>2부</option>
+              </select></div>
+            <div><label style="font-size:11px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">연락처</label>
+              <input id="aePhone" class="form-input" style="padding:8px 12px;font-size:13px;" value="${f(a.phone)}"></div>
+          </div>
+          ${!isAdult ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><label style="font-size:11px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">반</label>
+              <input id="aeClass" class="form-input" style="padding:8px 12px;font-size:13px;" value="${f(a.classNum)}"></div>
+            <div><label style="font-size:11px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">부모님 연락처</label>
+              <input id="aeParent" class="form-input" style="padding:8px 12px;font-size:13px;" value="${f(a.parentPhone)}"></div>
+          </div>` : ''}
+          <div><label style="font-size:11px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">건강 사항</label>
+            <textarea id="aeHealth" class="form-textarea" rows="2" style="padding:8px 12px;font-size:13px;">${f(a.health)}</textarea></div>
+          <div><label style="font-size:11px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">참가 동기</label>
+            <textarea id="aeMotiv" class="form-textarea" rows="2" style="padding:8px 12px;font-size:13px;">${f(a.motivation)}</textarea></div>
+          <div><label style="font-size:11px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">추천인</label>
+            <input id="aeReferrer" class="form-input" style="padding:8px 12px;font-size:13px;" value="${f(a.referrer)}"></div>
+          <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:4px;">
+            <button onclick="_toggleAppEdit()" style="padding:8px 20px;border:1px solid #EAE2D8;background:#fff;color:#8890A4;border-radius:10px;cursor:pointer;font-size:13px;font-family:inherit;">취소</button>
+            <button onclick="_saveMyApp('${a.id}',${isAdult})" style="padding:8px 20px;border:none;background:#C17B4A;color:#fff;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;">저장</button>
+          </div>
+        </div>
+      </div>`;
+
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+  }
+
+  function _toggleAppEdit() {
+    const view = document.getElementById('appView');
+    const edit = document.getElementById('appEdit');
+    const btn  = document.getElementById('appEditBtn');
+    const editing = edit.style.display !== 'none';
+    view.style.display = editing ? '' : 'none';
+    edit.style.display = editing ? 'none' : 'flex';
+    btn.textContent = editing ? '수정' : '취소';
+  }
+
+  async function _saveMyApp(id, isAdult) {
+    const data = {
+      service:     document.getElementById('aeService').value,
+      phone:       document.getElementById('aePhone').value.trim(),
+      classNum:    !isAdult && document.getElementById('aeClass')  ? document.getElementById('aeClass').value.trim()  : '',
+      parentPhone: !isAdult && document.getElementById('aeParent') ? document.getElementById('aeParent').value.trim() : '',
+      health:      document.getElementById('aeHealth').value.trim(),
+      motivation:  document.getElementById('aeMotiv').value.trim(),
+      referrer:    document.getElementById('aeReferrer').value.trim(),
+    };
+    await dbUpdateApplication(id, data);
+    document.getElementById('myAppModal').remove();
+    const all = await dbGetApplications();
+    const session = getSession();
+    const mine = all.filter(a => String(a.authorId) === String(session.id) || a.name === session.name);
+    if (mine.length) _openAppModal(mine[mine.length - 1]);
+  }
+
+  async function _deleteMyApp(id) {
+    if (!confirm('신청서를 삭제할까요? 되돌릴 수 없어요.')) return;
+    await dbDeleteItem('applications', id);
+    document.getElementById('myAppModal').remove();
+    alert('신청서가 삭제됐어요.');
+  }
+  async function adminClearLocalPhotos() {
+    if (!confirm('로컬에 저장된 사진 데이터를 전부 지웁니다.\nFirebase에 저장된 사진은 영향 없습니다.\n계속할까요?')) return;
+    await _idbClear().catch(() => {});
+    localStorage.removeItem('hm_photos');
+    renderAdminPhotosAll();
+    renderSavedPhotos();
+    alert('사진 데이터가 삭제됐어요. 이제 다시 올릴 수 있어요.');
+  }
+
+  async function adminDeletePhotoFromPanel(id) {
+    if (!confirm('이 사진 게시글을 삭제할까요?')) return;
+    await dbDeleteItem('photos', id);
+    renderAdminPhotosAll();
     renderSavedPhotos();
   }
+
+  /* 후기 관리 */
+  async function renderAdminReviewsAll() {
+    const reviews = await dbGetReviews();
+    const content = document.getElementById('adminPanelContent');
+    if (!reviews.length) {
+      content.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px;">등록된 후기가 없습니다.</p>';
+      return;
+    }
+    const typeLabel = { student:'학생', alumni:'졸업생', teacher:'교역자/교사' };
+    let rows = '';
+    reviews.slice().reverse().forEach((r, i) => {
+      const date    = r.timestamp ? new Date(r.timestamp).toLocaleDateString('ko-KR') : '-';
+      const preview = (r.content||'').substring(0,50) + ((r.content||'').length > 50 ? '...' : '');
+      const safeContent = (r.content||'').replace(/'/g,"\\'").replace(/\n/g,'\\n');
+      const safeName = (r.name||'').replace(/'/g,"\\'");
+      const safeTeam = (r.team||'').replace(/'/g,"\\'");
+      rows += `<tr id="arow-${r.id}">
+        <td style="color:var(--muted);font-size:12px;">${i+1}</td>
+        <td style="font-weight:600;">${r.name}</td>
+        <td style="font-size:12px;color:var(--muted);">${typeLabel[r.reviewType||'student']||'-'}</td>
+        <td style="color:var(--muted);font-size:12px;">${r.team||'-'}</td>
+        <td style="font-size:13px;">${preview}</td>
+        <td style="color:var(--muted);font-size:12px;">${date}</td>
+        <td style="white-space:nowrap;">
+          <button class="ap-edit" onclick="adminEditReviewFromPanel('${r.id}','${safeName}','${safeTeam}','${safeContent}')">수정</button>
+          <button class="ap-del" onclick="adminDeleteReviewFromPanel('${r.id}')">삭제</button>
+        </td>
+      </tr>`;
+    });
+    content.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="font-size:14px;font-weight:700;color:var(--dark);">전체 후기</span>
+        <span style="font-size:13px;color:var(--muted);">총 ${reviews.length}개</span>
+      </div>
+      <div id="adminReviewEditBox" style="display:none;background:#FFF8F0;border:1px solid #EAD5BB;border-radius:12px;padding:20px;margin-bottom:18px;">
+        <input type="hidden" id="areEditId">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+          <div><label style="font-size:12px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">이름</label><input id="areEditName" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;"></div>
+          <div><label style="font-size:12px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">팀/연도</label><input id="areEditTeam" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;"></div>
+        </div>
+        <label style="font-size:12px;font-weight:700;color:#4A4A5A;display:block;margin-bottom:4px;">내용</label>
+        <textarea id="areEditContent" rows="5" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #EAE2D8;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;"></textarea>
+        <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end;">
+          <button onclick="document.getElementById('adminReviewEditBox').style.display='none';" style="border:1px solid #EAE2D8;background:#fff;color:#8890A4;border-radius:10px;padding:7px 18px;cursor:pointer;font-size:13px;font-family:inherit;">취소</button>
+          <button onclick="adminSaveReviewEdit()" style="border:none;background:#C17B4A;color:#fff;border-radius:10px;padding:7px 18px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;">저장</button>
+        </div>
+      </div>
+      <table class="ap-table">
+        <thead><tr><th>#</th><th>이름</th><th>구분</th><th>팀/연도</th><th>내용</th><th>날짜</th><th>관리</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+  function adminEditReviewFromPanel(id, name, team, content) {
+    document.getElementById('areEditId').value = id;
+    document.getElementById('areEditName').value = name;
+    document.getElementById('areEditTeam').value = team;
+    document.getElementById('areEditContent').value = content.replace(/\\n/g, '\n');
+    document.getElementById('adminReviewEditBox').style.display = 'block';
+    document.getElementById('adminReviewEditBox').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+  async function adminSaveReviewEdit() {
+    const id = document.getElementById('areEditId').value;
+    const name = document.getElementById('areEditName').value.trim();
+    const team = document.getElementById('areEditTeam').value.trim();
+    const content = document.getElementById('areEditContent').value.trim();
+    if (!content) { alert('내용을 입력해주세요.'); return; }
+    await dbUpdateReview(id, { name, team, content });
+    document.getElementById('adminReviewEditBox').style.display = 'none';
+    renderAdminReviewsAll();
+    renderReviews();
+  }
+  async function adminDeleteReviewFromPanel(id) {
+    if (!confirm('이 후기를 삭제할까요?')) return;
+    await dbDeleteItem('reviews', id);
+    renderAdminReviewsAll();
+    renderReviews();
+  }
+
+  /* 신청 관리 */
+  async function renderAdminApplications() {
+    const content = document.getElementById('adminPanelContent');
+    content.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px;">로딩 중...</div>';
+    try {
+      const apps = await dbGetApplications();
+      if (!apps.length) {
+        content.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px;">아직 신청이 없습니다.</p>';
+        return;
+      }
+      let rows = '';
+      apps.forEach((a, i) => {
+        const date = a.submittedAt ? new Date(a.submittedAt).toLocaleDateString('ko-KR') : '-';
+        const safeId = String(a.id).replace(/'/g,"\\'");
+        rows += `<tr>
+          <td style="color:var(--muted);font-size:12px;">${i+1}</td>
+          <td style="font-weight:600;">${a.name||'-'}</td>
+          <td style="font-size:12px;color:var(--muted);">${a.grade||'-'}${a.classNum ? ' '+a.classNum+'반' : ''}</td>
+          <td style="font-size:12px;">${a.service||'-'}</td>
+          <td style="font-size:12px;color:var(--muted);">${(a.training||'없음').substring(0,25)}</td>
+          <td style="font-size:12px;">${(a.health||'-').substring(0,20)}</td>
+          <td style="color:var(--muted);font-size:12px;">${date}</td>
+          <td style="white-space:nowrap;">
+            <button class="ap-edit" onclick="adminViewApplication('${safeId}')">상세</button>
+            <button class="ap-del" onclick="adminDeleteApplication('${safeId}')">삭제</button>
+          </td>
+        </tr>`;
+      });
+      const storageNote = firestoreDB ? '' : '<div style="background:#FFF8F0;border:1px solid #EAD5BB;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#7A5C3A;">Firebase 미연결 — 이 기기의 localStorage에 저장된 신청 목록입니다.</div>';
+      content.innerHTML = `
+        ${storageNote}
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <span style="font-size:14px;font-weight:700;color:var(--dark);">신청 목록</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:13px;color:var(--muted);">총 ${apps.length}명</span>
+            <button onclick="adminExportApplicationsCSV()" style="font-size:12px;padding:5px 14px;border-radius:8px;background:#4A7C59;color:#fff;border:none;cursor:pointer;font-weight:600;font-family:inherit;">CSV 다운로드</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+        <table class="ap-table">
+          <thead><tr><th>#</th><th>이름</th><th>학년/반</th><th>예배</th><th>받은 훈련</th><th>건강특이사항</th><th>신청일</th><th>관리</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        </div>`;
+      window._adminApps = apps;
+    } catch(err) {
+      content.innerHTML = `<p style="color:red;text-align:center;padding:40px;">오류: ${err.message}</p>`;
+    }
+  }
+
+  async function adminViewApplication(id) {
+    const a = (window._adminApps||[]).find(x => x.id === id);
+    if (!a) return;
+    const date = a.submittedAt ? new Date(a.submittedAt).toLocaleString('ko-KR') : '-';
+    const info = [
+      ['이름', a.name||'-'],
+      ['학년', a.grade||'-'],
+      ['반', a.classNum||'-'],
+      ['핸드폰', a.phone||'-'],
+      ['부모님 연락처', a.parentPhone||'-'],
+      ['예배', a.service||'-'],
+      ['받은 훈련', a.training||'없음'],
+      ['건강 특이사항', a.health||'-'],
+      ['처음 참가', a.firstTime||'-'],
+      ['해외선교 신청', a.overseas||'-'],
+      ['참가 동기', a.motivation||'-'],
+      ['신청일시', date],
+    ].map(([k,v]) => `<tr><th style="width:130px;text-align:left;padding:8px 10px;background:#F8F9FB;border:1px solid #EAE2D8;font-size:13px;">${k}</th><td style="padding:8px 10px;border:1px solid #EAE2D8;font-size:13px;">${v}</td></tr>`).join('');
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;padding:28px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <span style="font-size:16px;font-weight:800;color:#1A2744;">${a.name||''} 신청 상세</span>
+          <button onclick="this.closest('[style*=fixed]').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#8890A4;">✕</button>
+        </div>
+        <table style="width:100%;border-collapse:collapse;">${info}</table>
+        <div style="margin-top:20px;text-align:right;">
+          <a href="mailto:hwanedla@hanmail.net?subject=함양신청-${encodeURIComponent(a.name||'')}&body=${encodeURIComponent('이름: '+(a.name||'')+'\n학년: '+(a.grade||'')+'\n반: '+(a.classNum||'')+'\n핸드폰: '+(a.phone||'')+'\n받은 훈련: '+(a.training||'없음')+'\n건강특이사항: '+(a.health||'-'))}"
+            style="display:inline-block;padding:10px 20px;background:#C17B4A;color:#fff;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;">이메일로 회신 →</a>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+
+  async function adminDeleteApplication(id) {
+    if (!confirm('이 신청을 삭제할까요?')) return;
+    await dbDeleteItem('applications', String(id));
+    renderAdminApplications();
+  }
+
+  /* 문의 관리 */
+  async function renderAdminInquiries() {
+    const content = document.getElementById('adminPanelContent');
+    const inquiries = await dbGetInquiries();
+    if (!inquiries.length) {
+      content.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px;">등록된 문의가 없습니다.</p>';
+      return;
+    }
+    content.innerHTML = inquiries.map(inq => {
+      const date    = inq.timestamp ? new Date(inq.timestamp).toLocaleDateString('ko-KR') : '-';
+      const safeId  = String(inq.id).replace(/'/g,"\\'");
+      const safeReply = (inq.reply||'').replace(/'/g,"\\'").replace(/\n/g,'\\n');
+      return `<div style="border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;background:${inq.reply ? '#F4FAF6' : 'var(--white)'};">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-weight:700;font-size:14px;">${inq.subject}</span>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span style="font-size:12px;color:var(--muted);">${inq.authorName||'익명'} · ${date}</span>
+            <span style="font-size:11px;padding:2px 8px;border-radius:20px;background:${inq.reply ? '#D1FAE5' : '#FEF3C7'};color:${inq.reply ? '#065F46' : '#92400E'};">${inq.reply ? '답변완료' : '미답변'}</span>
+            <button onclick="adminDeleteInquiry('${safeId}')" style="border:none;background:#E05252;color:#fff;border-radius:8px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:700;">삭제</button>
+          </div>
+        </div>
+        <div style="font-size:14px;color:#4A4A5A;line-height:1.75;padding:10px;background:var(--bg);border-radius:8px;">${(inq.content||'').replace(/\n/g,'<br>')}</div>
+        ${inq.reply ? `<div style="margin-top:10px;padding:10px;background:#E8F4EC;border-radius:8px;border-left:3px solid var(--green);font-size:13px;color:var(--dark);">${(inq.reply||'').replace(/\n/g,'<br>')}</div>` : ''}
+        <div style="margin-top:10px;" id="adminReplyBox-${inq.id}">
+          <textarea id="adminReplyTxt-${inq.id}" rows="3" style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;" placeholder="답변 작성...">${inq.reply || ''}</textarea>
+          <div style="display:flex;gap:8px;margin-top:6px;justify-content:flex-end;">
+            <button onclick="adminSubmitInquiryReply('${safeId}')" style="border:none;background:#4A7C59;color:#fff;border-radius:8px;padding:7px 18px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;">${inq.reply ? '답변 수정' : '답변 등록'}</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  async function adminSubmitInquiryReply(id) {
+    const txt = document.getElementById('adminReplyTxt-' + id);
+    if (!txt || !txt.value.trim()) return;
+    await dbUpdateInquiry(id, { reply: txt.value.trim(), repliedAt: Date.now() });
+    renderAdminInquiries();
+    loadInquiries();
+  }
+  async function adminDeleteInquiry(id) {
+    if (!confirm('이 문의를 삭제할까요?')) return;
+    await dbDeleteItem('inquiries', id);
+    renderAdminInquiries();
+    loadInquiries();
+  }
+
+  function adminExportApplicationsCSV() {
+    const apps = window._adminApps || [];
+    if (!apps.length) { alert('신청 데이터가 없습니다.'); return; }
+    const headers = ['이름','학년','반','예배','핸드폰','부모님연락처','받은훈련','건강특이사항','처음참가','동기','신청일'];
+    const rows = apps.map(a => [
+      a.name||'', a.grade||'', a.classNum||'', a.service||'', a.phone||'', a.parentPhone||'',
+      a.training||'', a.health||'', a.firstTime||'', a.motivation||'',
+      a.submittedAt ? new Date(a.submittedAt).toLocaleString('ko-KR') : ''
+    ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
+    const csv = '﻿' + [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = '함양신청목록.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ── Hero slideshow ── */
+  (function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (!slides.length) return;
+    let cur = 0;
+    setInterval(() => {
+      slides[cur].classList.remove('active');
+      cur = (cur + 1) % slides.length;
+      slides[cur].classList.add('active');
+    }, 5000);
+  })();
 </script>
 </body>
 </html>
