@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>함양 국내선교 | 수영로교회 고등부</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1544,6 +1547,7 @@
       <div class="section-label">함양 사역 사진들</div>
       <h2 class="section-title">함양에서의 순간들</h2>
       <p class="section-desc">이미 다녀온 학생들이 직접 올린 사진들. 말보다 사진이 더 많은 걸 담습니다.</p>
+      <button onclick="renderSavedPhotos()" style="margin-top:12px;padding:8px 20px;border:1.5px solid var(--amber);background:none;color:var(--amber);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">↻ 새로고침</button>
     </div>
 
 
@@ -2606,6 +2610,19 @@
     renderInquirySection();
     updateNavUser();
     if (isAdmin()) document.getElementById('adminBar').style.display = 'flex';
+  });
+
+  /* 카카오톡/모바일 브라우저 bfcache(뒤로가기 캐시)에서 복원 시 강제 재로드 */
+  window.addEventListener('pageshow', e => {
+    if (e.persisted) {
+      renderSavedPhotos();
+      renderReviews();
+    }
+  });
+
+  /* #gallery 해시로 이동할 때마다 Firestore 최신 데이터 재로드 */
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#gallery') renderSavedPhotos();
   });
 
 function filterYear(year, btn) {
