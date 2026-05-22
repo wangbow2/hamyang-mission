@@ -2095,11 +2095,40 @@
   /* ── DB helpers ── */
   function _checkDB(msg) { return true; }
 
+  /* blob ID → base64 메모리 캐시 */
+  const _blobCache = {};
+  async function _resolvePhotos(posts) {
+    if (!firestoreDB) return posts;
+    const blobIdsNeeded = [];
+    posts.forEach(p => {
+      if (Array.isArray(p.photos)) p.photos.forEach(x => {
+        if (typeof x === 'string' && x.length < 50 && !x.startsWith('data:') && !x.startsWith('http') && !_blobCache[x])
+          blobIdsNeeded.push(x);
+      });
+    });
+    if (blobIdsNeeded.length) {
+      await Promise.all(blobIdsNeeded.map(async id => {
+        try {
+          const d = await firestoreDB.collection('photo_blobs').doc(id).get();
+          if (d.exists) _blobCache[id] = d.data().data;
+        } catch {}
+      }));
+    }
+    return posts.map(p => ({
+      ...p,
+      photos: Array.isArray(p.photos) ? p.photos.map(x =>
+        (typeof x === 'string' && x.length < 50 && !x.startsWith('data:') && !x.startsWith('http'))
+          ? (_blobCache[x] || null) : x
+      ).filter(Boolean) : p.photos
+    }));
+  }
+
   async function dbGetAll() {
     if (firestoreDB) {
       try {
         const snap = await firestoreDB.collection('photos').orderBy('timestamp','asc').get();
-        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        return _resolvePhotos(posts);
       } catch { /* fall through */ }
     }
     try {
@@ -2170,6 +2199,11 @@
     if (store === 'photos') {
       await _idbDelete(id).catch(() => {});
       _lsDel('hm_photos', id);
+      /* Firestore: blob 문서들도 삭제 */
+      if (firestoreDB) {
+        firestoreDB.collection('photo_blobs').where('postId','==',id).get()
+          .then(snap => snap.docs.forEach(d => d.ref.delete())).catch(()=>{});
+      }
     } else {
       const lsKeyMap = { reviews: 'hm_reviews', users: 'hm_users', applications: 'hm_applications', inquiries: 'hm_inquiries' };
       const lsKey = lsKeyMap[store];
@@ -2297,12 +2331,15 @@
     document.getElementById('loginModal').style.display = 'none';
     _loginCb = null;
   }
-  function showLoginToast(name) {
+  function showToast(msg, duration) {
     const t = document.getElementById('loginToast');
     if (!t) return;
-    t.textContent = name + '님, 환영합니다!';
+    t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2400);
+    setTimeout(() => t.classList.remove('show'), duration || 2400);
+  }
+  function showLoginToast(name) {
+    showToast(name + '님, 환영합니다!');
   }
   async function doLogin() {
     const name = document.getElementById('authName').value.trim();
@@ -2897,40 +2934,32 @@ function filterYear(year, btn) {
 
     try {
       const uploadCount = document.getElementById('uploadCount');
-      let urls;
 
-      if (firebaseStorage && firestoreDB) {
-        /* ── Firebase Storage 업로드 ── */
-        let uploadDone = 0;
-        urls = new Array(valid.length);
-        const BATCH = 5;
-        for (let b = 0; b < valid.length; b += BATCH) {
-          const slice = valid.slice(b, b + BATCH);
-          await Promise.all(slice.map(async (dataUrl, j) => {
-            const i = b + j;
-            const blob = await fetch(dataUrl).then(r => r.blob());
-            const path = `photos/${year}/${church}/${Date.now()}_${i}_${Math.random().toString(36).slice(2)}.jpg`;
-            const ref  = firebaseStorage.ref(path);
-            await ref.put(blob, { contentType: 'image/jpeg' });
-            urls[i] = await ref.getDownloadURL();
-            uploadDone++;
-            if (uploadCount) uploadCount.textContent = `${uploadDone}/${valid.length}장 업로드됨`;
-          }));
+      if (firestoreDB) {
+        /* ── Firestore: 사진 별도 문서로 저장 (Storage 불필요) ── */
+        const blobIds = [];
+        for (let i = 0; i < valid.length; i++) {
+          if (uploadCount) uploadCount.textContent = `${i + 1}/${valid.length}장 업로드 중...`;
+          const ref = await firestoreDB.collection('photo_blobs').add({ data: valid[i], postId: '' });
+          blobIds.push(ref.id);
         }
-        await firestoreDB.collection('photos').add({ photos: urls.filter(Boolean), title, authorName, authorId: s ? s.id : '', church, year, timestamp: Date.now() });
+        if (uploadCount) uploadCount.textContent = `저장 중...`;
+        const postRef = await firestoreDB.collection('photos').add({
+          photos: blobIds, title, authorName, authorId: s ? s.id : '', church, year, timestamp: Date.now()
+        });
+        /* blob 에 postId 역참조 */
+        blobIds.forEach(bid => firestoreDB.collection('photo_blobs').doc(bid).update({ postId: postRef.id }).catch(() => {}));
       } else {
-        /* ── IndexedDB 저장 (이미 선택 단계에서 압축 완료, 재압축 없음) ── */
+        /* ── IndexedDB 저장 (Firebase 미연결 시) ── */
         if (!valid.length) { alert('이미지 처리에 실패했습니다.'); return; }
         if (uploadCount) uploadCount.textContent = `저장 중...`;
         try {
           const newId = Date.now().toString() + Math.random().toString(36).slice(2,6);
           await _idbAdd({ id: newId, photos: valid, title, authorName, authorId: s ? s.id : '', church, year, timestamp: Date.now() });
-          if (uploadCount) uploadCount.textContent = `${valid.length}장 저장됨`;
         } catch(storageErr) {
           alert('저장 중 오류가 발생했습니다.\n' + (storageErr && storageErr.message ? storageErr.message : storageErr));
           return;
         }
-        urls = valid;
       }
 
       currentYear = year;
@@ -2939,9 +2968,10 @@ function filterYear(year, btn) {
       });
       cancelUpload();
       renderSavedPhotos();
+      showToast('글이 등록되었습니다.');
     } catch (err) {
       console.error(err);
-      alert('사진 저장 중 오류가 발생했습니다.\nFirebase 설정(firebase-config)을 확인해주세요.');
+      alert('사진 저장 중 오류가 발생했습니다: ' + (err && err.message ? err.message : err));
     } finally {
       if (regBtn) { regBtn.textContent = '등록하기'; regBtn.disabled = false; }
     }
