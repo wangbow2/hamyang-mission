@@ -824,12 +824,6 @@
     <div id="authFormRegister" style="padding:22px 28px;display:none;max-height:80vh;overflow-y:auto;">
       <p class="auth-sub" style="margin-bottom:16px;">처음 이용하시는 분은 가입해 주세요.</p>
       <div class="auth-field"><label>이름 *</label><input type="text" id="regName" placeholder="본인 이름" maxlength="20"></div>
-      <div class="auth-field"><label>예배 *</label>
-        <div style="display:flex;flex-direction:row;flex-wrap:nowrap;gap:10px;margin-top:6px;">
-          <label style="display:inline-flex!important;align-items:center;gap:6px;font-size:14px;cursor:pointer;padding:10px 18px;border:1.5px solid var(--border);border-radius:10px;flex:1;justify-content:center;margin-bottom:0!important;"><input type="radio" name="regService" value="1부"> 1부</label>
-          <label style="display:inline-flex!important;align-items:center;gap:6px;font-size:14px;cursor:pointer;padding:10px 18px;border:1.5px solid var(--border);border-radius:10px;flex:1;justify-content:center;margin-bottom:0!important;"><input type="radio" name="regService" value="2부"> 2부</label>
-        </div>
-      </div>
       <div class="auth-field"><label>학년 *</label>
         <select id="regGrade" style="background:#fff;" onchange="updateRegFields()">
           <option value="">선택</option>
@@ -840,6 +834,12 @@
           <option value="교사">교사</option>
           <option value="교역자/부장">교역자/부장</option>
         </select>
+      </div>
+      <div class="auth-field" id="regServiceField"><label>예배 *</label>
+        <div style="display:flex;flex-direction:row;flex-wrap:nowrap;gap:10px;margin-top:6px;">
+          <label style="display:inline-flex!important;align-items:center;gap:6px;font-size:14px;cursor:pointer;padding:10px 18px;border:1.5px solid var(--border);border-radius:10px;flex:1;justify-content:center;margin-bottom:0!important;"><input type="radio" name="regService" value="1부"> 1부</label>
+          <label style="display:inline-flex!important;align-items:center;gap:6px;font-size:14px;cursor:pointer;padding:10px 18px;border:1.5px solid var(--border);border-radius:10px;flex:1;justify-content:center;margin-bottom:0!important;"><input type="radio" name="regService" value="2부"> 2부</label>
+        </div>
       </div>
       <div class="auth-field" id="regClassField"><label>반 *</label><input type="text" id="regClass" placeholder="예: 3반" maxlength="10"></div>
       <div class="auth-field"><label>핸드폰 번호 *</label><input type="tel" id="regPhone" placeholder="010-0000-0000"></div>
@@ -2419,8 +2419,11 @@
   function updateRegFields() {
     const grade = document.getElementById('regGrade').value;
     const adult = ['졸업생','교사','교역자/부장'].includes(grade);
+    document.getElementById('regServiceField').style.display     = adult ? 'none' : '';
     document.getElementById('regClassField').style.display       = adult ? 'none' : '';
     document.getElementById('regParentPhoneField').style.display = adult ? 'none' : '';
+    /* 졸업생 등 선택 시 예배 라디오 초기화 */
+    if (adult) document.querySelectorAll('input[name="regService"]').forEach(r => r.checked = false);
   }
 
   async function doRegister() {
@@ -2437,8 +2440,8 @@
     msg.textContent   = '';
     const _adultGrade = ['졸업생','교사','교역자/부장'].includes(grade);
     if (!name)        { msg.textContent = '이름을 입력해주세요.'; return; }
-    if (!service)     { msg.textContent = '예배를 선택해주세요. (1부/2부)'; return; }
     if (!grade)       { msg.textContent = '학년을 선택해주세요.'; return; }
+    if (!_adultGrade && !service)     { msg.textContent = '예배를 선택해주세요. (1부/2부)'; return; }
     if (!_adultGrade && !classNum)    { msg.textContent = '반을 입력해주세요.'; return; }
     if (!phone)       { msg.textContent = '핸드폰 번호를 입력해주세요.'; return; }
     if (!_adultGrade && !parentPhone) { msg.textContent = '부모님 연락처를 입력해주세요.'; return; }
