@@ -2315,12 +2315,30 @@
     if (idx >= 0) { list[idx] = { ...list[idx], ...data }; _lsSave('hm_applications', list); }
     if (firestoreDB) firestoreDB.collection('applications').doc(id).update(data).catch(()=>{});
   }
-  async function dbGetInquiries() { return _ls('hm_inquiries').slice().reverse(); }
-  async function dbAddInquiry(data) { return _lsAdd('hm_inquiries', data); }
+  async function dbGetInquiries() {
+    if (firestoreDB) {
+      try {
+        const snap = await firestoreDB.collection('inquiries').get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      } catch(e) {}
+    }
+    return _ls('hm_inquiries').slice().reverse();
+  }
+  async function dbAddInquiry(data) {
+    const id = _lsAdd('hm_inquiries', data);
+    if (firestoreDB) {
+      try { await firestoreDB.collection('inquiries').doc(id).set({ ...data, id }); } catch(e) {}
+    }
+    return id;
+  }
   async function dbUpdateInquiry(id, data) {
     const list = _ls('hm_inquiries');
     const idx = list.findIndex(x => String(x.id) === String(id));
     if (idx >= 0) { list[idx] = { ...list[idx], ...data }; _lsSave('hm_inquiries', list); }
+    if (firestoreDB) {
+      try { await firestoreDB.collection('inquiries').doc(id).update(data); } catch(e) {}
+    }
   }
   async function dbPutPhoto(p) {
     /* IndexedDB 업데이트 */
@@ -3030,10 +3048,7 @@ function filterYear(year, btn) {
     const subj = document.getElementById('inq-esubj-' + id).value.trim();
     const txt  = document.getElementById('inq-etxt-' + id).value.trim();
     if (!subj || !txt) return;
-    const list = _ls('hm_inquiries');
-    const idx  = list.findIndex(x => String(x.id) === String(id));
-    if (idx >= 0) { list[idx].subject = subj; list[idx].content = txt; _lsSave('hm_inquiries', list); }
-    if (firestoreDB) firestoreDB.collection('inquiries').doc(id).update({ subject: subj, content: txt }).catch(()=>{});
+    await dbUpdateInquiry(id, { subject: subj, content: txt });
     loadInquiries();
   }
   async function deleteInquiry(id) {
