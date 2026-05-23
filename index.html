@@ -2464,7 +2464,9 @@
     if (adult) document.querySelectorAll('input[name="regService"]').forEach(r => r.checked = false);
   }
 
+  let _registering = false;
   async function doRegister() {
+    if (_registering) return;
     const name        = document.getElementById('regName').value.trim();
     const serviceEl   = document.querySelector('input[name="regService"]:checked');
     const service     = serviceEl ? serviceEl.value : '';
@@ -2475,6 +2477,7 @@
     const pin         = document.getElementById('regPin').value;
     const pinConfirm  = document.getElementById('regPinConfirm').value;
     const msg         = document.getElementById('regMsg');
+    const btn         = document.querySelector('[onclick="doRegister()"]');
     msg.textContent   = '';
     const _adultGrade = ['졸업생','교사','교역자/부장'].includes(grade);
     if (!name)        { msg.textContent = '이름을 입력해주세요.'; return; }
@@ -2485,18 +2488,23 @@
     if (!_adultGrade && !parentPhone) { msg.textContent = '부모님 연락처를 입력해주세요.'; return; }
     if (!pin)         { msg.textContent = '비밀번호를 입력해주세요.'; return; }
     if (pin !== pinConfirm) { msg.textContent = '비밀번호가 일치하지 않습니다.'; return; }
-    msg.textContent = '처리 중...';
+    _registering = true;
+    if (btn) { btn.disabled = true; btn.textContent = '처리 중...'; }
+    msg.textContent = '';
     try {
       const ex = await dbGetUser(name);
-      if (ex) { msg.textContent = '이미 사용 중인 이름입니다.'; return; }
+      if (ex) { msg.textContent = '이미 사용 중인 이름입니다.'; _registering = false; if (btn) { btn.disabled = false; btn.textContent = '가입하기'; } return; }
       const id = await dbAddUser(name, grade, pin, { service, classNum, phone, parentPhone });
       setSession({ id, name });
+      _registering = false;
       try { closeLoginModal(); } catch(e2) { console.warn(e2); }
       try { showLoginToast(name); } catch(e4) { console.warn(e4); }
       try { if (_loginCb) _loginCb(); } catch(e3) { console.warn(e3); }
     } catch(err) {
       console.error('doRegister error:', err);
       msg.textContent = '가입 오류: ' + (err && err.message ? err.message : String(err));
+      _registering = false;
+      if (btn) { btn.disabled = false; btn.textContent = '가입하기'; }
     }
   }
 
@@ -3263,9 +3271,14 @@ function filterYear(year, btn) {
     }
   }
 
+  let _applying = false;
   async function submitApply(e) {
     e.preventDefault();
+    if (_applying) return;
     const form = e.target;
+    const submitBtn = form.querySelector('[type="submit"]');
+    _applying = true;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '신청 중...'; }
     const session = getSession();
     /* 세션엔 id·name만 있으므로 localStorage에서 전체 프로필 조회 */
     const userProfile = session ? (_lsGetUsers().find(u => String(u.id) === String(session.id)) || {}) : {};
@@ -3286,10 +3299,17 @@ function filterYear(year, btn) {
       referrer:    form.referrer   ? form.referrer.value.trim()   : '',
       submittedAt: Date.now(),
     };
-    await dbAddApplication(payload);
-    document.getElementById('applyForm').style.display = 'none';
-    document.getElementById('applySuccess').style.display = 'block';
-    document.getElementById('apply').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    try {
+      await dbAddApplication(payload);
+      _applying = false;
+      document.getElementById('applyForm').style.display = 'none';
+      document.getElementById('applySuccess').style.display = 'block';
+      document.getElementById('apply').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch(err) {
+      _applying = false;
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '함양 국내선교 신청하기 →'; }
+      alert('신청 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
   }
 
   function _gradeToReviewType(grade) {
