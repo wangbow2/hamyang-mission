@@ -703,6 +703,35 @@
     .admin-photo-move{position:absolute;top:7px;right:37px;width:26px;height:26px;border-radius:50%;background:rgba(30,80,200,.85);color:#fff;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;z-index:5;}
 
 
+    /* ── Board table responsive ── */
+    .gallery-board th.col-cat{width:120px;}
+    .gallery-board td.col-cat{color:var(--amber);font-size:11px;font-weight:700;white-space:nowrap;}
+    .gallery-board th.col-views{width:64px;text-align:center;}
+    .gallery-board td.col-views{text-align:center;color:var(--muted);font-size:12px;}
+    @media(max-width:640px){
+      .gallery-board th.col-cat,.gallery-board td.col-cat{display:none;}
+      .gallery-board th.col-author,.gallery-board td.col-author{display:none;}
+      .gallery-board th.col-views,.gallery-board td.col-views{display:none;}
+      .gallery-board .thumb{width:36px;height:28px;}
+    }
+
+    /* ── Comments ── */
+    .comment-section{padding:20px 24px 24px;border-top:1px solid var(--border);}
+    .comment-section-title{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:12px;}
+    .comment-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+    .comment-item{background:var(--bg-alt);border-radius:10px;padding:10px 14px;position:relative;}
+    .comment-item-meta{font-size:11px;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:6px;}
+    .comment-item-author{font-weight:700;color:var(--dark);}
+    .comment-item-text{font-size:13px;color:var(--body);line-height:1.6;word-break:break-all;}
+    .comment-del-btn{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-left:auto;}
+    .comment-del-btn:hover{color:#E05252;}
+    .comment-form{display:flex;gap:8px;align-items:center;margin-top:4px;}
+    .comment-input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;}
+    .comment-input:focus{border-color:var(--amber);}
+    .comment-submit{padding:10px 18px;background:var(--amber);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+    .comment-submit:hover{background:#A86338;}
+    .comment-login-msg{font-size:13px;color:var(--muted);text-align:center;padding:8px 0;}
+
     /* ── Post detail modal ── */
     .post-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9990;display:flex;align-items:center;justify-content:center;padding:20px;}
     .post-modal-box{background:#fff;border-radius:20px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.35);}
@@ -896,6 +925,7 @@
       </div>
     </div>
     <div id="postModalGrid" class="post-modal-grid"></div>
+    <div id="postModalComments" class="comment-section" style="display:none;"></div>
   </div>
 </div>
 
@@ -2053,6 +2083,14 @@
     _lsSave(key, _ls(key).filter(x => String(x.id) !== String(id)));
   }
 
+  function _getViewCounts() { try { return JSON.parse(localStorage.getItem('hm_viewcounts') || '{}'); } catch { return {}; } }
+  function _incViewCount(id) {
+    const vc = _getViewCounts(); vc[id] = (vc[id] || 0) + 1;
+    try { localStorage.setItem('hm_viewcounts', JSON.stringify(vc)); } catch(e) {}
+    return vc[id];
+  }
+  function _getViewCount(id) { return _getViewCounts()[id] || 0; }
+
   function _lsGetUsers() { return _ls('hm_users'); }
   function _lsSaveUsers(u) { _lsSave('hm_users', u); }
 
@@ -2564,6 +2602,14 @@
     document.getElementById('postModalEditBtn').style.display = canManage ? '' : 'none';
     document.getElementById('postModalDelBtn').style.display = canManage ? '' : 'none';
     _renderPostModalGrid(p, canManage, title, author);
+    /* 조회수 증가 및 목록 행 업데이트 */
+    const newViews = _incViewCount(p.id);
+    const viewCell = document.querySelector(`tr[data-pid="${p.id}"] .col-views`);
+    if (viewCell) viewCell.textContent = newViews;
+    /* 댓글 섹션 */
+    const commentEl = document.getElementById('postModalComments');
+    commentEl.style.display = '';
+    loadComments(p.id);
     document.getElementById('postModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
@@ -2614,6 +2660,115 @@
     document.getElementById('postModal').style.display = 'none';
     document.body.style.overflow = '';
     _modalPost = null;
+  }
+
+  async function _dbGetComments(postId) {
+    if (firestoreDB) {
+      try {
+        const snap = await firestoreDB.collection('comments')
+          .where('postId', '==', postId)
+          .get();
+        return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+      } catch(e) {}
+    }
+    return _ls('hm_comments').filter(c => c.postId === postId)
+      .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+  }
+
+  async function _dbAddComment(data) {
+    if (firestoreDB) {
+      try {
+        const ref = await firestoreDB.collection('comments').add(data);
+        return ref.id;
+      } catch(e) {}
+    }
+    return _lsAdd('hm_comments', data);
+  }
+
+  async function _dbDelComment(id) {
+    if (firestoreDB) {
+      try { await firestoreDB.collection('comments').doc(id).delete(); return; } catch(e) {}
+    }
+    _lsDel('hm_comments', id);
+  }
+
+  async function loadComments(postId) {
+    const el = document.getElementById('postModalComments');
+    if (!el) return;
+    el.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:4px 0;">댓글 불러오는 중...</div>';
+    const session = getSession();
+    const admin = isAdmin();
+    let comments = [];
+    try { comments = await _dbGetComments(postId); } catch(e) {}
+
+    let html = `<div class="comment-section-title">댓글 ${comments.length ? `(${comments.length})` : ''}</div>`;
+    if (comments.length) {
+      html += '<div class="comment-list">';
+      for (const c of comments) {
+        const ts = c.timestamp ? new Date(c.timestamp) : null;
+        const dateStr = ts ? ts.getFullYear() + '.' + String(ts.getMonth()+1).padStart(2,'0') + '.' + String(ts.getDate()).padStart(2,'0') : '';
+        const canDel = admin || (session && (String(c.authorId) === String(session.id) || c.authorName === session.name));
+        const delBtn = canDel ? `<button class="comment-del-btn" onclick="_deleteComment('${c.id}','${postId}')">삭제</button>` : '';
+        const text = (c.text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+        html += `<div class="comment-item">
+          <div class="comment-item-meta">
+            <span class="comment-item-author">${c.authorName || '익명'}</span>
+            <span>${dateStr}</span>
+            ${delBtn}
+          </div>
+          <div class="comment-item-text">${text}</div>
+        </div>`;
+      }
+      html += '</div>';
+    }
+
+    if (session || admin) {
+      html += `<div class="comment-form">
+        <input class="comment-input" id="commentInput_${postId}" type="text" placeholder="댓글을 입력하세요..." maxlength="300" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitComment('${postId}');}">
+        <button class="comment-submit" onclick="submitComment('${postId}')">등록</button>
+      </div>`;
+    } else {
+      html += `<div class="comment-login-msg"><a href="#" onclick="showLoginModal();return false;" style="color:var(--amber);">로그인</a> 후 댓글을 달 수 있습니다.</div>`;
+    }
+
+    el.innerHTML = html;
+  }
+
+  async function submitComment(postId) {
+    const session = getSession();
+    const admin = isAdmin();
+    if (!session && !admin) { showLoginModal(); return; }
+    const inp = document.getElementById('commentInput_' + postId);
+    if (!inp) return;
+    const text = inp.value.trim();
+    if (!text) return;
+    inp.disabled = true;
+    const data = {
+      postId,
+      authorName: session ? session.name : '관리자',
+      authorId: session ? String(session.id) : 'admin',
+      text,
+      timestamp: Date.now()
+    };
+    try {
+      await _dbAddComment(data);
+      inp.value = '';
+      await loadComments(postId);
+    } catch(e) {
+      alert('댓글 등록에 실패했습니다.');
+    }
+    inp.disabled = false;
+  }
+
+  async function _deleteComment(commentId, postId) {
+    if (!confirm('댓글을 삭제할까요?')) return;
+    try {
+      await _dbDelComment(commentId);
+      await loadComments(postId);
+    } catch(e) {
+      alert('삭제에 실패했습니다.');
+    }
   }
 
   /* ── Gallery upload (로그인 필요) ── */
@@ -2678,8 +2833,22 @@ function filterYear(year, btn) {
         empty.style.display = 'none';
         wrap.style.display = 'block';
         const admin = isAdmin();
+        const posts = filtered.slice().reverse();
 
-        filtered.slice().reverse().forEach(p => {
+        const table = document.createElement('table');
+        table.className = 'gallery-board';
+        table.innerHTML = `<thead><tr>
+          <th class="col-num">번호</th>
+          <th class="col-cat">카테고리</th>
+          <th>제목</th>
+          <th class="col-author">작성자</th>
+          <th class="col-time">작성일</th>
+          <th class="col-views">조회수</th>
+        </tr></thead>`;
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        posts.forEach((p, idx) => {
           const photos   = getPostPhotos(p);
           const title    = p.title || '(제목 없음)';
           const author   = p.authorName || '-';
@@ -2687,56 +2856,56 @@ function filterYear(year, btn) {
           const dateStr  = ts ? ts.getFullYear() + '.' + String(ts.getMonth()+1).padStart(2,'0') + '.' + String(ts.getDate()).padStart(2,'0') : '-';
           const yearSuffix  = p.year ? p.year.toString().slice(2) + '년' : '';
           const churchName  = CHURCH_LABELS[p.church] || p.church || '';
-          const churchLabel = [yearSuffix, churchName].filter(Boolean).join(' ');
+          const catLabel = [yearSuffix, churchName].filter(Boolean).join(' ');
+          const views = _getViewCount(p.id);
 
-          const group = document.createElement('div');
-          group.style.cssText = 'position:relative;margin-bottom:10px;';
+          const tr = document.createElement('tr');
+          tr.setAttribute('data-pid', p.id);
+
+          const thumbSrc = getPostCover(p);
+          const countBadge = photos.length > 1 ? `<span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px;">[${photos.length}장]</span>` : '';
+
+          tr.innerHTML = `
+            <td class="col-num">${posts.length - idx}</td>
+            <td class="col-cat">${catLabel}</td>
+            <td class="col-title"><div class="title-wrap">
+              <img class="thumb" src="${thumbSrc}" alt="" loading="lazy" onerror="this.style.display='none'">
+              <span>${title}${countBadge}</span>
+            </div></td>
+            <td class="col-author">${author}</td>
+            <td class="col-time">${dateStr}</td>
+            <td class="col-views">${views}</td>
+          `;
+
+          tr.addEventListener('click', () => openPostModal(p, title, author, dateStr));
 
           const curSession = getSession();
           const isOwnPost = curSession && (String(p.authorId) === String(curSession.id) || p.authorName === curSession.name);
           if (admin || isOwnPost) {
-            const actions = document.createElement('div');
-            actions.style.cssText = 'position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:2;';
+            const adminTd = document.createElement('td');
+            adminTd.className = 'col-admin';
+            adminTd.innerHTML = '';
+            adminTd.style.cssText = 'white-space:nowrap;';
             const editBtn = document.createElement('button');
             editBtn.className = 'admin-photo-move';
+            editBtn.style.cssText = 'position:static;width:24px;height:24px;font-size:11px;margin:0;';
             editBtn.textContent = '✏';
             editBtn.title = '수정';
             editBtn.onclick = e => { e.stopPropagation(); adminEditPost(p.id, p.title, p.church, p.year); };
             const delBtn = document.createElement('button');
             delBtn.className = 'admin-photo-del';
-            delBtn.textContent = '';
+            delBtn.style.cssText = 'position:static;width:24px;height:24px;font-size:13px;margin-left:4px;';
+            delBtn.textContent = '✕';
             delBtn.title = '삭제';
             delBtn.onclick = e => { e.stopPropagation(); adminDeletePhoto(p.id); };
-            actions.appendChild(editBtn);
-            actions.appendChild(delBtn);
-            group.appendChild(actions);
+            adminTd.appendChild(editBtn);
+            adminTd.appendChild(delBtn);
+            tr.appendChild(adminTd);
           }
 
-          /* 대표 사진 카드 */
-          const card = document.createElement('div');
-          card.className = 'post-card';
-          card.style.cssText = 'display:flex;align-items:center;gap:16px;padding:14px;background:var(--white);border-radius:14px;box-shadow:var(--shadow-sm);cursor:pointer;transition:box-shadow .2s;';
-          card.addEventListener('mouseenter', () => { card.style.boxShadow = 'var(--shadow)'; });
-          card.addEventListener('mouseleave', () => { card.style.boxShadow = 'var(--shadow-sm)'; });
-          card.addEventListener('click', () => openPostModal(p, title, author, dateStr));
-
-          const cover = document.createElement('img');
-          cover.src = getPostCover(p);
-          cover.alt = '';
-          cover.loading = 'lazy';
-          cover.style.cssText = 'width:96px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;background:var(--bg-alt);';
-
-          const info = document.createElement('div');
-          info.style.cssText = 'flex:1;min-width:0;';
-          info.innerHTML = (churchLabel ? `<div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:3px;">${churchLabel}</div>` : '')
-            + `<div style="font-size:14px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${title}${photos.length > 1 ? `<span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px;">${photos.length}장</span>` : ''}</div>`
-            + `<div style="font-size:12px;color:var(--muted);margin-top:3px;">${author} · ${dateStr}</div>`;
-
-          card.appendChild(cover);
-          card.appendChild(info);
-          group.appendChild(card);
-          wrap.appendChild(group);
+          tbody.appendChild(tr);
         });
+        wrap.appendChild(table);
       }
     }).catch(err => {
       const wrap = document.getElementById('savedPhotos');
