@@ -2733,6 +2733,29 @@
     }
 
     el.innerHTML = html;
+    _updateCommentBadge(postId, comments.length);
+  }
+
+  function _updateCommentBadge(postId, count) {
+    const badge = document.querySelector(`tr[data-pid="${postId}"] .comment-count-badge`);
+    if (!badge) return;
+    if (count > 0) { badge.textContent = `(${count})`; badge.style.display = ''; }
+    else { badge.textContent = ''; badge.style.display = 'none'; }
+  }
+
+  async function _loadAllCommentCounts() {
+    const counts = {};
+    if (firestoreDB) {
+      try {
+        const snap = await firestoreDB.collection('comments').get();
+        snap.docs.forEach(d => { const pid = d.data().postId; if (pid) counts[pid] = (counts[pid] || 0) + 1; });
+      } catch(e) {
+        _ls('hm_comments').forEach(c => { if (c.postId) counts[c.postId] = (counts[c.postId] || 0) + 1; });
+      }
+    } else {
+      _ls('hm_comments').forEach(c => { if (c.postId) counts[c.postId] = (counts[c.postId] || 0) + 1; });
+    }
+    Object.entries(counts).forEach(([pid, count]) => _updateCommentBadge(pid, count));
   }
 
   async function submitComment(postId) {
@@ -2870,7 +2893,7 @@ function filterYear(year, btn) {
             <td class="col-cat">${catLabel}</td>
             <td class="col-title"><div class="title-wrap">
               <img class="thumb" src="${thumbSrc}" alt="" loading="lazy" onerror="this.style.display='none'">
-              <span>${title}${countBadge}</span>
+              <span>${title}${countBadge}<span class="comment-count-badge" style="display:none;margin-left:5px;font-size:11px;color:var(--amber);font-weight:700;"></span></span>
             </div></td>
             <td class="col-author">${author}</td>
             <td class="col-time">${dateStr}</td>
@@ -2906,6 +2929,7 @@ function filterYear(year, btn) {
           tbody.appendChild(tr);
         });
         wrap.appendChild(table);
+        _loadAllCommentCounts();
       }
     }).catch(err => {
       const wrap = document.getElementById('savedPhotos');
