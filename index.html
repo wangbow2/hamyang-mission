@@ -2354,7 +2354,7 @@
     const list = _ls('hm_photos');
     const idx  = list.findIndex(x => String(x.id) === String(p.id));
     if (idx >= 0) { list[idx] = p; _lsSave('hm_photos', list); }
-    if (firestoreDB) { const { id, ...data } = p; firestoreDB.collection('photos').doc(id).set(data).catch(()=>{}); }
+    if (firestoreDB) { const { id, ...data } = p; await firestoreDB.collection('photos').doc(id).set(data).catch(()=>{}); }
   }
   async function dbAddAll(entries) {
     entries.forEach(e => _lsAdd('hm_photos', e));
